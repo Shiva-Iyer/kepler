@@ -23,21 +23,21 @@
 #include <kepler.h>
 #include <mpc_file.h>
 
-/**
+/*
  * Parses data in the MPC's Orbit Database for minor planets. For details on the
  * format, see <http://www.cfa.harvard.edu/iau/info/MPOrbitFormat.html>.
  * Download the database from <http://www.cfa.harvard.edu/iau/MPCORB.html>.
  *
- * @param[in] data A line of data from the MPCORB minor planet database file.
- * @param[in] tt TT to be used for calculations.
- * @param[out] info The minor planet's details and heliocentric coordinates.
+ * data A line of data from the MPCORB minor planet database file.
+ * tt TT to be used for calculations.
+ * info The minor planet's details and heliocentric coordinates.
  * The reference frame is the equinox & ecliptic of J2000.
  *
- * @retval SUCCESS The data was parsed and the coordinates were calculated.
- * @retval ERR_INVALID_DATA The data was in an unrecognized format.
- * @retval ERR_CONVERGENCE The solution to Kepler's equation didn't converge
+ * Return: SUCCESS The data was parsed and the coordinates were calculated.
+ * Return: ERR_INVALID_DATA The data was in an unrecognized format.
+ * Return: ERR_CONVERGENCE The solution to Kepler's equation didn't converge
  * to the required precision within the specified number of iterations.
- **/
+ */
 int minor_planet_info(char *data, struct julian_date *tt, struct mpc_body *info)
 {
 	size_t i,l;
@@ -115,21 +115,21 @@ int minor_planet_info(char *data, struct julian_date *tt, struct mpc_body *info)
 	return elements_to_ephemeris(tt, &info->elements, &info->position);
 }
 
-/**
+/*
  * Parses data in the MPC's Orbit Database for comets. For details on the
  * format, see <http://www.cfa.harvard.edu/iau/info/CometOrbitFormat.html>.
  * Download the database from <http://www.cfa.harvard.edu/iau/MPCORB.html>.
  *
- * @param[in] data A line of data from the MPCORB comet database file.
- * @param[in] tt TT to be used for calculations.
- * @param[out] info The comet's details and heliocentric coordinates. The 
+ * data A line of data from the MPCORB comet database file.
+ * tt TT to be used for calculations.
+ * info The comet's details and heliocentric coordinates. The 
  * reference frame is the equinox & ecliptic of J2000.
  *
- * @retval SUCCESS The data was parsed and the coordinates were calculated.
- * @retval ERR_INVALID_DATA The data was in an unrecognized format.
- * @retval ERR_CONVERGENCE The solution to Kepler's equation didn't converge
+ * Return: SUCCESS The data was parsed and the coordinates were calculated.
+ * Return: ERR_INVALID_DATA The data was in an unrecognized format.
+ * Return: ERR_CONVERGENCE The solution to Kepler's equation didn't converge
  * to the required precision within the specified number of iterations.
- **/
+ */
 int comet_info(char *data, struct julian_date *tt, struct mpc_body *info)
 {
 	size_t i,l;

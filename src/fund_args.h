@@ -19,10 +19,10 @@
 #ifndef _FUND_ARGS_H_
 #define _FUND_ARGS_H_
 
-/** 
+/* 
  * Enum for the various fundamental arguments used throughout the program. These
  * values are parameters to the function fundamental_argument().
- **/
+ */
 enum fund_argument {
 	ARG_LONGITUDE_MERCURY = 0,
 	ARG_LONGITUDE_VENUS,

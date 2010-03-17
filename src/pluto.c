@@ -173,21 +173,21 @@ double fq[106] = {
 	.0043500678052272,.0279624510118796
 };
 
-/**
+/*
  * Calculates the heliocentric rectangular coordinates of Pluto using an
  * analytical model developed at the Bureau des Longitudes (Pluto95).
  *
  * This theory is valid only for dates between Jan 01, 1700 (inclusive) 
  * and Jan 24, 2100 (exclusive).
  *
- * @param[in] tdb TDB to be used for calculations. TT may be used for all but
+ * tdb TDB to be used for calculations. TT may be used for all but
  * the most exacting applications. Must be between 1700-01-01 and 2100-01-24.
- * @param[out] pos On success, the heliocentric rectangular coordinates of Pluto
+ * pos On success, the heliocentric rectangular coordinates of Pluto
  * in AU. The reference frame is the equinox and equator of J2000.
  *
- * @retval SUCCESS If the coordinates were calculated successfully.
- * @retval ERR_INVALID_DATE If tdb was out of range for the theory.
- **/
+ * Return: SUCCESS If the coordinates were calculated successfully.
+ * Return: ERR_INVALID_DATE If tdb was out of range for the theory.
+ */
 int pluto_coordinates(struct julian_date *tdb,
 		struct rectangular_coordinates *pos)
 {

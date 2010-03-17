@@ -21,7 +21,7 @@
 
 #include <julian_date.h>
 
-/** Used internally to store the series for the equation of the equinoxes */
+/* Used internally to store the series for the equation of the equinoxes */
 struct equation_of_equinoxes_term {
 	double si;
 	double ci;

@@ -19,13 +19,13 @@
 #ifndef _JULIAN_DATE_H_
 #define _JULIAN_DATE_H_
 
-/**
+/*
  * This structure is used wherever a Julian Day Number (JDN) is expected or
  * returned. Two doubles are used to preserve precision.
  *
  * A given JDN may be partitioned between date1 & date2 in any convenient 
  * manner. The JDN that corresponds to this structure is date1 + date2.
- **/
+ */
 struct julian_date {
 	double date1;
 	double date2;

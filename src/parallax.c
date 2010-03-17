@@ -21,18 +21,18 @@
 #include <earth_figure.h>
 #include <parallax.h>
 
-/**
+/*
  * Calculates the geocentric parallax in the equatorial coordinates of a
  * celestial body.
  *
- * @param[in] hr_ang The body's local hour angle in radians.
- * @param[in] decl The body's declination in radians.
- * @param[in] distance The body's distance from the Earth in AU. 
- * @param[in] geog_lat The observer's geographic latitude in radians.
- * @param[in] height_msl The observer's height above mean sea level in meters.
- * @param[out] d_ra The parallax in right ascension expressed in radians.
- * @param[out] d_decl The parallax in declination expressed in radians.
- **/
+ * hr_ang The body's local hour angle in radians.
+ * decl The body's declination in radians.
+ * distance The body's distance from the Earth in AU. 
+ * geog_lat The observer's geographic latitude in radians.
+ * height_msl The observer's height above mean sea level in meters.
+ * d_ra The parallax in right ascension expressed in radians.
+ * d_decl The parallax in declination expressed in radians.
+ */
 void geocentric_parallax(double hr_ang, double decl, double distance,
 			double geog_lat, double height_msl, double *d_ra,
 			double *d_decl)

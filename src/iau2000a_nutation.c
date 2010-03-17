@@ -26,21 +26,21 @@
 #include <fund_args.h>
 #include <iau2000a_nutation.h>
 
-/** These arrays in iau2000a_data.c contain the series of terms in the model */
+/* These arrays in iau2000a_data.c contain the series of terms in the model */
 extern struct iau2000a_term1 iau2000a_lunisolar[];
 extern struct iau2000a_term2 iau2000a_planetary[];
 
 extern u_short iau2000a_lunisolar_count;
 extern u_short iau2000a_planetary_count;
 
-/**
+/*
  * Calculates the mean obliquity of the ecliptic using the IAU 2000 formula.
  *
- * @param[in] tdb TDB to be used for calculations. TT may be used for all but
+ * tdb TDB to be used for calculations. TT may be used for all but
  * the most exacting applications.
  *
- * @return The mean obliquity of the ecliptic in radians.
- **/
+ * Return: The mean obliquity of the ecliptic in radians.
+ */
 double iau2000a_mean_obliquity(struct julian_date *tdb)
 {
 	double t = JULIAN_CENTURIES(tdb->date1, tdb->date2);
@@ -52,15 +52,15 @@ double iau2000a_mean_obliquity(struct julian_date *tdb)
 		(-0.000000576 - 0.0000000434*t) * t) * t) * t) * t) * ACS_TO_RAD;
 }
 
-/**
+/*
  * Calculates the nutation in longitude and obliquity using the IAU 2000A 
  * nutation model in its entirety.
  *
- * @param[in] tdb TDB to be used for calculations. TT may be used for all but
+ * tdb TDB to be used for calculations. TT may be used for all but
  * the most exacting applications.
- * @param[out] d_psi The nutation in longitude expressed in radians.
- * @param[out] d_epsilon The nutation in obliquity expressed in radians.
- **/
+ * d_psi The nutation in longitude expressed in radians.
+ * d_epsilon The nutation in obliquity expressed in radians.
+ */
 void iau2000a_nutation(struct julian_date *tdb, double *d_psi, double *d_epsilon)
 {
 	int i;
@@ -132,15 +132,15 @@ void iau2000a_nutation(struct julian_date *tdb, double *d_psi, double *d_epsilon
 	*d_epsilon = (eps_lun + eps_pla) * MAS_TO_RAD;
 }
 
-/**
+/*
  * Calculates the nutation matrix using the IAU 2000A nutation model
  * in its entirety. The resulting matrix may be used in the rotation
  * of coordinates.
  *
- * @param[in] tdb TDB to be used for calculations. TT may be used for all but
+ * tdb TDB to be used for calculations. TT may be used for all but
  * the most exacting applications.
- * @param[out] nut_matrix The nutation matrix.
- **/
+ * nut_matrix The nutation matrix.
+ */
 void iau2000a_nutation_matrix(struct julian_date *tdb, double nut_matrix[3][3])
 {
 	double epsilon,d_psi,d_epsilon,c1,c2,c3,s1,s2,s3;

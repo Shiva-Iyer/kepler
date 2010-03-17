@@ -22,7 +22,7 @@
 #include <julian_date.h>
 #include <coordinates.h>
 
-/** Used internally to store the series of terms in the theory */
+/* Used internally to store the series of terms in the theory */
 struct elp82b_term1 {
 	short i1;
 	short i2;
@@ -36,7 +36,7 @@ struct elp82b_term1 {
 	double b5;
 };
 
-/** Used internally to store the series of terms in the theory */
+/* Used internally to store the series of terms in the theory */
 struct elp82b_term2 {
 	short i1;
 	short i2;
@@ -47,7 +47,7 @@ struct elp82b_term2 {
 	double a;
 };
 
-/** Used internally to store the series of terms in the theory */
+/* Used internally to store the series of terms in the theory */
 struct elp82b_term3 {
 	short i1;
 	short i2;

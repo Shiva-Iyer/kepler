@@ -28,46 +28,46 @@
 #define KEPLER_MAX_ITER			10
 #define KEPLER_PRECISION		1e-14
 
-/**
+/*
  * Used wherever the osculating orbital elements of a celestial body are
  * expected or returned.
  *
  * These values may be obtained from the circulars of the Minor Planet 
  * Center, the Astronomical Almanac or other publications. See mpc_file.c
  * for some ways in which this structure is used.
- **/
+ */
 struct orbital_elements {
-	struct julian_date epoch; /**< Epoch of osculation */
+	struct julian_date epoch; /* Epoch of osculation */
 
-	double mean_anomaly; /**< Mean anomaly in radians at epoch */
-	double daily_motion; /**< Daily motion in radians/day */
+	double mean_anomaly; /* Mean anomaly in radians at epoch */
+	double daily_motion; /* Daily motion in radians/day */
 
-	double perihelion; /**< Perihelion distance in AU */
-	double eccentricity; /**< Eccentricity of the orbit */
+	double perihelion; /* Perihelion distance in AU */
+	double eccentricity; /* Eccentricity of the orbit */
 
-	/** The values for the orbit's orientation must be referred to J2000 **/
-	double arg_perihelion; /**< Argument of the perihelion in radians */
-	double lon_asc_node; /**< Longitude of the ascending node in radians */
-	double inclination; /**< Inclination of the orbit in radians */
+	/* The values for the orbit's orientation must be referred to J2000 */
+	double arg_perihelion; /* Argument of the perihelion in radians */
+	double lon_asc_node; /* Longitude of the ascending node in radians */
+	double inclination; /* Inclination of the orbit in radians */
 };
 
-/**
+/*
  * May be set to limit the number of iterations in the solution of Kepler's
  * equations. The default value is KEPLER_MAX_ITER.
- **/
+ */
 extern u_short kepler_equation_max_iters;
 
-/**
+/*
  * May be set to specify the precision expected in the solution Kepler's 
  * equations. The default value is KEPLER_PRECISION.
- **/
+ */
 extern double kepler_equation_precision;
 
 #ifdef _DEBUG
-/**
+/*
  * Set to the number of iterations required for the solution of Kepler's
  * equations in the most recent call to the relevant functions.
- **/
+ */
 extern u_short kepler_equation_iters;
 #endif
 

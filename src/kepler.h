@@ -73,17 +73,17 @@
 
 typedef unsigned short 		u_short;
 
-/** Used in conversions from decimal degrees to degree/minute/second form */
+/* Used in conversions from decimal degrees to degree/minute/second form */
 struct deg_min_sec {
 	int degrees;
 	int minutes;
 	double seconds;
 };
 
-/**
+/*
  * Identifiers for the planets in the solar system. Following the IAU's
  * resolutions in 2006, Pluto is not considered a planet.
- **/
+ */
 enum solar_system_planets {
 	MERCURY,
 	VENUS,
@@ -95,14 +95,14 @@ enum solar_system_planets {
 	NEPTUNE
 };
 
-/**
+/*
  * Returns an angle that is between 0 and limit.
  *
- * @param[in] angle The angle to be reduced.
- * @param[in] limit The maximum value for the angle.
+ * angle The angle to be reduced.
+ * limit The maximum value for the angle.
  *
- * @return An angle that is between 0 and limit.
- **/
+ * Return: An angle that is between 0 and limit.
+ */
 static __inline__ double reduce_angle(double angle, double limit)
 {
 	while (angle < 0)
@@ -113,13 +113,12 @@ static __inline__ double reduce_angle(double angle, double limit)
 	return angle;
 }
 
-/**
+/*
  * Converts an angle in decimal degrees to degrees/minutes/seconds form.
  *
- * @param[in] d The angle to convert.
- * @param[out] out Converted value. If d is negative, the members of 
- * out will be negative.
- **/
+ * d The angle to convert.
+ * out Converted value. If d is negative, the members of out will be negative.
+ */
 static __inline__ void degrees_to_dms(double d, struct deg_min_sec *out)
 {
 	double tmp;
@@ -137,12 +136,12 @@ static __inline__ void degrees_to_dms(double d, struct deg_min_sec *out)
 	}
 }
 
-/**
+/*
  * Swaps values
  *
- * @param[in,out] x Will contain *y on return.
- * @param[in,out] y Will contain *x on return.
- **/
+ * x Will contain *y on return.
+ * y Will contain *x on return.
+ */
 static __inline__ void swap(double *x, double *y)
 {
 	double tmp;
@@ -152,13 +151,13 @@ static __inline__ void swap(double *x, double *y)
 	*y = tmp;
 }
 
-/**
+/*
  * Version of the standard C function strncpy that always NULL terminates
  *
- * @param[in,out] dest Destination string.
- * @param[in] src Source string.
- * @param[in] len Maximum number of characters to copy.
- **/
+ * dest Destination string.
+ * src Source string.
+ * len Maximum number of characters to copy.
+ */
 static __inline__ char *strncpyn(char *dest, const char *src, size_t len)
 {
 	strncpy(dest, src, len);

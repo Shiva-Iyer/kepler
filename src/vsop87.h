@@ -23,7 +23,7 @@
 #include <julian_date.h>
 #include <coordinates.h>
 
-/** Used internally to store the series of terms in the theory */
+/* Used internally to store the series of terms in the theory */
 struct vsop87_term {
 	double a;
 	double b;

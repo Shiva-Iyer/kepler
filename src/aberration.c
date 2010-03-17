@@ -28,18 +28,18 @@
 #include <fund_args.h>
 #include <aberration.h>
 
-/**
+/*
  * Terms for velocity components of the EMB's heliocentric motion #1
- **/
+ */
 struct aberration_term1_1 aberration_series1_1[] = {
 	{1,-1719919,-2,-25,0,0,25,-13,-1,1578094,156,10,32,1,684187,-358},
 	{2,6434,141,28007,-107,-1,25697,-95,-1,-5904,-130,11141,-48,0,-2559,-55},
 	{3,486,-5,-236,-4,0,-216,-4,0,-446,5,-94,-2,0,-193,2},
 };
 
-/**
+/*
  * Terms for velocity components of the EMB's heliocentric motion #2
- **/
+ */
 struct aberration_term1_2 aberration_series1_2[] = {
 	{0,0,2,0,-1,0,31,1,1,-28,0,-12},
 	{0,0,3,-8,3,0,8,-28,25,8,11,3},
@@ -120,9 +120,9 @@ struct aberration_term1_2 aberration_series1_2[] = {
 	{0,7,-8,0,0,0,0,0,0,-1,0,0}
 };
 
-/**
+/*
  * Terms for velocity components of the Sun wrt the solar system barycenter
- **/
+ */
 struct aberration_term2 aberration_series2[] = {
 	{0,0,1,0,0,0,719,0,6,-660,-15,-283},
 	{0,0,0,1,0,0,159,0,2,-147,-6,-61},
@@ -143,9 +143,9 @@ struct aberration_term2 aberration_series2[] = {
 	{0,0,1,0,0,-2,1,0,0,0,0,0}
 };
 
-/**
+/*
  * Terms for velocity components of the Earth wrt the EMB
- **/
+ */
 struct aberration_term3 aberration_series3[] = {
 	{1,0,0,0,0,715,-656,-285},
 	{0,0,0,0,1,0,26,-59},
@@ -166,14 +166,14 @@ struct aberration_term3 aberration_series3[] = {
 	{0,2,0,-1,1,0,0,-1}
 };
 
-/**
+/*
  * Calculates the components of the earth's velocity
  *
- * @param[in] tdb TDB to be used for calculations. TT may be used for all but
+ * tdb TDB to be used for calculations. TT may be used for all but
  * the most exacting applications.
- * @param[out] vel The Earth's velocity components in 10**(-8) AU/day.
+ * vel The Earth's velocity components in 10**(-8) AU/day.
  * The reference frame is the equinox & equator of J2000.
- **/
+ */
 void aberration_earth_velocity(struct julian_date *tdb,
 			struct rectangular_coordinates *vel)
 {
@@ -293,14 +293,14 @@ void aberration_earth_velocity(struct julian_date *tdb,
 	vel->z = v1.z + v2.z + v3.z;
 }
 
-/**
+/*
  * Calculates the annual aberration in right ascension and declination
  *
- * @param[in] tdb TDB to be used for calculations
- * @param[in] e Equatorial coordinates of the celestial body
- * @param[out] d_ra Aberration in right ascension
- * @param[out] d_dec Aberration in declination
- **/
+ * tdb TDB to be used for calculations
+ * e Equatorial coordinates of the celestial body
+ * d_ra Aberration in right ascension
+ * d_dec Aberration in declination
+ */
 void annual_aberration(struct julian_date *tdb, struct equatorial_coordinates *e,
 		double *d_ra, double *d_dec)
 {

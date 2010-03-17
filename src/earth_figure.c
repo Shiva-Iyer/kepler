@@ -20,15 +20,15 @@
 #include <kepler.h>
 #include <earth_figure.h>
 
-/**
+/*
  * Calculates various values related to the oblateness of the Earth.
  *
- * @param[in] geog_lat The observer's geographic latitude in radians.
- * @param[in] height_msl The observer's height above mean sea level in meters.
- * @param[out] gc_lat The observer's geocentric latitude in radians.
- * @param[out] gc_radius The observer's geocentric radius as a fraction of
+ * geog_lat The observer's geographic latitude in radians.
+ * height_msl The observer's height above mean sea level in meters.
+ * gc_lat The observer's geocentric latitude in radians.
+ * gc_radius The observer's geocentric radius as a fraction of
  * the Earth's equatorial radius.
- **/
+ */
 void earth_figure_values(double geog_lat, double height_msl, double *gc_lat,
 			double *gc_radius)
 {

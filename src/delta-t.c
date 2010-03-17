@@ -25,21 +25,21 @@
 #include <kepler.h>
 #include <delta-t.h>
 
-/**
+/*
  * Returns an approximate value for Delta-T (TT - UT1) valid for a limited
  * historical period.
  *
- * @param[in] year Year number using astronomical reckoning, between
+ * year Year number using astronomical reckoning, between
  * 2000BC and 3000AD inclusive.
- * @param[in] month Month of the year.
- * @param[out] delta_t An approximate value for Delta-T in seconds.
- * @param[out] correction A correction, in seconds, to be added to Delta-T for
+ * month Month of the year.
+ * delta_t An approximate value for Delta-T in seconds.
+ * correction A correction, in seconds, to be added to Delta-T for
  * years before 1955AD or after 2005AD and when used in conjunction with NASA's
  * publication "Five millennium canon of solar eclipses".
  *
- * @retval SUCCESS Delta-T calculated successfully.
- * @retval ERR_INVALID_DATE Invalid year or month specified.
- **/
+ * Return: SUCCESS Delta-T calculated successfully.
+ * Return: ERR_INVALID_DATE Invalid year or month specified.
+ */
 int delta_t(int year, int month, double *delta_t, double *correction)
 {
 	double u,y;

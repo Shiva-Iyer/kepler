@@ -67,18 +67,18 @@ struct equation_of_equinoxes_term eoe_series[] = {
 	{   0.11,  0.00,  1,  0, -2,  0, -1,  0,  0,  0}
 };
 
-/**
+/*
  * Calculates the local mean sidereal time using the latest IAU/IERS conventions
  * as described in Reference 1.
  *
- * @param[in] ut1 UT1 for calculating the Earth Rotation Angle.
- * @param[in] tdb TDB to be used for calculating the LMST. TT may be used 
+ * ut1 UT1 for calculating the Earth Rotation Angle.
+ * tdb TDB to be used for calculating the LMST. TT may be used 
  * for all but the most exacting applications.
- * @param[in] longitude The observer's longitude in radians, positive for
+ * longitude The observer's longitude in radians, positive for
  * places east of Greenwich.
  *
- * @return The local mean sidereal time in radians, between 0 and 2*PI.
- **/
+ * Return: The local mean sidereal time in radians, between 0 and 2*PI.
+ */
 double mean_sidereal_time(struct julian_date *ut1, struct julian_date *tdb,
 			double longitude)
 {
@@ -106,19 +106,19 @@ double mean_sidereal_time(struct julian_date *ut1, struct julian_date *tdb,
 	return mst;
 }
 
-/**
+/*
  * Calculates the local apparent sidereal time using the latest IAU/IERS
  * conventions as described in Reference 1. Apparent sidereal time takes
  * into account the motion of the equinox due to nutation.
  *
- * @param[in] ut1 UT1 for calculating the Earth Rotation Angle.
- * @param[in] tdb TDB to be used for calculating the LAST. TT may be used 
+ * ut1 UT1 for calculating the Earth Rotation Angle.
+ * tdb TDB to be used for calculating the LAST. TT may be used 
  * for all but the most exacting applications.
- * @param[in] longitude The observer's longitude in radians, positive for
+ * longitude The observer's longitude in radians, positive for
  * places east of Greenwich.
  *
- * @return The local apparent sidereal time in radians, between 0 and 2*PI.
- **/
+ * Return: The local apparent sidereal time in radians, between 0 and 2*PI.
+ */
 double apparent_sidereal_time(struct julian_date *ut1, struct julian_date *tdb,
 			double longitude)
 {
@@ -133,16 +133,16 @@ double apparent_sidereal_time(struct julian_date *ut1, struct julian_date *tdb,
 	return ast;
 }
 
-/**
+/*
  * Calculates the value of the equation of the equinoxes using the model
  * described in Reference 2. This accounts for the motion of the equinox
  * due to nutation.
  *
- * @param[in] tdb TDB to be used for calculations. TT may be used 
+ * tdb TDB to be used for calculations. TT may be used 
  * for all but the most exacting applications.
  *
- * @return The value of the equation of the equinoxes, in radians.
- **/
+ * Return: The value of the equation of the equinoxes, in radians.
+ */
 double equation_of_the_equinoxes(struct julian_date *tdb)
 {
 	int i;

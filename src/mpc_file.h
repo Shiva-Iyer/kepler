@@ -26,9 +26,9 @@
 #define MPC_UNPACK(c)			\
 	(c >= 97 ? c - 61 : (c >= 65 ? c - 55 : c - 48))
 
-/**
+/*
  * The types of celestial bodies included in the MPCORB Database.
- **/
+ */
 enum mpc_body_types {
 	MINOR_PLANET,
 	LONG_PERIOD_COMET,
@@ -37,24 +37,24 @@ enum mpc_body_types {
 	UNCERTAIN_COMET
 };
 
-/**
+/*
  * Used to store the details of a celestial body in the MPCORB Database.
- **/
+ */
 struct mpc_body {
-	char id[12]; /**< The body's ID or unpacked provisional designation */
-	char name[36]; /**< The body's name, if it is included in the file */
-	enum mpc_body_types type; /**< The type of body */
+	char id[12]; /* The body's ID or unpacked provisional designation */
+	char name[36]; /* The body's name, if it is included in the file */
+	enum mpc_body_types type; /* The type of body */
 
-	double magnitude; /**< The body's absolute magnitude, H */
-	double slope; /**< Slope parameter, G */
+	double magnitude; /* The body's absolute magnitude, H */
+	double slope; /* Slope parameter, G */
 
-	struct orbital_elements elements; /**< The body's orbital elements */
+	struct orbital_elements elements; /* The body's orbital elements */
 
-	/**
+	/*
 	 * The body's coordinates at the desired epoch. For minor planets and
 	 * comets, the origin is the Sun and the reference frame is the equinox
 	 * and ecliptic of J2000.
-	 **/
+	 */
 	struct rectangular_coordinates position;
 };
 

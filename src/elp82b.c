@@ -27,20 +27,20 @@
 #include <fund_args.h>
 #include <elp82b.h>
 
-/** These arrays in elp82b_data.c contain the series of terms in the theory */
+/* These arrays in elp82b_data.c contain the series of terms in the theory */
 extern void *elp_terms[];
 extern u_short elp_term_count[];
 
-/**
+/*
  * Calculates the Moon's geocentric ecliptic coordinates and distance using the
  * ELP 2000-82B lunar theory in its entirety.
  *
- * @param[in] tdb TDB to be used for calculations. TT may be used for all but
+ * tdb TDB to be used for calculations. TT may be used for all but
  * the most exacting applications.
- * @param[out] ecl The Moon's geocentric ecliptic coordinates. The reference
+ * ecl The Moon's geocentric ecliptic coordinates. The reference
  * frame is the equinox & ecliptic of J2000.
- * @param[out] radius The Moon's distance from the Earth in KM.
- **/
+ * radius The Moon's distance from the Earth in KM.
+ */
 void elp82b_coordinates(struct julian_date *tdb,
 			struct ecliptic_coordinates *ecl, double *radius)
 {

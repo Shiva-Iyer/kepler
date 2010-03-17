@@ -22,9 +22,9 @@
 #include <julian_date.h>
 #include <coordinates.h>
 
-/**
+/*
  * Used internally to store the terms in the trigonometric aberration series
- **/
+ */
 struct aberration_term1_1 {
 	short l_ea;
 	int x_sin;
@@ -44,9 +44,9 @@ struct aberration_term1_1 {
 	int z_cos_t;
 };
 
-/**
+/*
  * Used internally to store the terms in the trigonometric aberration series
- **/
+ */
 struct aberration_term1_2 {
 	short l_me;
 	short l_ve;
@@ -62,9 +62,9 @@ struct aberration_term1_2 {
 	short z_cos;
 };
 
-/**
+/*
  * Used internally to store the terms in the trigonometric aberration series
- **/
+ */
 struct aberration_term2 {
 	short l_ve;
 	short l_ea;
@@ -80,9 +80,9 @@ struct aberration_term2 {
 	short z_cos;
 };
 
-/**
+/*
  * Used internally to store the terms in the trigonometric aberration series
- **/
+ */
 struct aberration_term3 {
 	short w;
 	short d;

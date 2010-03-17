@@ -21,7 +21,7 @@
 
 #include <julian_date.h>
 
-/** Used internally to store the series of terms in the theory */
+/* Used internally to store the series of terms in the theory */
 struct iau2000a_term1 {
 	short l;
 	short lp;
@@ -36,7 +36,7 @@ struct iau2000a_term1 {
 	double esp;
 };
 
-/** Used internally to store the series of terms in the theory */
+/* Used internally to store the series of terms in the theory */
 struct iau2000a_term2 {
 	short mer;
 	short ven;

@@ -19,34 +19,34 @@
 #ifndef _COORDINATES_H_
 #define _COORDINATES_H_
 
-/** 
+/* 
  * Used for rectangular coordinates. 
  *
  * The origin and orientation of the xy axes are application specific. The xy
  * plane could be the ecliptic or the Earth's equator
- **/
+ */
 struct rectangular_coordinates {
-	double x; /**< x-coordinate. The unit is application specific. */
-	double y; /**< y-coordinate. The unit is application specific. */
-	double z; /**< z-coordinate. The unit is application specific. */
+	double x; /* x-coordinate. The unit is application specific. */
+	double y; /* y-coordinate. The unit is application specific. */
+	double z; /* z-coordinate. The unit is application specific. */
 };
 
-/** Used for coordinates in the Earth's equatorial frame. */
+/* Used for coordinates in the Earth's equatorial frame. */
 struct equatorial_coordinates {
-	double right_ascension; /**< Right ascension in radians. */
-	double declination;     /**< Declination in radians. */
+	double right_ascension; /* Right ascension in radians. */
+	double declination;     /* Declination in radians. */
 };
 
-/** Used for ecliptic coordinates. The origin is application specific. */
+/* Used for ecliptic coordinates. The origin is application specific. */
 struct ecliptic_coordinates {
-	double longitude; /**< Longitude in radians. */
-	double latitude;  /**< Latitude in radians. */
+	double longitude; /* Longitude in radians. */
+	double latitude;  /* Latitude in radians. */
 };
 
-/** Used for horizontal coordinates. */
+/* Used for horizontal coordinates. */
 struct horizontal_coordinates {
-	double azimuth;  /**< Azimuth in radians. Clockwise from the South. */
-	double altitude; /**< Altitude in radians. */
+	double azimuth;  /* Azimuth in radians. Clockwise from the South. */
+	double altitude; /* Altitude in radians. */
 };
 
 void rectangular_to_spherical(struct rectangular_coordinates *pla,

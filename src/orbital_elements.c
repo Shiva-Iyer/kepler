@@ -36,20 +36,20 @@ double kepler_equation_precision = KEPLER_PRECISION;
 u_short kepler_equation_iters = 0;
 #endif
 
-/**
+/*
  * Calculates the heliocentric rectangular coordinates of a celestial body
  * given its osculating orbital elements.
  *
- * @param[in] tt TT to be used for calculations.
- * @param[in] elt The body's osculating orbital elements.
- * @param[out] eph The body's heliocentric rectangular coordinates in AU.
+ * tt TT to be used for calculations.
+ * elt The body's osculating orbital elements.
+ * eph The body's heliocentric rectangular coordinates in AU.
  * The reference frame is the equinox & ecliptic of J2000.
  *
- * @retval SUCCESS If the coordinates were calculated successfully.
- * @retval ERR_INVALID_ECCENTRICITY If the body's eccentricity is negative.
- * @retval ERR_CONVERGENCE If the solution to Kepler's equation didn't converge
+ * Return: SUCCESS If the coordinates were calculated successfully.
+ * Return: ERR_INVALID_ECCENTRICITY If the body's eccentricity is negative.
+ * Return: ERR_CONVERGENCE If the solution to Kepler's equation didn't converge
  * to the required precision within the specified number of iterations.
- **/
+ */
 int elements_to_ephemeris(struct julian_date *tt, struct orbital_elements *elt,
 			struct rectangular_coordinates *eph)
 {
@@ -119,18 +119,18 @@ int elements_to_ephemeris(struct julian_date *tt, struct orbital_elements *elt,
 	return SUCCESS;
 }
 
-/**
+/*
  * Solves Kepler's equation for elliptic orbits and returns the resulting
  * value of the eccentric anomaly.
  *
- * @param[in] mean_ano The celestial body's mean anomaly in radians.
- * @param[in] ecc The eccentricity of the orbit.
- * @param[out] ecc_ano On success, the body's eccentric anomaly in radians.
+ * mean_ano The celestial body's mean anomaly in radians.
+ * ecc The eccentricity of the orbit.
+ * ecc_ano On success, the body's eccentric anomaly in radians.
  *
- * @retval SUCCESS If Kepler's equation was solved successfully.
- * @retval ERR_CONVERGENCE If the solution to Kepler's equation didn't converge
+ * Return: SUCCESS If Kepler's equation was solved successfully.
+ * Return: ERR_CONVERGENCE If the solution to Kepler's equation didn't converge
  * to the required precision within the specified number of iterations.
- **/
+ */
 int eccentric_anomaly(double mean_ano, double ecc, double *ecc_ano)
 {
 	u_short i;
@@ -171,18 +171,18 @@ int eccentric_anomaly(double mean_ano, double ecc, double *ecc_ano)
 	return i < kepler_equation_max_iters ? SUCCESS : ERR_CONVERGENCE;
 }
 
-/**
+/*
  * Solves Kepler's equation for hyperbolic orbits and returns the resulting
  * value of the hyperbolic anomaly.
  *
- * @param[in] mean_ano The celestial body's mean anomaly in radians.
- * @param[in] ecc The eccentricity of the orbit.
- * @param[out] hyp_ano On success, the body's hyperbolic anomaly in radians.
+ * mean_ano The celestial body's mean anomaly in radians.
+ * ecc The eccentricity of the orbit.
+ * hyp_ano On success, the body's hyperbolic anomaly in radians.
  *
- * @retval SUCCESS If Kepler's equation was solved successfully.
- * @retval ERR_CONVERGENCE If the solution to Kepler's equation didn't converge
+ * Return: SUCCESS If Kepler's equation was solved successfully.
+ * Return: ERR_CONVERGENCE If the solution to Kepler's equation didn't converge
  * to the required precision within the specified number of iterations.
- **/
+ */
 int hyperbolic_anomaly(double mean_ano, double ecc, double *hyp_ano)
 {
 	u_short i;

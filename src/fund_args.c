@@ -24,17 +24,17 @@
 #include <kepler.h>
 #include <fund_args.h>
 
-/**
+/*
  * Calculates values for the various fundamental arguments used in the planetary,
  * lunar, precession and nutation models.
  *
- * @param[in] arg One of the values from the fund_argument enumeration.
- * @param[in] t Number of Julian centuries of TDB since 2000-01-01 12h TDB. TT
+ * arg One of the values from the fund_argument enumeration.
+ * t Number of Julian centuries of TDB since 2000-01-01 12h TDB. TT
  * may be used for all but the most exacting applications.
  *
- * @return -1 if the arg parameter is invalid. The value of the fundamental 
+ * Return: -1 if the arg parameter is invalid. The value of the fundamental 
  * argument in radians otherwise.
- **/
+ */
 double fundamental_argument(enum fund_argument arg, double t)
 {
 	double val = -1;
