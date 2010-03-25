@@ -4,7 +4,7 @@ LDFLAGS = -lm
 OBJS1 = julian_date.o delta-t.o vsop87_data.o vsop87.o fund_args.o elp82b_data.o \
 	elp82b.o iau2006_precession.o iau2000a_data.o iau2000a_nutation.o \
 	coordinates.o sidereal_time.o pluto.o orbital_elements.o mpc_file.o \
-	aberration.o earth_figure.o parallax.o kepler_test.o
+	aberration.o earth_figure.o parallax.o magnitude.o kepler_test.o
 OBJS2 = julian_date.o vsop87_data.o vsop87.o fund_args.o elp82b_data.o \
 	elp82b.o iau2000a_data.o iau2000a_nutation.o coordinates.o sidereal_time.o \
 	pluto.o delta-t.o rise_set.o
@@ -68,6 +68,9 @@ earth_figure.o: earth_figure.c earth_figure.h kepler.h
 	$(CC) $(CFLAGS) -o $@ $<
 
 parallax.o: parallax.c parallax.h earth_figure.h kepler.h
+	$(CC) $(CFLAGS) -o $@ $<
+
+magnitude.o: magnitude.c magnitude.h coordinates.h
 	$(CC) $(CFLAGS) -o $@ $<
 
 kepler_test.o: kepler_test.c julian_date.h delta-t.h vsop87.h elp82b.h \
