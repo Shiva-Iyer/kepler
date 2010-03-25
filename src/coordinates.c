@@ -28,9 +28,9 @@
  * reference frame (xy plane) as the original coordinates.
  *
  * pla The body's heliocentric rectangular coordinates. Must be in
- * the same reference frame as ear.
+ * the same reference frame and units as ear.
  * ear The Earth's heliocentric rectangular coordinates. Must be in
- * the same reference frame as pla.
+ * the same reference frame and units as pla.
  * lon The body's geocentric longitude in radians.
  * lat The body's geocentric latitude in radians.
  * rad The body's geocentric distance in the units of pla and ear.
@@ -71,6 +71,38 @@ void spherical_to_rectangular(double lon, double lat, double rad,
 	rec->x = rad * cr * cd;
 	rec->y = rad * sr * cd;
 	rec->z = rad * sd;
+}
+
+/*
+ * Calculates the Sun-body-Earth phase angle.
+ *
+ * obj The body's heliocentric rectangular coordinates. Must be in
+ * the same reference frame and units as ear.
+ * ear The Earth's heliocentric rectangular coordinates. Must be in
+ * the same reference frame and units as obj.
+ *
+ * Return: The Sun-body-Earth phase angle in radians.
+ */
+double phase_angle(struct rectangular_coordinates *obj,
+		struct rectangular_coordinates *ear)
+{
+	double a,b,c,pa;
+
+	/* Sun-Earth distance */
+	a = sqrt(ear->x * ear->x + ear->y * ear->y + ear->z * ear->z);
+
+	/* Sun-body distance */
+	b = sqrt(obj->x * obj->x + obj->y * obj->y + obj->z * obj->z);
+
+	/* Earth-body distance */
+	c = sqrt((obj->x - ear->x) * (obj->x - ear->x) +
+		(obj->y - ear->y) * (obj->y - ear->y) +
+		(obj->z - ear->z) * (obj->z - ear->z));
+
+	/* Solve for the phase angle using the law of cosines */
+	pa = acos((b * b + c * c - a * a) / (2 * b * c));
+
+	return pa;
 }
 
 /*

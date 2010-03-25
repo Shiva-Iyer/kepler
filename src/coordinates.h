@@ -56,6 +56,9 @@ void rectangular_to_spherical(struct rectangular_coordinates *pla,
 void spherical_to_rectangular(double lon, double lat, double rad,
 			struct rectangular_coordinates *rec);
 
+double phase_angle(struct rectangular_coordinates *obj,
+		struct rectangular_coordinates *ear);
+
 void equatorial_to_ecliptic(struct equatorial_coordinates *equ, double obl,
 			struct ecliptic_coordinates *ecl);
 
