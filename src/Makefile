@@ -14,19 +14,16 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-CC = gcc
-CFLAGS = -D_GNU_SOURCE -c -ansi -pedantic -Wall -I ./
-LDFLAGS = -lm
-OBJS1 = julian_date.o delta-t.o vsop87_data.o vsop87.o fund_args.o elp82b_data.o \
+CFLAGS = -I . -D_GNU_SOURCE -c -fPIC -ansi -pedantic -Wall
+LDFLAGS = -shared -Wl,-soname,$(LIB_SONAME)
+
+OBJS = julian_date.o delta-t.o vsop87_data.o vsop87.o fund_args.o elp82b_data.o \
 	elp82b.o iau2006_precession.o iau2000a_data.o iau2000a_nutation.o \
 	coordinates.o sidereal_time.o pluto.o orbital_elements.o mpc_file.o \
-	aberration.o earth_figure.o parallax.o magnitude.o kepler_test.o
-OBJS2 = julian_date.o vsop87_data.o vsop87.o fund_args.o elp82b_data.o \
-	elp82b.o iau2000a_data.o iau2000a_nutation.o coordinates.o sidereal_time.o \
-	pluto.o delta-t.o rise_set.o
+	aberration.o earth_figure.o parallax.o magnitude.o
 
-all: kepler_test rise_set
- 
+all: $(LIB)
+
 julian_date.o: julian_date.c julian_date.h kepler.h
 	$(CC) $(CFLAGS) -o $@ $<
 
@@ -89,22 +86,9 @@ parallax.o: parallax.c parallax.h earth_figure.h kepler.h
 magnitude.o: magnitude.c magnitude.h coordinates.h
 	$(CC) $(CFLAGS) -o $@ $<
 
-kepler_test.o: kepler_test.c julian_date.h delta-t.h vsop87.h elp82b.h \
-	iau2006_precession.h iau2000a_nutation.h coordinates.h sidereal_time.h \
-	pluto.h mpc_file.h aberration.h parallax.h kepler.h
-	$(CC) $(CFLAGS) -o $@ $<
-
-rise_set.o: rise_set.c rise_set.h julian_date.h vsop87.h elp82b.h \
-	iau2000a_nutation.h coordinates.h sidereal_time.h pluto.h kepler.h \
-	delta-t.h
-	$(CC) $(CFLAGS) -o $@ $<
-
-kepler_test: $(OBJS1)
-	$(CC) -o $@ $(LDFLAGS) $(OBJS1)
-
-rise_set: $(OBJS2)
-	$(CC) -o $@ $(LDFLAGS) $(OBJS2)
+$(LIB): $(OBJS)
+	$(CC) $(LDFLAGS) -o $@ $(OBJS)
 
 .PHONY: clean
 clean:
-	rm -f $(OBJS1) $(OBJS2) kepler_test rise_set
+	@$(RM) $(OBJS) $(LIB)

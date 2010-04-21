@@ -30,23 +30,37 @@ etc.).
 The kepler library is free software, distributed under the terms of the GNU
 General Public License <http://www.gnu.org/licenses/gpl.html>.
 
-Installation
-------------
+Prerequisites
+-------------
 
-kepler is written in ANSI C and has been tested under Linux with the following
-build tools:
+Make sure your Unix installation has the GNU C compiler and build tools
+installed. The following are the minimum version requirements.
 
       * GNU gcc 	4.4.1
       * GNU Make	3.81
 
-Running `make' in the `src' subdirectory will compile all the library files and
-example programs. In order to call kepler's functions from your own applications,
-you will need to customize the file `makefile' or create your own.
+Installation
+------------
+
+Instructions for downloading the source archives and accessing the development
+repository may be found at <http://savannah.nongnu.org/projects/kepler>.
+
+Run `make' in the kepler installation directory to compile all the library
+files and example programs. In order to call kepler's functions from your own
+applications, you will need to create your own makefile along the lines of the
+one in the `examples' subdirectory.
+
+Run `make install' to deploy the shared library that is created in the previous
+step. You will need to do this before you run the example programs. On most
+systems, you will need to run this command as root.
+
+Run `make clean' to remove all the files created by running `make'. This will not
+remove the shared libraries or symbolic links in /usr/lib.
 
 Examples
 --------
 
-The following sample programs may be found in the `src' subdirectory.
+The following sample programs may be found in the `examples' subdirectory.
 
 kepler_test.c calls most of the functions in kepler and displays the results in a
 terminal window. To test the routines in mpc_file.c, you must download the MPC
@@ -83,7 +97,8 @@ Bugs
 ----
 
 Comments, criticisms and bug reports are very welcome and may be sent to the
-kepler maintainer.
+kepler maintainer by email or the project's website.
 
 Shiva Iyer
 shiva.iyer AT g m a i l DOT c o m
+

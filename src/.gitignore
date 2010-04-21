@@ -1,5 +1,2 @@
 *.o
-*.txt
-*.DAT
-kepler_test
-rise_set
+libkepler.so*
