@@ -19,10 +19,11 @@
 Introduction
 ------------
 
-This is the kepler library, version 1.0.0.
+This is the kepler library, version 1.0.0. kepler provides a set of routines for
+performing astronomical calculations. The library is implemented in ANSI C and
+the optional pykepler package provides support for programs written in Python.
 
-kepler provides a set of functions for performing astronomical calculations. The
-intent is to provide the basic building blocks necessary for more sophisticated
+The intent is to provide the basic building blocks necessary for more advanced
 applications. Consequently, no attempt has been made to provide an user interface
 or to write programs that meet various needs (observation, historical research
 etc.).
@@ -38,6 +39,7 @@ installed. The following are the minimum version requirements.
 
       * GNU gcc 	4.4.1
       * GNU Make	3.81
+      * Python		2.5.5 (needed only if you use the Python interface)
 
 Installation
 ------------
@@ -51,16 +53,19 @@ applications, you will need to create your own makefile along the lines of the
 one in the `examples' subdirectory.
 
 Run `make install' to deploy the shared library that is created in the previous
-step. You will need to do this before you run the example programs. On most
-systems, you will need to run this command as root.
+step. On most systems, you will need to run this as root. You will need to do
+this before you run the example programs or use the pykepler Python package.
 
 Run `make clean' to remove all the files created by running `make'. This will not
 remove the shared libraries or symbolic links in /usr/lib.
 
+The `pykepler' subdirectory contains the sources for the pykepler Python package.
+This package allows you to call kepler routines from Python.
+
 Examples
 --------
 
-The following sample programs may be found in the `examples' subdirectory.
+The following sample programs may be found in the `examples' subdirectory:
 
 kepler_test.c calls most of the functions in kepler and displays the results in a
 terminal window. To test the routines in mpc_file.c, you must download the MPC
@@ -68,9 +73,9 @@ Orbit Database files from <http://www.cfa.harvard.edu/iau/MPCORB.html>.
 
 rise_set.c is a program that accepts some command line arguments and displays
 the rise, upper transit and set times for the Sun, Moon, planets and Pluto.
-No corrections are made for planetary aberration, nutation, geocentric parallax or
-for the motion of the swifter objects (Moon, Mercury, Venus and Mars). Consequently,
-the displayed times could be anywhere between 3 and 6 minutes in error.
+No corrections are made for planetary aberration, nutation, geocentric parallax
+or for the motion of the swifter objects (Moon, Mercury, Venus and Mars).
+Consequently, the displayed times could be between 3 to 6 minutes in error.
 
 Documentation
 -------------
@@ -79,6 +84,17 @@ The names of the C source and header files are self-explanatory and indicate
 the nature of the functions contained therein. Extensive comments in the
 source code describe function parameters, return values and other relevant
 information.
+
+The Python interface in the pykepler package closely parallel the C routines with
+the following notable differences:
+
+1. Where the C routine expects pointer arguments for return values, the Python
+   wrapper returns the corresponding values as tuples. If the C routine returns
+   an integer to denote success (0) or failure (non-zero), the Python wrapper
+   returns that value as the first element in the tuple.
+
+2. Where the C routine expects a 3x3 matrix of doubles, the Python wrapper expects
+   a 3-member list where each of the members is a list of 3 doubles.
 
 References
 ----------
