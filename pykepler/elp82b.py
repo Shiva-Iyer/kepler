@@ -17,24 +17,22 @@
 if __name__ == "__main__":
     exit()
 
-import __builtin__
 from ctypes import *
 from julian_date import *
 from coordinates import *
+from pykepler import _libkepler
 
 def elp82b_coordinates(tdb):
 
     ecliptic = EclipticCoordinates()
     radius = c_double()
 
-    __builtin__.libkepler.elp82b_coordinates(byref(tdb),
-                                             byref(ecliptic),
-                                             byref(radius))
+    _libkepler.elp82b_coordinates(byref(tdb), byref(ecliptic), byref(radius))
 
-    return ecliptic, radius
+    return ecliptic, radius.value
 
-__builtin__.libkepler.elp82b_coordinates.restype = None
-__builtin__.libkepler.elp82b_coordinates.argtypes = [
+_libkepler.elp82b_coordinates.restype = None
+_libkepler.elp82b_coordinates.argtypes = [
     POINTER(JulianDate),
     POINTER(EclipticCoordinates),
     POINTER(c_double)

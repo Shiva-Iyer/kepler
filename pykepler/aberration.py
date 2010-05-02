@@ -17,17 +17,16 @@
 if __name__ == "__main__":
     exit()
 
-import __builtin__
 from ctypes import *
 from julian_date import *
 from coordinates import *
+from pykepler import _libkepler
 
 def aberration_earth_velocity(tdb):
 
     earth_velocity = RectangularCoordinates()
 
-    __builtin__.libkepler.aberration_earth_velocity(byref(tdb),
-                                                    byref(earth_velocity))
+    _libkepler.aberration_earth_velocity(byref(tdb), byref(earth_velocity))
 
     return earth_velocity
 
@@ -36,21 +35,19 @@ def annual_aberration(tdb, equ_coords):
     d_RA = c_double()
     d_declination = c_double()
 
-    __builtin__.libkepler.annual_aberration(byref(tdb),
-                                            byref(equ_coords),
-                                            byref(d_RA),
-                                            byref(d_declination))
+    _libkepler.annual_aberration(byref(tdb), byref(equ_coords), byref(d_RA),
+                                 byref(d_declination))
 
-    return d_RA, d_declination
+    return d_RA.value, d_declination.value
 
-__builtin__.libkepler.aberration_earth_velocity.restype = None
-__builtin__.libkepler.aberration_earth_velocity.argtypes = [
+_libkepler.aberration_earth_velocity.restype = None
+_libkepler.aberration_earth_velocity.argtypes = [
     POINTER(JulianDate),
     POINTER(RectangularCoordinates)
 ]
 
-__builtin__.libkepler.annual_aberration.restype = None
-__builtin__.libkepler.annual_aberration.argtypes = [
+_libkepler.annual_aberration.restype = None
+_libkepler.annual_aberration.argtypes = [
     POINTER(JulianDate),
     POINTER(EquatorialCoordinates),
     POINTER(c_double),

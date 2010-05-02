@@ -17,8 +17,8 @@
 if __name__ == "__main__":
     exit()
 
-import __builtin__
 from ctypes import *
+from pykepler import _libkepler
 
 class RectangularCoordinates(Structure):
 
@@ -54,8 +54,7 @@ class EquatorialCoordinates(Structure):
 
     def __repr__(self):
 
-        return dict(RA = self.right_ascension, Dec = self.declination).__repr__()
-
+        return dict(RA = self.right_ascension, dec = self.declination).__repr__()
 
 class EclipticCoordinates(Structure):
 
@@ -72,7 +71,7 @@ class EclipticCoordinates(Structure):
 
     def __repr__(self):
 
-        return dict(Lon = self.longitude, Lat = self.latitude).__repr__()
+        return dict(lon = self.longitude, lat = self.latitude).__repr__()
 
 class HorizontalCoordinates(Structure):
 
@@ -89,7 +88,7 @@ class HorizontalCoordinates(Structure):
 
     def __repr__(self):
 
-        return dict(Azi = self.azimuth, Alt = self.altitude).__repr__()
+        return dict(azi = self.azimuth, alt = self.altitude).__repr__()
 
 def rectangular_to_spherical(body, earth):
 
@@ -97,39 +96,31 @@ def rectangular_to_spherical(body, earth):
     latitude = c_double()
     radius = c_double()
 
-    __builtin__.libkepler.rectangular_to_spherical(byref(body),
-                                                   byref(earth),
-                                                   byref(longitude),
-                                                   byref(latitude),
-                                                   byref(radius))
+    _libkepler.rectangular_to_spherical(byref(body), byref(earth),
+                                        byref(longitude), byref(latitude),
+                                        byref(radius))
 
-    return longitude, latitude, radius
+    return longitude.value, latitude.value, radius.value
 
 def spherical_to_rectangular(longitude, latitude, radius):
 
     rectangular = RectangularCoordinates()
 
-    __builtin__.libkepler.spherical_to_rectangular(longitude,
-                                                   latitude,
-                                                   radius,
-                                                   byref(rectangular))
+    _libkepler.spherical_to_rectangular(longitude, latitude, radius,
+                                        byref(rectangular))
 
     return rectangular
 
 def phase_angle(body, earth):
 
-    phase_angle = __builtin__.libkepler.phase_angle(byref(body),
-                                                    byref(earth))
-
-    return phase_angle
+    return _libkepler.phase_angle(byref(body), byref(earth))
 
 def equatorial_to_ecliptic(equatorial, obliquity):
 
     ecliptic = EclipticCoordinates()
 
-    __builtin__.libkepler.equatorial_to_ecliptic(byref(equatorial),
-                                                 obliquity,
-                                                 byref(ecliptic))
+    _libkepler.equatorial_to_ecliptic(byref(equatorial), obliquity,
+                                      byref(ecliptic))
 
     return ecliptic
 
@@ -137,9 +128,8 @@ def ecliptic_to_equatorial(ecliptic, obliquity):
 
     equatorial = EquatorialCoordinates()
 
-    __builtin__.libkepler.ecliptic_to_equatorial(byref(ecliptic),
-                                                 obliquity,
-                                                 byref(equatorial))
+    _libkepler.ecliptic_to_equatorial(byref(ecliptic), obliquity,
+                                      byref(equatorial))
 
     return equatorial
 
@@ -147,10 +137,8 @@ def equatorial_to_horizontal(hour_angle, declination, latitude):
 
     horizontal = HorizontalCoordinates()
 
-    __builtin__.libkepler.equatorial_to_horizontal(hour_angle,
-                                                   declination,
-                                                   latitude,
-                                                   byref(horizontal))
+    _libkepler.equatorial_to_horizontal(hour_angle, declination, latitude,
+                                        byref(horizontal))
 
     return horizontal
 
@@ -159,13 +147,10 @@ def horizontal_to_equatorial(horizontal, latitude):
     hour_angle = c_double()
     declination = c_double()
 
-    __builtin__.libkepler.horizontal_to_equatorial(byref(horizontal),
-                                                   latitude,
-                                                   byref(hour_angle),
-                                                   byref(declination))
+    _libkepler.horizontal_to_equatorial(byref(horizontal), latitude,
+                                        byref(hour_angle), byref(declination))
 
-    return hour_angle, declination
-
+    return hour_angle.value, declination.value
 
 def rotate_rectangular(rotation_matrix, rectangular):
 
@@ -174,9 +159,7 @@ def rotate_rectangular(rotation_matrix, rectangular):
         for j in xrange(3):
             mat[i * 3 + j] = rotation_matrix[i][j]
 
-    __builtin__.libkepler.rotate_rectangular(pointer(mat),
-                                             byref(rectangular))
-
+    _libkepler.rotate_rectangular(pointer(mat), byref(rectangular))
 
 def rotate_equatorial(rotation_matrix, equatorial):
 
@@ -185,16 +168,14 @@ def rotate_equatorial(rotation_matrix, equatorial):
         for j in xrange(3):
             mat[i * 3 + j] = rotation_matrix[i][j]
 
-    __builtin__.libkepler.rotate_equatorial(pointer(mat),
-                                            byref(equatorial))
+    _libkepler.rotate_equatorial(pointer(mat), byref(equatorial))
 
 def rotate_ecliptic_to_equator(obliquity, ecliptic):
 
-    __builtin__.libkepler.rotate_ecliptic_to_equator(obliquity,
-                                                     byref(ecliptic))
+    _libkepler.rotate_ecliptic_to_equator(obliquity, byref(ecliptic))
 
-__builtin__.libkepler.rectangular_to_spherical.restype = None
-__builtin__.libkepler.rectangular_to_spherical.argtypes = [
+_libkepler.rectangular_to_spherical.restype = None
+_libkepler.rectangular_to_spherical.argtypes = [
     POINTER(RectangularCoordinates),
     POINTER(RectangularCoordinates),
     POINTER(c_double),
@@ -202,64 +183,64 @@ __builtin__.libkepler.rectangular_to_spherical.argtypes = [
     POINTER(c_double)
 ]
 
-__builtin__.libkepler.spherical_to_rectangular.restype = None
-__builtin__.libkepler.spherical_to_rectangular.argtypes = [
+_libkepler.spherical_to_rectangular.restype = None
+_libkepler.spherical_to_rectangular.argtypes = [
     c_double,
     c_double,
     c_double,
     POINTER(RectangularCoordinates)
 ]
 
-__builtin__.libkepler.phase_angle.restype = c_double
-__builtin__.libkepler.phase_angle.argtypes = [
+_libkepler.phase_angle.restype = c_double
+_libkepler.phase_angle.argtypes = [
     POINTER(RectangularCoordinates),
     POINTER(RectangularCoordinates)
 ]
 
-__builtin__.libkepler.equatorial_to_ecliptic.restype = None
-__builtin__.libkepler.equatorial_to_ecliptic.argtypes = [
+_libkepler.equatorial_to_ecliptic.restype = None
+_libkepler.equatorial_to_ecliptic.argtypes = [
     POINTER(EquatorialCoordinates),
     c_double,
     POINTER(EclipticCoordinates)
 ]
 
-__builtin__.libkepler.ecliptic_to_equatorial.restype = None
-__builtin__.libkepler.ecliptic_to_equatorial.argtypes = [
+_libkepler.ecliptic_to_equatorial.restype = None
+_libkepler.ecliptic_to_equatorial.argtypes = [
     POINTER(EclipticCoordinates),
     c_double,
     POINTER(EquatorialCoordinates)
 ]
 
-__builtin__.libkepler.equatorial_to_horizontal.restype = None
-__builtin__.libkepler.equatorial_to_horizontal.argtypes = [
+_libkepler.equatorial_to_horizontal.restype = None
+_libkepler.equatorial_to_horizontal.argtypes = [
     c_double,
     c_double,
     c_double,
     POINTER(HorizontalCoordinates)
 ]
 
-__builtin__.libkepler.horizontal_to_equatorial.restype = None
-__builtin__.libkepler.horizontal_to_equatorial.argtypes = [
+_libkepler.horizontal_to_equatorial.restype = None
+_libkepler.horizontal_to_equatorial.argtypes = [
     POINTER(HorizontalCoordinates),
     c_double,
     POINTER(c_double),
     POINTER(c_double)
 ]
 
-__builtin__.libkepler.rotate_rectangular.restype = None
-__builtin__.libkepler.rotate_rectangular.argtypes = [
+_libkepler.rotate_rectangular.restype = None
+_libkepler.rotate_rectangular.argtypes = [
     POINTER(c_double * 9),
     POINTER(RectangularCoordinates)
 ]
 
-__builtin__.libkepler.rotate_equatorial.restype = None
-__builtin__.libkepler.rotate_equatorial.argtypes = [
+_libkepler.rotate_equatorial.restype = None
+_libkepler.rotate_equatorial.argtypes = [
     POINTER(c_double * 9),
     POINTER(EquatorialCoordinates)
 ]
 
-__builtin__.libkepler.rotate_ecliptic_to_equator.restype = None
-__builtin__.libkepler.rotate_ecliptic_to_equator.argtypes = [
+_libkepler.rotate_ecliptic_to_equator.restype = None
+_libkepler.rotate_ecliptic_to_equator.argtypes = [
     c_double,
     POINTER(RectangularCoordinates)
 ]

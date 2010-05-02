@@ -17,13 +17,19 @@
 if __name__ == "__main__":
     exit()
 
-import __builtin__
 from ctypes import *
 from julian_date import *
 from coordinates import *
 from orbital_elements import *
+from pykepler import _libkepler
 
 class MpcBody(Structure):
+
+    MINOR_PLANET,       \
+    LONG_PERIOD_COMET,  \
+    SHORT_PERIOD_COMET, \
+    DEFUNCT_COMET,      \
+    UNCERTAIN_COMET = range(5)
 
     _fields_ = [
         ("id", c_char * 12),
@@ -50,31 +56,28 @@ class MpcBody(Structure):
 
 def minor_planet_info(mpcorb_record, jd_TT):
 
-    mpc_body = MpcBody()
+    body = MpcBody()
 
-    retval = __builtin__.libkepler.minor_planet_info(mpcorb_record,
-                                                     byref(jd_TT),
-                                                     byref(mpc_body))
+    retval = _libkepler.minor_planet_info(mpcorb_record, byref(jd_TT),
+                                          byref(body))
 
-    return retval, mpc_body
+    return retval, body
 
 def comet_info(mpcorb_record, jd_TT):
 
-    mpc_body = MpcBody()
+    body = MpcBody()
 
-    retval = __builtin__.libkepler.comet_info(mpcorb_record,
-                                              byref(jd_TT),
-                                              byref(mpc_body))
+    retval = _libkepler.comet_info(mpcorb_record, byref(jd_TT), byref(body))
 
-    return retval, mpc_body
+    return retval, body
 
-__builtin__.libkepler.minor_planet_info.argtypes = [
+_libkepler.minor_planet_info.argtypes = [
     c_char_p,
     POINTER(JulianDate),
     POINTER(MpcBody)
 ]
 
-__builtin__.libkepler.comet_info.argtypes = [
+_libkepler.comet_info.argtypes = [
     c_char_p,
     POINTER(JulianDate),
     POINTER(MpcBody)

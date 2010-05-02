@@ -17,19 +17,38 @@
 if __name__ == "__main__":
     exit()
 
-import __builtin__
 from ctypes import *
+from pykepler import _libkepler
+
+class FundArgs:
+
+    ARG_LONGITUDE_MERCURY, \
+    ARG_LONGITUDE_VENUS,   \
+    ARG_LONGITUDE_EARTH,   \
+    ARG_LONGITUDE_MARS,    \
+    ARG_LONGITUDE_JUPITER, \
+    ARG_LONGITUDE_SATURN,  \
+    ARG_LONGITUDE_URANUS,  \
+    ARG_LONGITUDE_NEPTUNE, \
+    ARG_PRECESSION,        \
+    ARG_ANOMALY_MOON,      \
+    ARG_ANOMALY_SUN,       \
+    ARG_LATITUDE_MOON,     \
+    ARG_ELONGATION_MOON,   \
+    ARG_LONGITUDE_NODE,    \
+    ARG_LONGITUDE_MOON = range(15)
 
 def fundamental_argument(argument, j2000_centuries):
 
-    return __builtin__.libkepler.fundamental_argument(argument, j2000_centuries)
+    return _libkepler.fundamental_argument(argument, j2000_centuries)
 
-__builtin__.libkepler.fundamental_argument.restype = c_double
-__builtin__.libkepler.fundamental_argument.argtypes = [
+_libkepler.fundamental_argument.restype = c_double
+_libkepler.fundamental_argument.argtypes = [
     c_int,
     c_double
 ]
 
 __all__ = [
+    "FundArgs",
     "fundamental_argument"
 ]

@@ -17,23 +17,22 @@
 if __name__ == "__main__":
     exit()
 
-import __builtin__
 from ctypes import *
+from pykepler import _libkepler
 
 def earth_figure_values(geog_latitude, height_msl):
 
     geocentric_latitude = c_double()
     geocentric_radius = c_double()
 
-    __builtin__.libkepler.earth_figure_values(geog_latitude,
-                                              height_msl,
-                                              byref(geocentric_latitude),
-                                              byref(geocentric_radius))
+    _libkepler.earth_figure_values(geog_latitude, height_msl,
+                                   byref(geocentric_latitude),
+                                   byref(geocentric_radius))
 
-    return geocentric_latitude, geocentric_radius
+    return geocentric_latitude.value, geocentric_radius.value
 
-__builtin__.libkepler.earth_figure_values.restype = None
-__builtin__.libkepler.earth_figure_values.argtypes = [
+_libkepler.earth_figure_values.restype = None
+_libkepler.earth_figure_values.argtypes = [
     c_double,
     c_double,
     POINTER(c_double),

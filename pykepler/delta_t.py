@@ -17,22 +17,19 @@
 if __name__ == "__main__":
     exit()
 
-import __builtin__
 from ctypes import *
+from pykepler import _libkepler
 
 def delta_t(year, month):
 
     del_t = c_double()
     correction = c_double()
 
-    retval = __builtin__.libkepler.delta_t(year,
-                                           month,
-                                           byref(del_t),
-                                           byref(correction))
+    retval = _libkepler.delta_t(year, month, byref(del_t), byref(correction))
 
-    return retval, del_t, correction
+    return retval, del_t.value, correction.value
 
-__builtin__.libkepler.delta_t.argtypes = [
+_libkepler.delta_t.argtypes = [
     c_int,
     c_int,
     POINTER(c_double),

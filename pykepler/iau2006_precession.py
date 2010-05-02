@@ -17,22 +17,21 @@
 if __name__ == "__main__":
     exit()
 
-import __builtin__
 from ctypes import *
 from julian_date import *
+from pykepler import _libkepler
 
 def iau2006_precession_matrix(tdb, toJ2000):
 
     prec_matrix = (c_double * 9)()
 
-    __builtin__.libkepler.iau2006_precession_matrix(byref(tdb),
-                                                    c_int(1 if toJ2000 else 0),
-                                                    pointer(prec_matrix))
+    _libkepler.iau2006_precession_matrix(byref(tdb), c_int(1 if toJ2000 else 0),
+                                         pointer(prec_matrix))
 
     return [prec_matrix[0:3], prec_matrix[3:6], prec_matrix[6:9]]
 
-__builtin__.libkepler.iau2006_precession_matrix.restype = None
-__builtin__.libkepler.iau2006_precession_matrix.argtypes = [
+_libkepler.iau2006_precession_matrix.restype = None
+_libkepler.iau2006_precession_matrix.argtypes = [
     POINTER(JulianDate),
     c_int,
     POINTER(c_double * 9)

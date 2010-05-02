@@ -17,8 +17,8 @@
 if __name__ == "__main__":
     exit()
 
-import __builtin__
 from ctypes import *
+from pykepler import _libkepler
 
 def geocentric_parallax(hour_angle, declination, distance,
 			geog_latitude, height_msl):
@@ -26,18 +26,14 @@ def geocentric_parallax(hour_angle, declination, distance,
     d_RA = c_double()
     d_declination = c_double()
 
-    __builtin__.libkepler.geocentric_parallax(hour_angle,
-                                              declination,
-                                              distance,
-                                              geog_latitude,
-                                              height_msl,
-                                              byref(d_RA),
-                                              byref(d_declination))
+    _libkepler.geocentric_parallax(hour_angle, declination, distance,
+                                   geog_latitude, height_msl, byref(d_RA),
+                                   byref(d_declination))
 
-    return d_RA, d_declination
+    return d_RA.value, d_declination.value
 
-__builtin__.libkepler.geocentric_parallax.restype = None
-__builtin__.libkepler.geocentric_parallax.argtypes = [
+_libkepler.geocentric_parallax.restype = None
+_libkepler.geocentric_parallax.argtypes = [
     c_double,
     c_double,
     c_double,

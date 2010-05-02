@@ -17,42 +17,38 @@
 if __name__ == "__main__":
     exit()
 
-import __builtin__
 from ctypes import *
 from julian_date import *
+from pykepler import _libkepler
 
 def mean_sidereal_time(ut1, tdb, longitude):
 
-    return __builtin__.libkepler.mean_sidereal_time(byref(ut1),
-                                                    byref(tdb),
-                                                    longitude)
+    return _libkepler.mean_sidereal_time(byref(ut1), byref(tdb), longitude)
 
 def apparent_sidereal_time(ut1, tdb, longitude):
 
-    return __builtin__.libkepler.apparent_sidereal_time(byref(ut1),
-                                                        byref(tdb),
-                                                        longitude)
+    return _libkepler.apparent_sidereal_time(byref(ut1), byref(tdb), longitude)
 
 def equation_of_the_equinoxes(tdb):
 
-    return __builtin__.libkepler.equation_of_the_equinoxes(byref(tdb))
+    return _libkepler.equation_of_the_equinoxes(byref(tdb))
 
-__builtin__.libkepler.mean_sidereal_time.restype = c_double
-__builtin__.libkepler.mean_sidereal_time.argtypes = [
+_libkepler.mean_sidereal_time.restype = c_double
+_libkepler.mean_sidereal_time.argtypes = [
     POINTER(JulianDate),
     POINTER(JulianDate),
     c_double
 ]
 
-__builtin__.libkepler.apparent_sidereal_time.restype = c_double
-__builtin__.libkepler.apparent_sidereal_time.argtypes = [
+_libkepler.apparent_sidereal_time.restype = c_double
+_libkepler.apparent_sidereal_time.argtypes = [
     POINTER(JulianDate),
     POINTER(JulianDate),
     c_double
 ]
 
-__builtin__.libkepler.equation_of_the_equinoxes.restype = c_double
-__builtin__.libkepler.equation_of_the_equinoxes.argtypes = [
+_libkepler.equation_of_the_equinoxes.restype = c_double
+_libkepler.equation_of_the_equinoxes.argtypes = [
     POINTER(JulianDate)
 ]
 

@@ -17,8 +17,8 @@
 if __name__ == "__main__":
     exit()
 
-import __builtin__
 from ctypes import *
+from pykepler import _libkepler
 
 class JulianDate(Structure):
 
@@ -41,7 +41,7 @@ def calendar_to_julian_date(year, month, day):
 
     jd = JulianDate()
 
-    retval = __builtin__.libkepler.calendar_to_julian_date(year, month, day, jd)
+    retval = _libkepler.calendar_to_julian_date(year, month, day, jd)
 
     return retval, jd
 
@@ -52,22 +52,20 @@ def julian_to_calendar_date(jd):
     day = c_int()
     day_frac = c_double()
 
-    retval = __builtin__.libkepler.julian_to_calendar_date(byref(jd),
-                                                           byref(year),
-                                                           byref(month),
-                                                           byref(day),
-                                                           byref(day_frac))
+    retval = _libkepler.julian_to_calendar_date(byref(jd), byref(year),
+                                                byref(month), byref(day),
+                                                byref(day_frac))
 
-    return retval, year, month, day, day_frac
+    return retval, year.value, month.value, day.value, day_frac.value
 
-__builtin__.libkepler.calendar_to_julian_date.argtypes = [
+_libkepler.calendar_to_julian_date.argtypes = [
     c_int,
     c_int,
     c_int,
     POINTER(JulianDate)
 ]
 
-__builtin__.libkepler.julian_to_calendar_date.argtypes = [
+_libkepler.julian_to_calendar_date.argtypes = [
     POINTER(JulianDate),
     POINTER(c_int),
     POINTER(c_int),

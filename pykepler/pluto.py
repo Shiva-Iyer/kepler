@@ -17,21 +17,20 @@
 if __name__ == "__main__":
     exit()
 
-import __builtin__
 from ctypes import *
 from julian_date import *
 from coordinates import *
+from pykepler import _libkepler
 
 def pluto_coordinates(tdb):
 
     rectangular = RectangularCoordinates()
 
-    retval = __builtin__.libkepler.pluto_coordinates(byref(tdb),
-                                                     byref(rectangular))
+    retval = _libkepler.pluto_coordinates(byref(tdb), byref(rectangular))
 
     return retval, rectangular
 
-__builtin__.libkepler.pluto_coordinates.argtypes = [
+_libkepler.pluto_coordinates.argtypes = [
     POINTER(JulianDate),
     POINTER(RectangularCoordinates)
 ]

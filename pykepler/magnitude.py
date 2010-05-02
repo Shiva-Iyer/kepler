@@ -17,34 +17,30 @@
 if __name__ == "__main__":
     exit()
 
-import __builtin__
 from ctypes import *
 from coordinates import *
+from pykepler import _libkepler
 
 def minor_planet_magnitude(body_coords, earth_coords, abs_mag, slope):
 
-    return __builtin__.libkepler.minor_planet_magnitude(byref(body_coords),
-                                                        byref(earth_coords),
-                                                        abs_mag,
-                                                        slope)
+    return _libkepler.minor_planet_magnitude(byref(body_coords),
+                                             byref(earth_coords), abs_mag, slope)
 
 def comet_magnitude(body_coords, earth_coords, abs_mag, slope):
 
-    return __builtin__.libkepler.comet_magnitude(byref(body_coords),
-                                                 byref(earth_coords),
-                                                 abs_mag,
-                                                 slope)
+    return _libkepler.comet_magnitude(byref(body_coords), byref(earth_coords),
+                                      abs_mag, slope)
 
-__builtin__.libkepler.minor_planet_magnitude.restype = c_double
-__builtin__.libkepler.minor_planet_magnitude.argtypes = [
+_libkepler.minor_planet_magnitude.restype = c_double
+_libkepler.minor_planet_magnitude.argtypes = [
     POINTER(RectangularCoordinates),
     POINTER(RectangularCoordinates),
     c_double,
     c_double
 ]
 
-__builtin__.libkepler.comet_magnitude.restype = c_double
-__builtin__.libkepler.comet_magnitude.argtypes = [
+_libkepler.comet_magnitude.restype = c_double
+_libkepler.comet_magnitude.argtypes = [
     POINTER(RectangularCoordinates),
     POINTER(RectangularCoordinates),
     c_double,

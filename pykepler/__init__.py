@@ -18,11 +18,10 @@ if __name__ == "__main__":
     exit()
 
 import sys
-import __builtin__
 from ctypes import *
 
 # Load the kepler shared library and save for use in the pykepler modules
-__builtin__.libkepler = CDLL("libkepler.so.1")
+_libkepler = CDLL("libkepler.so.1")
 
 from julian_date import *
 from delta_t import *
@@ -40,12 +39,13 @@ from aberration import *
 from earth_figure import *
 from parallax import *
 from magnitude import *
+from constants import *
 
-# Iterate through the pykepler modules and export the public symbols. As a
-# result, functions can be called without specifying the module name.
 __all__ = []
-_modules = filter(lambda mod: mod.startswith(__package__ + "."), sys.modules)
 
+# Iterate through the pykepler modules and export the public symbols so that
+# functions can be called without specifying a module name.
+_modules = filter(lambda mod: mod.startswith(__package__ + "."), sys.modules)
 for m in _modules:
     try:
         mod = sys.modules[m]

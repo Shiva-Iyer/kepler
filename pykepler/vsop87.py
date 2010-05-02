@@ -17,33 +17,32 @@
 if __name__ == "__main__":
     exit()
 
-import __builtin__
 from ctypes import *
 from julian_date import *
 from coordinates import *
+from pykepler import _libkepler
 
 def vsop87_coordinates(planet_number, tdb):
 
     rectangular = RectangularCoordinates()
 
-    retval = __builtin__.libkepler.vsop87_coordinates(planet_number,
-                                                      byref(tdb),
-                                                      byref(rectangular))
+    retval = _libkepler.vsop87_coordinates(planet_number, byref(tdb),
+                                           byref(rectangular))
 
     return retval, rectangular
 
 def vsop87_ecliptic_to_equator(ecliptic):
 
-    __builtin__.libkepler.vsop87_ecliptic_to_equator(byref(ecliptic))
+    _libkepler.vsop87_ecliptic_to_equator(byref(ecliptic))
 
-__builtin__.libkepler.vsop87_coordinates.argtypes = [
+_libkepler.vsop87_coordinates.argtypes = [
     c_int,
     POINTER(JulianDate),
     POINTER(RectangularCoordinates)
 ]
 
-__builtin__.libkepler.vsop87_ecliptic_to_equator.restype = None
-__builtin__.libkepler.vsop87_ecliptic_to_equator.argtypes = [
+_libkepler.vsop87_ecliptic_to_equator.restype = None
+_libkepler.vsop87_ecliptic_to_equator.argtypes = [
     POINTER(RectangularCoordinates)
 ]
 

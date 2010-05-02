@@ -17,10 +17,10 @@
 if __name__ == "__main__":
     exit()
 
-import __builtin__
 from ctypes import *
 from julian_date import *
 from coordinates import *
+from pykepler import _libkepler
 
 class OrbitalElements(Structure):
 
@@ -66,9 +66,8 @@ def elements_to_ephemeris(jd_TT, orb_elements):
 
     coordinates = RectangularCoordinates()
 
-    retval = __builtin__.libkepler.elements_to_ephemeris(byref(jd_TT),
-                                                         byref(orb_elements),
-                                                         byref(coordinates))
+    retval = _libkepler.elements_to_ephemeris(byref(jd_TT), byref(orb_elements),
+                                              byref(coordinates))
 
     return retval, coordinates
 
@@ -76,35 +75,33 @@ def eccentric_anomaly(mean_ano, eccentricity):
 
     ecc_anomaly = c_double()
 
-    retval = __builtin__.libkepler.eccentric_anomaly(mean_ano,
-                                                     eccentricity,
-                                                     byref(ecc_anomaly))
+    retval = _libkepler.eccentric_anomaly(mean_ano, eccentricity,
+                                          byref(ecc_anomaly))
 
-    return retval, ecc_anomaly
+    return retval, ecc_anomaly.value
 
 def hyperbolic_anomaly(mean_ano, eccentricity):
 
     hyp_anomaly = c_double()
 
-    retval = __builtin__.libkepler.hyperbolic_anomaly(mean_ano,
-                                                      eccentricity,
-                                                      byref(hyp_anomaly))
+    retval = _libkepler.hyperbolic_anomaly(mean_ano, eccentricity,
+                                           byref(hyp_anomaly))
 
-    return retval, hyp_anomaly
+    return retval, hyp_anomaly.value
 
-__builtin__.libkepler.elements_to_ephemeris.argtypes = [
+_libkepler.elements_to_ephemeris.argtypes = [
     POINTER(JulianDate),
     POINTER(OrbitalElements),
     POINTER(RectangularCoordinates)
 ]
 
-__builtin__.libkepler.eccentric_anomaly.argtypes = [
+_libkepler.eccentric_anomaly.argtypes = [
     c_double,
     c_double,
     POINTER(c_double)
 ]
 
-__builtin__.libkepler.hyperbolic_anomaly.argtypes = [
+_libkepler.hyperbolic_anomaly.argtypes = [
     c_double,
     c_double,
     POINTER(c_double)
