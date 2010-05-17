@@ -22,15 +22,45 @@ from julian_date import *
 from pykepler import _libkepler
 
 def mean_sidereal_time(ut1, tdb, longitude):
+    """
+    Calculate the local mean sidereal time.
 
+    ut1 -- UT1 for calculating the Earth Rotation Angle.
+    tdb -- TDB to be used for calculating the LMST. TT may be used for all but
+           the most exacting applications.
+    longitude -- The observer's longitude in radians,positive east of Greenwich.
+
+    Return 1: The local mean sidereal time in radians, between 0 and 2*PI.
+
+    """
     return _libkepler.mean_sidereal_time(byref(ut1), byref(tdb), longitude)
 
 def apparent_sidereal_time(ut1, tdb, longitude):
+    """
+    Calculate the local apparent sidereal time. Apparent sidereal time takes
+    into account the motion of the equinox due to nutation.
 
+    ut1 -- UT1 for calculating the Earth Rotation Angle.
+    tdb -- TDB to be used for calculating the LAST. TT may be used for all but
+           the most exacting applications.
+    longitude -- The observer's longitude in radians,positive east of Greenwich.
+
+    Return 1: The local apparent sidereal time in radians, between 0 and 2*PI.
+
+    """
     return _libkepler.apparent_sidereal_time(byref(ut1), byref(tdb), longitude)
 
 def equation_of_the_equinoxes(tdb):
+    """
+    Calculate the value of the equation of the equinoxes which accounts for the
+    motion of the equinox due to nutation.
 
+    tdb -- TDB to be used for calculations. TT may be used for all but the most
+           exacting applications.
+
+    Return 1: The value of the equation of the equinoxes in radians.
+
+    """
     return _libkepler.equation_of_the_equinoxes(byref(tdb))
 
 _libkepler.mean_sidereal_time.restype = c_double

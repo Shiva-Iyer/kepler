@@ -65,6 +65,16 @@ class Conversion:
     HRS_TO_RAD = 0.261799387799149436538554
 
 class DegMinSec:
+    """ The __init__ method converts an angle expressed as a decimal into degrees,
+    minutes and seconds.
+
+    Fields:
+
+    degrees
+    minutes
+    seconds
+
+    """
 
     def __init__(self, d = 0.0):
 
@@ -88,6 +98,10 @@ class DegMinSec:
         return rep
 
 def degrees(d, m, s):
+    """Return the decimal value of an angle expressed in degrees, minutes
+    and seconds.
+
+    """
     return d + (m / 60.0) + (s / 3600.0)
 
 __all__ = [

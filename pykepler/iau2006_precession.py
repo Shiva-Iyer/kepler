@@ -22,7 +22,19 @@ from julian_date import *
 from pykepler import _libkepler
 
 def iau2006_precession_matrix(tdb, toJ2000):
+    """
+    Calculate the precession matrix using the IAU 2006 precession model in its
+    entirety. The resulting matrix may be used in the rotation of coordinates.
 
+    tdb -- TDB to be used for calculations. TT may be used for all but the most
+           exacting applications.
+    toJ2000 -- If False, the resulting matrix is for precessing from J2000 to
+               another epoch. If True, precession is from another epoch to J2000.
+
+    Return 1: The precession matrix in the form 
+              [[m11, m12, m13], [m21, m22, m23], [m31, m32, m33]]
+
+    """
     prec_matrix = (c_double * 9)()
 
     _libkepler.iau2006_precession_matrix(byref(tdb), c_int(1 if toJ2000 else 0),

@@ -22,12 +22,36 @@ from coordinates import *
 from pykepler import _libkepler
 
 def minor_planet_magnitude(body_coords, earth_coords, abs_mag, slope):
+    """
+    Calculate the apparent magnitude of a minor planet.
 
+    body_coords -- The minor planet's heliocentric rectangular coordinates. Must
+                   be in the same reference frame and units as ear (AU).
+    earth_coords -- The Earth's heliocentric rectangular coordinates. Must be in
+                    the same reference frame and units as obj (AU).
+    abs_mag -- The mean absolute visual magnitude of the minor planet, H.
+    slope -- The magnitude slope parameter of the minor planet, G.
+
+    Return 1: The minor planet's apparent magnitude.
+
+    """
     return _libkepler.minor_planet_magnitude(byref(body_coords),
                                              byref(earth_coords), abs_mag, slope)
 
 def comet_magnitude(body_coords, earth_coords, abs_mag, slope):
+    """
+    Calculates the apparent magnitude of a comet.
 
+    body_coords -- The comet's heliocentric rectangular coordinates. Must be in
+                   the same reference frame and units as ear (AU).
+    earth_coords -- The Earth's heliocentric rectangular coordinates. Must be in
+                    the same reference frame and units as obj (AU).
+    abs_mag -- The mean absolute visual magnitude of the comet, H.
+    slope -- The magnitude slope parameter of the comet, G.
+
+    Return 1: The comet's apparent magnitude.
+
+    """
     return _libkepler.comet_magnitude(byref(body_coords), byref(earth_coords),
                                       abs_mag, slope)
 

@@ -14,6 +14,31 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+"""This package provides a Python interface for the routines in the kepler
+library. Refer to the kepler documentation for the software prerequisites.
+
+Modules:
+
+julian_date -- Julian date conversions
+delta_t -- Approximate value of Delta-T (TT - UT1)
+coordinates -- Coordinate transformations and rotations
+fund_args -- Values of fundamental lunisolar/planetary/precession arguments
+vsop87 -- VSOP87 theory for sun/planet coordinates
+elp82b -- ELP2000-82B theory for lunar coordinates
+pluto -- PLUTO95 theory for Pluto's coordinates
+sidereal_time -- Sidereal time calculations using IERS 2003 conventions 
+iau2006_precession -- Precession calculations using the IAU 2006 model
+iau2000a_nutation -- Nutation calculations using the IAU 2000A model
+orbital_elements -- Reduction of orbital elements to ephemeris
+mpc_file -- MPC orbit database parser
+aberration -- Ron-Vondrak theory of aberration
+earth_figure -- Values related to the oblateness of the Earth
+parallax -- Values for the geocentric parallax of celestial bodies
+magnitude -- Apparent magnitude of minor planets and comets
+constants -- Constants and utility routines
+
+"""
+
 if __name__ == "__main__":
     exit()
 

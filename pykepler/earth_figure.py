@@ -21,7 +21,17 @@ from ctypes import *
 from pykepler import _libkepler
 
 def earth_figure_values(geog_latitude, height_msl):
+    """
+    Calculate various values related to the oblateness of the Earth.
 
+    geog_latitude -- The observer's geographic latitude in radians.
+    height_msl -- The observer's height above mean sea level in meters.
+
+    Return 1: The observer's geocentric latitude in radians.
+    Return 2: The observer's geocentric radius as a fraction of the Earth's
+              equatorial radius.
+
+    """
     geocentric_latitude = c_double()
     geocentric_radius = c_double()
 

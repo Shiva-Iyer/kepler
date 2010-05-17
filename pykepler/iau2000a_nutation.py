@@ -22,11 +22,29 @@ from julian_date import *
 from pykepler import _libkepler
 
 def iau2000a_mean_obliquity(tdb):
+    """
+    Calculate the mean obliquity of the ecliptic using the IAU 2000 formula.
 
+    tdb -- TDB to be used for calculations. TT may be used for all but the
+           most exacting applications.
+
+    Return 1: The mean obliquity of the ecliptic in radians.
+
+    """
     return _libkepler.iau2000a_mean_obliquity(byref(tdb))
 
 def iau2000a_nutation(tdb):
+    """
+    Calculate the nutation in longitude and obliquity using the IAU 2000A
+    nutation model in its entirety.
 
+    tdb -- TDB to be used for calculations. TT may be used for all but the
+           most exacting applications.
+
+    Return 1: The nutation in longitude expressed in radians.
+    Return 2: The nutation in obliquity expressed in radians.
+
+    """
     nut_longitude = c_double()
     nut_latitude = c_double()
 
@@ -36,7 +54,17 @@ def iau2000a_nutation(tdb):
     return nut_longitude.value, nut_latitude.value
 
 def iau2000a_nutation_matrix(tdb):
+    """
+    Calculate the nutation matrix using the IAU 2000A nutation model in its
+    entirety. The resulting matrix may be used in the rotation of coordinates.
 
+    tdb -- TDB to be used for calculations. TT may be used for all but the
+           most exacting applications.
+
+    Return 1: The nutation matrix in the form
+              [[m11, m12, m13], [m21, m22, m23], [m31, m32, m33]]
+
+    """
     nut_matrix = (c_double * 9)()
 
     _libkepler.iau2000a_nutation_matrix(byref(tdb), pointer(nut_matrix))

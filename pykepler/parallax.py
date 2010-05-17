@@ -22,7 +22,20 @@ from pykepler import _libkepler
 
 def geocentric_parallax(hour_angle, declination, distance,
 			geog_latitude, height_msl):
+    """
+    Calculate the geocentric parallax in the equatorial coordinates of a
+    celestial body.
 
+    hour_angle -- The body's local hour angle in radians.
+    declination -- The body's declination in radians.
+    distance -- The body's distance from the Earth in AU. 
+    geog_latitude -- The observer's geographic latitude in radians.
+    height_msl -- The observer's height above mean sea level in meters.
+
+    Return 1: The parallax in right ascension expressed in radians.
+    Return 2: The parallax in declination expressed in radians.
+
+    """
     d_RA = c_double()
     d_declination = c_double()
 

@@ -23,7 +23,21 @@ from coordinates import *
 from pykepler import _libkepler
 
 def vsop87_coordinates(planet_number, tdb):
+    """
+    Calculate a major planet's heliocentric rectangular coordinates using the
+    VSOP87 (version A) theory in its entirety.
 
+    planet_number -- A constant from the class SolarSystemPlanets, identifying
+                     the planet.
+    tdb -- TDB to be used for calculations. TT may be used for all but the most
+           exacting applications.
+
+    Return 1: SUCCESS -- If the coordinates have been calculated successfully.
+              ERR_INVALID_PLANET -- If the planet's identifier is invalid.
+    Return 2: The planet's heliocentric rectangular coordinates in AU.
+              The reference frame is the equinox & ecliptic of J2000.
+
+    """
     rectangular = RectangularCoordinates()
 
     retval = _libkepler.vsop87_coordinates(planet_number, byref(tdb),
@@ -32,7 +46,13 @@ def vsop87_coordinates(planet_number, tdb):
     return retval, rectangular
 
 def vsop87_ecliptic_to_equator(ecliptic):
+    """
+    Rotate a body's coordinates from the dynamical ecliptic frame of J2000
+    to the equatorial frame of J2000/FK5.
 
+    ecliptic -- The coordinates to be rotated in-place
+
+    """
     _libkepler.vsop87_ecliptic_to_equator(byref(ecliptic))
 
 _libkepler.vsop87_coordinates.argtypes = [

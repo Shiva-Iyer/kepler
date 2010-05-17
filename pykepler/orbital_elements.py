@@ -23,6 +23,22 @@ from coordinates import *
 from pykepler import _libkepler
 
 class OrbitalElements(Structure):
+    """
+    Used wherever the osculating orbital elements of a celestial body are
+    expected or returned.
+
+    Fields:
+
+    epoch -- Epoch of osculation
+    mean_anomaly -- Mean anomaly in radians at epoch
+    daily_motion -- Daily motion in radians/day
+    perihelion -- Perihelion distance in AU
+    eccentricity -- Eccentricity of the orbit
+    arg_perihelion -- Argument of the perihelion in radians (J2000)
+    lon_asc_node -- Longitude of the ascending node in radians (J2000)
+    inclination -- Inclination of the orbit in radians (J2000)
+
+    """
 
     _fields_ = [
         ("epoch", JulianDate),
@@ -63,7 +79,22 @@ class OrbitalElements(Structure):
         return rep
 
 def elements_to_ephemeris(jd_TT, orb_elements):
+    """
+    Calculate the heliocentric rectangular coordinates of a celestial body
+    given its osculating orbital elements.
 
+    jd_tt -- TT to be used for calculations.
+    orb_elements -- The body's osculating orbital elements.
+
+    Return 1: SUCCESS -- If the coordinates were calculated successfully.
+              ERR_INVALID_ECCENTRICITY -- If the body's eccentricity is negative.
+              ERR_CONVERGENCE -- If the solution to Kepler's equation didn't 
+              converge to the required precision within the specified number
+              of iterations.
+    Return 2: The body's heliocentric rectangular coordinates in AU. The
+              reference frame is the equinox & ecliptic of J2000.
+
+    """
     coordinates = RectangularCoordinates()
 
     retval = _libkepler.elements_to_ephemeris(byref(jd_TT), byref(orb_elements),
@@ -72,7 +103,20 @@ def elements_to_ephemeris(jd_TT, orb_elements):
     return retval, coordinates
 
 def eccentric_anomaly(mean_ano, eccentricity):
+    """
+    Solve Kepler's equation for elliptic orbits and return the resulting value
+    of the eccentric anomaly.
 
+    mean_ano -- The celestial body's mean anomaly in radians.
+    eccentricity -- The eccentricity of the orbit.
+
+    Return 1: SUCCESS -- If Kepler's equation was solved successfully.
+              ERR_CONVERGENCE -- If the solution to Kepler's equation didn't
+              converge to the required precision within the specified number
+              of iterations.
+    Return 2: On success, the body's eccentric anomaly in radians.
+
+    """
     ecc_anomaly = c_double()
 
     retval = _libkepler.eccentric_anomaly(mean_ano, eccentricity,
@@ -81,7 +125,20 @@ def eccentric_anomaly(mean_ano, eccentricity):
     return retval, ecc_anomaly.value
 
 def hyperbolic_anomaly(mean_ano, eccentricity):
+    """
+    Solve Kepler's equation for hyperbolic orbits and return the resulting value
+    of the hyperbolic anomaly.
 
+    mean_ano -- The celestial body's mean anomaly in radians.
+    eccentricity -- The eccentricity of the orbit.
+
+    Return 1: SUCCESS -- If Kepler's equation was solved successfully.
+              ERR_CONVERGENCE -- If the solution to Kepler's equation didn't
+              converge to the required precision within the specified number
+              of iterations.
+    Return 2: On success, the body's hyperbolic anomaly in radians.
+
+    """
     hyp_anomaly = c_double()
 
     retval = _libkepler.hyperbolic_anomaly(mean_ano, eccentricity,

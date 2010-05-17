@@ -21,6 +21,11 @@ from ctypes import *
 from pykepler import _libkepler
 
 class FundArgs:
+    """
+    Constants for the various fundamental arguments used throughout the library.
+    These values are parameters to the function fundamental_argument().
+
+    """
 
     ARG_LONGITUDE_MERCURY, \
     ARG_LONGITUDE_VENUS,   \
@@ -39,7 +44,18 @@ class FundArgs:
     ARG_LONGITUDE_MOON = range(15)
 
 def fundamental_argument(argument, j2000_centuries):
+    """
+    Calculates values for the various fundamental arguments used in the
+    planetary, lunar, precession and nutation models.
 
+    arguments -- One of the constants from the FundArgs class.
+    j2000_centuries -- Julian centuries of TDB since 2000-01-01 12h TDB. TT may
+                       be used for all but the most exacting applications.
+
+    Return 1: -1 if the argument parameter is invalid. The value of the
+              fundamental argument in radians otherwise.
+
+    """
     return _libkepler.fundamental_argument(argument, j2000_centuries)
 
 _libkepler.fundamental_argument.restype = c_double

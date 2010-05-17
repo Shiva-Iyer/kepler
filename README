@@ -85,16 +85,9 @@ the nature of the functions contained therein. Extensive comments in the
 source code describe function parameters, return values and other relevant
 information.
 
-The Python interface in the pykepler package closely parallel the C routines with
-the following notable differences:
-
-1. Where the C routine expects pointer arguments for return values, the Python
-   wrapper returns the corresponding values as tuples. If the C routine returns
-   an integer to denote success (0) or failure (non-zero), the Python wrapper
-   returns that value as the first element in the tuple.
-
-2. Where the C routine expects a 3x3 matrix of doubles, the Python wrapper expects
-   a 3-member list where each of the members is a list of 3 doubles.
+The Python interface in the pykepler package closely parallels the C routines.
+The help() function in the Python interpreter may be used to view the available
+documentation on function arguments and return values.
 
 References
 ----------

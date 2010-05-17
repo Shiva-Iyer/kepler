@@ -23,7 +23,16 @@ from coordinates import *
 from pykepler import _libkepler
 
 def aberration_earth_velocity(tdb):
+    """
+    Calculate the components of the earth's velocity.
 
+    tdb -- TDB to be used for calculations. TT may be used for all but the most
+           exacting applications.
+
+    Return 1: The Earth's velocity components in 10**(-8) AU/day. The reference
+              frame is the equinox & equator of J2000.
+
+    """
     earth_velocity = RectangularCoordinates()
 
     _libkepler.aberration_earth_velocity(byref(tdb), byref(earth_velocity))
@@ -31,7 +40,16 @@ def aberration_earth_velocity(tdb):
     return earth_velocity
 
 def annual_aberration(tdb, equ_coords):
+    """
+    Calculate the annual aberration in right ascension and declination.
 
+    tdb -- TDB to be used for calculations
+    equ_coords -- Equatorial coordinates of the celestial body
+
+    Return 1: Aberration in right ascension
+    Return 2: Aberration in declination
+
+    """
     d_RA = c_double()
     d_declination = c_double()
 

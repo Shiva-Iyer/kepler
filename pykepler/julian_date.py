@@ -21,6 +21,12 @@ from ctypes import *
 from pykepler import _libkepler
 
 class JulianDate(Structure):
+    """Used wherever a Julian Day Number (JDN) is expected or returned.
+
+    A given JDN may be partitioned between date1 and date2 in any convenient
+    manner. The JDN that corresponds to this class is date1 + date2.
+
+    """
 
     _fields_ = [
         ("date1", c_double),
@@ -38,7 +44,19 @@ class JulianDate(Structure):
         return dict(date1 = self.date1, date2 = self.date2).__repr__()
 
 def calendar_to_julian_date(year, month, day):
+    """Calculate the Julian Day Number for a date in the proleptic Gregorian
+    calendar. No account is taken of the Gregorian calendar reform and dates
+    prior to Jan. 1, 4800BC are not supported.
 
+    year -- Year number using astronomical reckoning and after 4800BC.
+    month -- Month of the year.
+    day -- Day of the month.
+
+    Return 1: SUCCESS -- Julian date calculated successfully.
+              ERR_INVALID_DATE -- Gregorian date specified is invalid.
+    Return 2: The calculated Julian Day Number.
+
+    """
     jd = JulianDate()
 
     retval = _libkepler.calendar_to_julian_date(year, month, day, jd)
@@ -46,7 +64,20 @@ def calendar_to_julian_date(year, month, day):
     return retval, jd
 
 def julian_to_calendar_date(jd):
+    """Calculates the date in the proleptic Gregorian calendar that corresponds
+    to the given Julian Day Number. The Gregorian calendar reform is ignored.
 
+    jd -- The Julian Day Number. Must correspond to a date on or after
+          Jan. 1, 4800BC in the proleptic Gregorian calendar.
+
+    Return 1: SUCCESS -- Gregorian date calculated successfully.
+              ERR_INVALID_DATE -- Julian Day Number specified is out of range.
+    Return 2: Year number using astronomical reckoning.
+    Return 3: Month of the year.
+    Return 4: Day of the month.
+    Return 5: Fractional part of the day (0 = midnight, 0.5 = noon).
+
+    """
     year = c_int()
     month = c_int()
     day = c_int()

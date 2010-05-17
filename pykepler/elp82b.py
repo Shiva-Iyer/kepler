@@ -23,7 +23,18 @@ from coordinates import *
 from pykepler import _libkepler
 
 def elp82b_coordinates(tdb):
+    """
+    Calculate the Moon's geocentric ecliptic coordinates and distance using the
+    ELP 2000-82B lunar theory in its entirety.
 
+    tdb -- TDB to be used for calculations. TT may be used for all but the most
+           exacting applications.
+
+    Return 1: The Moon's geocentric ecliptic coordinates. The reference frame is
+              the equinox & ecliptic of J2000.
+    Return 2: The Moon's distance from the Earth in KM.
+
+    """
     ecliptic = EclipticCoordinates()
     radius = c_double()
 

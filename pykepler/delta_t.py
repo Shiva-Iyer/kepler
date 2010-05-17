@@ -21,7 +21,20 @@ from ctypes import *
 from pykepler import _libkepler
 
 def delta_t(year, month):
+    """Return an approximate value for Delta-T (TT - UT1) valid for a limited
+    historical period.
 
+    year -- Year number in astronomical reckoning, between 2000BC and 3000AD.
+    month -- Month of the year.
+
+    Return 1: SUCCESS -- Delta-T calculated successfully.
+              ERR_INVALID_DATE -- Invalid year or month specified.
+    Return 2: An approximate value for Delta-T in seconds.
+    Return 3: A correction, in seconds, to be added to Delta-T for years before
+              1955AD or after 2005AD and when used in conjunction with NASA's
+              publication "Five millennium canon of solar eclipses".
+
+    """
     del_t = c_double()
     correction = c_double()
 

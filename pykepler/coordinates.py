@@ -21,6 +21,16 @@ from ctypes import *
 from pykepler import _libkepler
 
 class RectangularCoordinates(Structure):
+    """Used for rectangular coordinates. The origin and orientation of
+    the xy axes are application specific.
+
+    Fields:
+
+    x -- x-coordinate. The units are application specific.
+    y -- y-coordinate. The units are application specific.
+    z -- z-coordinate. The units are application specific.
+
+    """
 
     _fields_ = [
         ("x", c_double),
@@ -40,6 +50,14 @@ class RectangularCoordinates(Structure):
         return dict(x = self.x, y = self.y, z = self.z).__repr__()
 
 class EquatorialCoordinates(Structure):
+    """Used for coordinates in the Earth's equatorial frame.
+
+    Fields:
+
+    right_ascension -- Right ascension in radians
+    declination -- Declination in radians
+
+    """
 
     _fields_ = [
         ("right_ascension", c_double),
@@ -57,6 +75,14 @@ class EquatorialCoordinates(Structure):
         return dict(RA = self.right_ascension, dec = self.declination).__repr__()
 
 class EclipticCoordinates(Structure):
+    """Used for ecliptic coordinates. The origin is application specific.
+
+    Fields:
+
+    longitude -- Longitude in radians.
+    latitude -- Latitude in radians.
+
+    """
 
     _fields_ = [
         ("longitude", c_double),
@@ -74,6 +100,14 @@ class EclipticCoordinates(Structure):
         return dict(lon = self.longitude, lat = self.latitude).__repr__()
 
 class HorizontalCoordinates(Structure):
+    """Used for horizontal coordinates.
+
+    Fields:
+
+    azimuth -- Azimuth measured in radians and clockwise from the south.
+    altitude -- Altitude in radians.
+
+    """
 
     _fields_ = [
         ("azimuth", c_double),
@@ -91,7 +125,21 @@ class HorizontalCoordinates(Structure):
         return dict(azi = self.azimuth, alt = self.altitude).__repr__()
 
 def rectangular_to_spherical(body, earth):
+    """
+    Convert the heliocentric rectangular coordinates of a celestial body to
+    geocentric spherical coordinates. The resulting coordinates will be in the
+    same reference frame (xy plane) as the original coordinates.
 
+    body -- The body's heliocentric rectangular coordinates. Must be in
+            the same reference frame and units as earth.
+    earth -- The Earth's heliocentric rectangular coordinates. Must be in
+             the same reference frame and units as body.
+
+    Return 1: The body's geocentric longitude in radians.
+    Return 2: The body's geocentric latitude in radians.
+    Return 3: The body's geocentric distance in the units of body and earth.
+
+    """
     longitude = c_double()
     latitude = c_double()
     radius = c_double()
@@ -103,7 +151,17 @@ def rectangular_to_spherical(body, earth):
     return longitude.value, latitude.value, radius.value
 
 def spherical_to_rectangular(longitude, latitude, radius):
+    """
+    Convert the spherical coordinates of a celestial body to rectangular
+    coordinates with the same origin and reference frame (xy plane).
 
+    longitude -- The body's longitude in radians.
+    latitude -- The body's latitude in radians.
+    radius -- The body's distance from the central body.
+
+    Return 1: The body's rectangular coordinates in the same units as radius.
+
+    """
     rectangular = RectangularCoordinates()
 
     _libkepler.spherical_to_rectangular(longitude, latitude, radius,
@@ -112,11 +170,30 @@ def spherical_to_rectangular(longitude, latitude, radius):
     return rectangular
 
 def phase_angle(body, earth):
+    """
+    Calculate the Sun-body-Earth phase angle.
 
+    body -- The body's heliocentric rectangular coordinates. Must be in
+            the same reference frame and units as ear.
+    earth -- The Earth's heliocentric rectangular coordinates. Must be in
+             the same reference frame and units as obj.
+
+    Return 1: The Sun-body-Earth phase angle in radians.
+
+    """
     return _libkepler.phase_angle(byref(body), byref(earth))
 
 def equatorial_to_ecliptic(equatorial, obliquity):
+    """
+    Convert the geocentric equatorial coordinates of a celestial body to
+    geocentric ecliptic coordinates.
 
+    equatorial -- The body's geocentric equatorial coordinates.
+    obliquity -- The obliquity of the ecliptic in radians.
+
+    Return 1: The body's geocentric ecliptic coordinates.
+
+    """
     ecliptic = EclipticCoordinates()
 
     _libkepler.equatorial_to_ecliptic(byref(equatorial), obliquity,
@@ -125,7 +202,16 @@ def equatorial_to_ecliptic(equatorial, obliquity):
     return ecliptic
 
 def ecliptic_to_equatorial(ecliptic, obliquity):
+    """
+    Convert the geocentric ecliptic coordinates of a celestial body to
+    geocentric equatorial coordinates. 
 
+    ecliptic -- The body's geocentric ecliptic coordinates.
+    obliquity -- The obliquity of the ecliptic in radians.
+
+    Return 1: The body's geocentric equatorial coordinates.
+
+    """
     equatorial = EquatorialCoordinates()
 
     _libkepler.ecliptic_to_equatorial(byref(ecliptic), obliquity,
@@ -134,7 +220,17 @@ def ecliptic_to_equatorial(ecliptic, obliquity):
     return equatorial
 
 def equatorial_to_horizontal(hour_angle, declination, latitude):
+    """
+    Convert the geocentric equatorial coordinates of a celestial body to
+    horizontal coordinates.
 
+    hour_angle -- The body's local hour angle in radians.
+    declination -- The body's declination in radians.
+    latitude -- The observer's geographic latitude in radians.
+
+    Return 1: The body's horizontal coordinates.
+
+    """
     horizontal = HorizontalCoordinates()
 
     _libkepler.equatorial_to_horizontal(hour_angle, declination, latitude,
@@ -143,7 +239,17 @@ def equatorial_to_horizontal(hour_angle, declination, latitude):
     return horizontal
 
 def horizontal_to_equatorial(horizontal, latitude):
+    """
+    Convert the horizontal coordinates of a celestial body to geocentric
+    equatorial coordinates.
 
+    horizontal -- The body's horizontal coordinates.
+    latitude -- The observer's geographic latitude in radians.
+
+    Return 1: The body's local hour angle in radians.
+    Return 2: The body's declination in radians.
+
+    """
     hour_angle = c_double()
     declination = c_double()
 
@@ -153,7 +259,14 @@ def horizontal_to_equatorial(horizontal, latitude):
     return hour_angle.value, declination.value
 
 def rotate_rectangular(rotation_matrix, rectangular):
+    """
+    Apply a rotation matrix to a body's rectangular coordinates.
 
+    rotation_matrix -- The rotation matrix in the form
+                       [[m11, m12, m13], [m21, m22, m23], [m31, m32, m33]]
+    rectangular -- The rectangular coordinates to be rotated in-place.
+
+    """
     mat = (c_double * 9)()
     for i in xrange(3):
         for j in xrange(3):
@@ -162,7 +275,15 @@ def rotate_rectangular(rotation_matrix, rectangular):
     _libkepler.rotate_rectangular(pointer(mat), byref(rectangular))
 
 def rotate_equatorial(rotation_matrix, equatorial):
+    """
+    Apply a rotation matrix to a body's geocentric equatorial coordinates. This
+    function can be used to apply the IAU2006/2000A precession/nutation matrices.
 
+    rotation_matrix -- The rotation matrix in the form
+                       [[m11, m12, m13], [m21, m22, m23], [m31, m32, m33]]
+    equatorial -- The equatorial coordinates to be rotated in-place.
+
+    """
     mat = (c_double * 9)()
     for i in xrange(3):
         for j in xrange(3):
@@ -171,7 +292,13 @@ def rotate_equatorial(rotation_matrix, equatorial):
     _libkepler.rotate_equatorial(pointer(mat), byref(equatorial))
 
 def rotate_ecliptic_to_equator(obliquity, ecliptic):
+    """
+    Rotate rectangular coordinates from the ecliptic to the equatorial frame.
 
+    obliquity -- The obliquity of the ecliptic in radians.
+    ecliptic -- The coordinates to be rotated in-place.
+
+    """
     _libkepler.rotate_ecliptic_to_equator(obliquity, byref(ecliptic))
 
 _libkepler.rectangular_to_spherical.restype = None
