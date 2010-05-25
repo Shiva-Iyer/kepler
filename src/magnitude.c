@@ -27,12 +27,12 @@
 /*
  * Calculates the apparent magnitude of a minor planet.
  *
- * obj The minor planet's heliocentric rectangular coordinates. Must be in
- * the same reference frame and units as ear (AU).
- * ear The Earth's heliocentric rectangular coordinates. Must be in
- * the same reference frame and units as obj (AU).
- * abs_mag The mean absolute visual magnitude of the minor planet, H.
- * slope The magnitude slope parameter of the minor planet, G.
+ * obj -- The minor planet's heliocentric rectangular coordinates. Must be in the
+ *        same reference frame and units as ear (AU).
+ * ear -- The Earth's heliocentric rectangular coordinates. Must be in the same
+ *        reference frame and units as obj (AU).
+ * abs_mag -- The mean absolute visual magnitude of the minor planet, H.
+ * slope -- The magnitude slope parameter of the minor planet, G.
  *
  * Return: The minor planet's apparent magnitude.
  */
@@ -66,12 +66,12 @@ double minor_planet_magnitude(struct rectangular_coordinates *obj,
 /*
  * Calculates the apparent magnitude of a comet.
  *
- * obj The comet's heliocentric rectangular coordinates. Must be in
- * the same reference frame and units as ear (AU).
- * ear The Earth's heliocentric rectangular coordinates. Must be in
- * the same reference frame and units as obj (AU).
- * abs_mag The mean absolute visual magnitude of the comet, H.
- * slope The magnitude slope parameter of the comet, G.
+ * obj -- The comet's heliocentric rectangular coordinates. Must be in the
+ *        same reference frame and units as ear (AU).
+ * ear -- The Earth's heliocentric rectangular coordinates. Must be in the same
+ *        reference frame and units as obj (AU).
+ * abs_mag -- The mean absolute visual magnitude of the comet, H.
+ * slope -- The magnitude slope parameter of the comet, G.
  *
  * Return: The comet's apparent magnitude.
  */

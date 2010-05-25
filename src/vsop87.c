@@ -34,14 +34,14 @@ extern struct vsop87_term *planets_terms[];
  * Calculates a major planet's heliocentric rectangular coordinates using the
  * VSOP87 (version A) theory in its entirety.
  *
- * planet Enumeration that identifies the planet for calculations.
- * tdb TDB to be used for calculations. TT may be used for all but
- * the most exacting applications.
- * pos The planet's heliocentric rectangular coordinates in AU.
- * The reference frame is the equinox & ecliptic of J2000.
+ * planet -- Enumeration that identifies the planet for calculations.
+ * tdb -- TDB to be used for calculations. TT may be used for all but the most
+ *        exacting applications.
+ * pos -- The planet's heliocentric rectangular coordinates in AU. The reference
+ *        frame is the equinox & ecliptic of J2000.
  *
- * Return: SUCCESS If the coordinates have been calculated successfully.
- * Return: ERR_INVALID_PLANET If the planet's identifier is invalid.
+ * Return: SUCCESS -- If the coordinates have been calculated successfully.
+ *         ERR_INVALID_PLANET -- If the planet's identifier is invalid.
  */
 int vsop87_coordinates(enum solar_system_planets planet, struct julian_date *tdb,
 		struct rectangular_coordinates *pos)
@@ -84,7 +84,7 @@ int vsop87_coordinates(enum solar_system_planets planet, struct julian_date *tdb
  * Rotates a body's coordinates from the dynamical ecliptic frame of J2000
  * to the equatorial frame of J2000/FK5.
  *
- * pos The coordinates to be rotated in-place
+ * pos -- The coordinates to be rotated in-place
  */
 void vsop87_ecliptic_to_equator(struct rectangular_coordinates *pos)
 {

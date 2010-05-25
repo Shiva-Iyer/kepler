@@ -73,7 +73,7 @@
 
 typedef unsigned short 		u_short;
 
-/* Used in conversions from decimal degrees to degree/minute/second form */
+/* Used in conversions from decimal degrees to degree/minute/second form. */
 struct deg_min_sec {
 	int degrees;
 	int minutes;
@@ -82,7 +82,7 @@ struct deg_min_sec {
 
 /*
  * Identifiers for the planets in the solar system. Following the IAU's
- * resolutions in 2006, Pluto is not considered a planet.
+ * resolutions of 2006, Pluto is not considered a planet.
  */
 enum solar_system_planets {
 	MERCURY,
@@ -98,8 +98,8 @@ enum solar_system_planets {
 /*
  * Returns an angle that is between 0 and limit.
  *
- * angle The angle to be reduced.
- * limit The maximum value for the angle.
+ * angle -- The angle to be reduced.
+ * limit -- The maximum value for the angle.
  *
  * Return: An angle that is between 0 and limit.
  */
@@ -116,8 +116,8 @@ static __inline__ double reduce_angle(double angle, double limit)
 /*
  * Converts an angle in decimal degrees to degrees/minutes/seconds form.
  *
- * d The angle to convert.
- * out Converted value. If d is negative, the members of out will be negative.
+ * d -- The angle to convert.
+ * out -- Converted value. If d is negative, the members of out will be negative.
  */
 static __inline__ void degrees_to_dms(double d, struct deg_min_sec *out)
 {
@@ -137,10 +137,10 @@ static __inline__ void degrees_to_dms(double d, struct deg_min_sec *out)
 }
 
 /*
- * Swaps values
+ * Swaps values.
  *
- * x Will contain *y on return.
- * y Will contain *x on return.
+ * x -- Will contain *y on return.
+ * y -- Will contain *x on return.
  */
 static __inline__ void swap(double *x, double *y)
 {
@@ -152,11 +152,11 @@ static __inline__ void swap(double *x, double *y)
 }
 
 /*
- * Version of the standard C function strncpy that always NULL terminates
+ * Version of the standard C function strncpy that always NULL terminates.
  *
- * dest Destination string.
- * src Source string.
- * len Maximum number of characters to copy.
+ * dest -- Destination string.
+ * src -- Source string.
+ * len -- Maximum number of characters to copy.
  */
 static __inline__ char *strncpyn(char *dest, const char *src, size_t len)
 {

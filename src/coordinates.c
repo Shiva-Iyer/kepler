@@ -22,18 +22,17 @@
 
 /*
  * Converts the heliocentric rectangular coordinates of a celestial body to
- * geocentric spherical coordinates.
+ * geocentric spherical coordinates. Since no rotation is involved, the
+ * resulting coordinates will be in the same reference frame (xy plane) as the
+ * original coordinates.
  *
- * Since no rotation is involved, the resulting coordinates will be in the same
- * reference frame (xy plane) as the original coordinates.
- *
- * pla The body's heliocentric rectangular coordinates. Must be in
- * the same reference frame and units as ear.
- * ear The Earth's heliocentric rectangular coordinates. Must be in
- * the same reference frame and units as pla.
- * lon The body's geocentric longitude in radians.
- * lat The body's geocentric latitude in radians.
- * rad The body's geocentric distance in the units of pla and ear.
+ * pla -- The body's heliocentric rectangular coordinates. Must be in the same
+ *        reference frame and units as ear.
+ * ear -- The Earth's heliocentric rectangular coordinates. Must be in the same
+ *        reference frame and units as pla.
+ * lon -- The body's geocentric longitude in radians.
+ * lat -- The body's geocentric latitude in radians.
+ * rad -- The body's geocentric distance in the units of pla and ear.
  */
 void rectangular_to_spherical(struct rectangular_coordinates *pla,
 			struct rectangular_coordinates *ear, double *lon,
@@ -55,10 +54,10 @@ void rectangular_to_spherical(struct rectangular_coordinates *pla,
  * Converts the spherical coordinates of a celestial body to rectangular
  * coordinates with the same origin and reference frame (xy plane).
  *
- * lon The body's longitude in radians.
- * lat The body's latitude in radians.
- * rad The body's distance from the central body.
- * rec The body's rectangular coordinates in the same units as rad.
+ * lon -- The body's longitude in radians.
+ * lat -- The body's latitude in radians.
+ * rad -- The body's distance from the central body.
+ * rec -- The body's rectangular coordinates in the same units as rad.
  */
 void spherical_to_rectangular(double lon, double lat, double rad,
 			struct rectangular_coordinates *rec)
@@ -76,10 +75,10 @@ void spherical_to_rectangular(double lon, double lat, double rad,
 /*
  * Calculates the Sun-body-Earth phase angle.
  *
- * obj The body's heliocentric rectangular coordinates. Must be in
- * the same reference frame and units as ear.
- * ear The Earth's heliocentric rectangular coordinates. Must be in
- * the same reference frame and units as obj.
+ * obj -- The body's heliocentric rectangular coordinates. Must be in
+ *        the same reference frame and units as ear.
+ * ear -- The Earth's heliocentric rectangular coordinates. Must be in
+ *        the same reference frame and units as obj.
  *
  * Return: The Sun-body-Earth phase angle in radians.
  */
@@ -109,9 +108,9 @@ double phase_angle(struct rectangular_coordinates *obj,
  * Converts the geocentric equatorial coordinates of a celestial body to
  * geocentric ecliptic coordinates. 
  *
- * equ The body's geocentric equatorial coordinates.
- * obl The obliquity of the ecliptic in radians.
- * ecl The body's geocentric ecliptic coordinates.
+ * equ -- The body's geocentric equatorial coordinates.
+ * obl -- The obliquity of the ecliptic in radians.
+ * ecl -- The body's geocentric ecliptic coordinates.
  */
 void equatorial_to_ecliptic(struct equatorial_coordinates *equ, double obl,
 			struct ecliptic_coordinates *ecl)
@@ -130,9 +129,9 @@ void equatorial_to_ecliptic(struct equatorial_coordinates *equ, double obl,
  * Converts the geocentric ecliptic coordinates of a celestial body to
  * geocentric equatorial coordinates. 
  *
- * ecl The body's geocentric ecliptic coordinates.
- * obl The obliquity of the ecliptic in radians.
- * equ The body's geocentric equatorial coordinates.
+ * ecl -- The body's geocentric ecliptic coordinates.
+ * obl -- The obliquity of the ecliptic in radians.
+ * equ -- The body's geocentric equatorial coordinates.
  */
 void ecliptic_to_equatorial(struct ecliptic_coordinates *ecl, double obl,
 			struct equatorial_coordinates *equ)
@@ -151,10 +150,10 @@ void ecliptic_to_equatorial(struct ecliptic_coordinates *ecl, double obl,
  * Converts the geocentric equatorial coordinates of a celestial body to
  * horizontal coordinates.
  *
- * ha The body's local hour angle in radians.
- * decl The body's declination in radians.
- * lat The observer's geographic latitude in radians.
- * hor The body's horizontal coordinates.
+ * ha -- The body's local hour angle in radians.
+ * decl -- The body's declination in radians.
+ * lat -- The observer's geographic latitude in radians.
+ * hor -- The body's horizontal coordinates.
  */
 void equatorial_to_horizontal(double ha, double decl, double lat,
 			struct horizontal_coordinates *hor)
@@ -173,10 +172,10 @@ void equatorial_to_horizontal(double ha, double decl, double lat,
  * Converts the horizontal coordinates of a celestial body to geocentric
  * equatorial coordinates.
  *
- * hor The body's horizontal coordinates.
- * lat The observer's geographic latitude in radians.
- * ha The body's local hour angle in radians.
- * decl The body's declination in radians.
+ * hor -- The body's horizontal coordinates.
+ * lat -- The observer's geographic latitude in radians.
+ * ha -- The body's local hour angle in radians.
+ * decl -- The body's declination in radians.
  */
 void horizontal_to_equatorial(struct horizontal_coordinates *hor, double lat,
 			double *ha, double *decl)
@@ -194,8 +193,8 @@ void horizontal_to_equatorial(struct horizontal_coordinates *hor, double lat,
 /*
  * Applies a rotation matrix to a body's rectangular coordinates.
  *
- * mat The rotation matrix.
- * pos The coordinates to be rotated in-place.
+ * mat -- The rotation matrix.
+ * pos -- The coordinates to be rotated in-place.
  */
 void rotate_rectangular(double mat[3][3], struct rectangular_coordinates *pos)
 {
@@ -214,8 +213,8 @@ void rotate_rectangular(double mat[3][3], struct rectangular_coordinates *pos)
  * Applies a rotation matrix to a body's geocentric equatorial coordinates. This
  * function can be used to apply the IAU2006/2000A precession/nutation matrices.
  *
- * mat The rotation matrix.
- * pos The coordinates to be rotated in-place.
+ * mat -- The rotation matrix.
+ * pos -- The coordinates to be rotated in-place.
  */
 void rotate_equatorial(double mat[3][3], struct equatorial_coordinates *pos)
 {
@@ -233,8 +232,8 @@ void rotate_equatorial(double mat[3][3], struct equatorial_coordinates *pos)
 /*
  * Rotates rectangular coordinates in the ecliptic frame to the equatorial frame.
  *
- * obl The obliquity of the ecliptic in radians.
- * pos The coordinates to be rotated in-place.
+ * obl -- The obliquity of the ecliptic in radians.
+ * pos -- The coordinates to be rotated in-place.
  */
 void rotate_ecliptic_to_equator(double obl, struct rectangular_coordinates *pos)
 {

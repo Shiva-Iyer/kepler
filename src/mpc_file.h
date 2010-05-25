@@ -41,14 +41,14 @@ enum mpc_body_types {
  * Used to store the details of a celestial body in the MPCORB Database.
  */
 struct mpc_body {
-	char id[12]; /* The body's ID or unpacked provisional designation */
-	char name[36]; /* The body's name, if it is included in the file */
-	enum mpc_body_types type; /* The type of body */
+	char id[12]; /* The body's ID or unpacked provisional designation. */
+	char name[36]; /* The body's name, if it is included in the file. */
+	enum mpc_body_types type; /* The type of body. */
 
-	double magnitude; /* The body's absolute magnitude, H */
-	double slope; /* Slope parameter, G */
+	double magnitude; /* The body's absolute magnitude, H. */
+	double slope; /* Slope parameter, G. */
 
-	struct orbital_elements elements; /* The body's orbital elements */
+	struct orbital_elements elements; /* The body's orbital elements. */
 
 	/*
 	 * The body's coordinates at the desired epoch. For minor planets and

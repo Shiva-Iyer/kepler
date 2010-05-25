@@ -71,11 +71,10 @@ struct equation_of_equinoxes_term eoe_series[] = {
  * Calculates the local mean sidereal time using the latest IAU/IERS conventions
  * as described in Reference 1.
  *
- * ut1 UT1 for calculating the Earth Rotation Angle.
- * tdb TDB to be used for calculating the LMST. TT may be used 
- * for all but the most exacting applications.
- * longitude The observer's longitude in radians, positive for
- * places east of Greenwich.
+ * ut1 -- UT1 for calculating the Earth Rotation Angle.
+ * tdb -- TDB to be used for calculating the LMST. TT may be used  for all but
+ *        the most exacting applications.
+ * longitude -- The observer's longitude in radians, positive east of Greenwich.
  *
  * Return: The local mean sidereal time in radians, between 0 and 2*PI.
  */
@@ -111,11 +110,10 @@ double mean_sidereal_time(struct julian_date *ut1, struct julian_date *tdb,
  * conventions as described in Reference 1. Apparent sidereal time takes
  * into account the motion of the equinox due to nutation.
  *
- * ut1 UT1 for calculating the Earth Rotation Angle.
- * tdb TDB to be used for calculating the LAST. TT may be used 
- * for all but the most exacting applications.
- * longitude The observer's longitude in radians, positive for
- * places east of Greenwich.
+ * ut1 -- UT1 for calculating the Earth Rotation Angle.
+ * tdb -- TDB to be used for calculating the LAST. TT may be used  for all but
+ *        the most exacting applications.
+ * longitude -- The observer's longitude in radians, positive east of Greenwich.
  *
  * Return: The local apparent sidereal time in radians, between 0 and 2*PI.
  */
@@ -138,8 +136,8 @@ double apparent_sidereal_time(struct julian_date *ut1, struct julian_date *tdb,
  * described in Reference 2. This accounts for the motion of the equinox
  * due to nutation.
  *
- * tdb TDB to be used for calculations. TT may be used 
- * for all but the most exacting applications.
+ * tdb -- TDB to be used for calculations. TT may be used for all but the most
+ *        exacting applications.
  *
  * Return: The value of the equation of the equinoxes, in radians.
  */

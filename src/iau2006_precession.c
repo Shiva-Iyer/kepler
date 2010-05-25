@@ -26,15 +26,14 @@
 #include <iau2006_precession.h>
 
 /*
- * Calculates the precession matrix using the IAU 2006 precession model
- * in its entirety. The resulting matrix may be used in the rotation
- * of coordinates.
+ * Calculates the precession matrix using the IAU 2006 precession model in its
+ * entirety. The resulting matrix may be used in the rotation of coordinates.
  *
- * tdb TDB to be used for calculations. TT may be used for all but
- * the most exacting applications.
- * toJ2000 If 0, the resulting matrix is for precessing from J2000 to
- * another epoch. Otherwise, the precession is from another epoch to J2000.
- * prec_matrix The precession matrix.
+ * tdb -- TDB to be used for calculations. TT may be used for all but the most
+ *        exacting applications.
+ * toJ2000 -- If 0, the resulting matrix is for precessing from J2000 to another
+ *            epoch. Otherwise, the precession is from another epoch to J2000.
+ * prec_matrix -- The precession matrix.
  */
 void iau2006_precession_matrix(struct julian_date *tdb, int toJ2000,
 			double prec_matrix[3][3])

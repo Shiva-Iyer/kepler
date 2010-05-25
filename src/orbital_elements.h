@@ -37,18 +37,18 @@
  * for some ways in which this structure is used.
  */
 struct orbital_elements {
-	struct julian_date epoch; /* Epoch of osculation */
+	struct julian_date epoch; /* Epoch of osculation. */
 
-	double mean_anomaly; /* Mean anomaly in radians at epoch */
-	double daily_motion; /* Daily motion in radians/day */
+	double mean_anomaly; /* Mean anomaly in radians at epoch. */
+	double daily_motion; /* Daily motion in radians/day. */
 
-	double perihelion; /* Perihelion distance in AU */
-	double eccentricity; /* Eccentricity of the orbit */
+	double perihelion; /* Perihelion distance in AU. */
+	double eccentricity; /* Eccentricity of the orbit. */
 
-	/* The values for the orbit's orientation must be referred to J2000 */
-	double arg_perihelion; /* Argument of the perihelion in radians */
-	double lon_asc_node; /* Longitude of the ascending node in radians */
-	double inclination; /* Inclination of the orbit in radians */
+	/* The values for the orbit's orientation must be referred to J2000. */
+	double arg_perihelion; /* Argument of the perihelion in radians. */
+	double lon_asc_node; /* Longitude of the ascending node in radians. */
+	double inclination; /* Inclination of the orbit in radians. */
 };
 
 /*

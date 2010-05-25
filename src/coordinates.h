@@ -20,10 +20,9 @@
 #define _COORDINATES_H_
 
 /* 
- * Used for rectangular coordinates. 
- *
- * The origin and orientation of the xy axes are application specific. The xy
- * plane could be the ecliptic or the Earth's equator
+ * Used for rectangular coordinates. The origin and orientation of the xy axes
+ * are application specific. The xy plane could be the ecliptic or the Earth's
+ * equator.
  */
 struct rectangular_coordinates {
 	double x; /* x-coordinate. The unit is application specific. */

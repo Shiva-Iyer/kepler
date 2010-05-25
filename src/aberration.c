@@ -167,12 +167,12 @@ struct aberration_term3 aberration_series3[] = {
 };
 
 /*
- * Calculates the components of the earth's velocity
+ * Calculates the components of the earth's velocity.
  *
- * tdb TDB to be used for calculations. TT may be used for all but
- * the most exacting applications.
- * vel The Earth's velocity components in 10**(-8) AU/day.
- * The reference frame is the equinox & equator of J2000.
+ * tdb -- TDB to be used for calculations. TT may be used for all but the most
+ *        exacting applications.
+ * vel -- The Earth's velocity components in 10**(-8) AU/day. The reference frame
+ *        is the equinox & equator of J2000.
  */
 void aberration_earth_velocity(struct julian_date *tdb,
 			struct rectangular_coordinates *vel)
@@ -294,12 +294,12 @@ void aberration_earth_velocity(struct julian_date *tdb,
 }
 
 /*
- * Calculates the annual aberration in right ascension and declination
+ * Calculates the annual aberration in right ascension and declination.
  *
- * tdb TDB to be used for calculations
- * e Equatorial coordinates of the celestial body
- * d_ra Aberration in right ascension
- * d_dec Aberration in declination
+ * tdb -- TDB to be used for calculations.
+ * e -- Equatorial coordinates of the celestial body.
+ * d_ra -- Aberration in right ascension.
+ * d_dec -- Aberration in declination.
  */
 void annual_aberration(struct julian_date *tdb, struct equatorial_coordinates *e,
 		double *d_ra, double *d_dec)

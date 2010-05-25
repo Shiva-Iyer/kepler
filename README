@@ -47,25 +47,33 @@ Installation
 Instructions for downloading the source archives and accessing the development
 repository may be found at <http://savannah.nongnu.org/projects/kepler>.
 
-Run `make' in the kepler installation directory to compile all the library
+Run 'make' in the kepler installation directory to compile all the library
 files and example programs. In order to call kepler's functions from your own
 applications, you will need to create your own makefile along the lines of the
-one in the `examples' subdirectory.
+one in the 'examples' subdirectory.
 
-Run `make install' to deploy the shared library that is created in the previous
+Run 'make install' to deploy the shared library that is created in the previous
 step. On most systems, you will need to run this as root. You will need to do
 this before you run the example programs or use the pykepler Python package.
 
-Run `make clean' to remove all the files created by running `make'. This will not
+Run 'make clean' to remove all the files created by running 'make'. This will not
 remove the shared libraries or symbolic links in /usr/lib.
 
-The `pykepler' subdirectory contains the sources for the pykepler Python package.
+The 'pykepler' subdirectory contains the sources for the pykepler Python package.
 This package allows you to call kepler routines from Python.
+
+Documentation
+-------------
+
+The C library is documented in the file kepler.html under the 'doc' subdirectory.
+
+The 'pydoc' utility or the help() function in the interactive Python interpreter
+may be used to view the documentation for the Python interface.
 
 Examples
 --------
 
-The following sample programs may be found in the `examples' subdirectory:
+The following sample programs may be found in the 'examples' subdirectory:
 
 kepler_test.c calls most of the functions in kepler and displays the results in a
 terminal window. To test the routines in mpc_file.c, you must download the MPC
@@ -76,18 +84,6 @@ the rise, upper transit and set times for the Sun, Moon, planets and Pluto.
 No corrections are made for planetary aberration, nutation, geocentric parallax
 or for the motion of the swifter objects (Moon, Mercury, Venus and Mars).
 Consequently, the displayed times could be between 3 to 6 minutes in error.
-
-Documentation
--------------
-
-The names of the C source and header files are self-explanatory and indicate
-the nature of the functions contained therein. Extensive comments in the
-source code describe function parameters, return values and other relevant
-information.
-
-The Python interface in the pykepler package closely parallels the C routines.
-The help() function in the Python interpreter may be used to view the available
-documentation on function arguments and return values.
 
 References
 ----------
@@ -110,4 +106,3 @@ kepler maintainer by email or the project's website.
 
 Shiva Iyer
 shiva.iyer AT g m a i l DOT c o m
-

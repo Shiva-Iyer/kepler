@@ -21,19 +21,17 @@
 #include <julian_date.h>
 
 /*
- * Calculates the Julian Day Number for a date in the proleptic Gregorian 
- * calendar.
- *
- * No account is taken of the Gregorian calendar reform and dates prior to
+ * Calculates the Julian Day Number for a date in the proleptic Gregorian
+ * calendar. The Gregorian calendar reform is ignored and dates prior to
  * Jan. 1, 4800BC are not supported.
  *
- * year Year number using astronomical reckoning and after 4800BC.
- * month Month of the year.
- * day Day of the month.
- * jd The calculated Julian Day Number.
+ * year -- Year number using astronomical reckoning and after 4800BC.
+ * month -- Month of the year.
+ * day -- Day of the month.
+ * jd -- The calculated Julian Day Number.
  *
- * Return: SUCCESS Julian date calculated successfully.
- * Return: ERR_INVALID_DATE Gregorian date specified is invalid or out of range.
+ * Return: SUCCESS -- Julian date calculated successfully.
+ *         ERR_INVALID_DATE -- Gregorian date specified is invalid or out of range.
  */
 int calendar_to_julian_date(int year, int month, int day, struct julian_date *jd)
 {
@@ -54,20 +52,18 @@ int calendar_to_julian_date(int year, int month, int day, struct julian_date *jd
 }
 
 /*
- * Calculates the date in the proleptic Gregorian calendar that corresponds
- * to the given Julian Day Number.
+ * Calculates the date in the proleptic Gregorian calendar that corresponds to
+ * the given Julian Day Number. The Gregorian calendar reform is ignored.
  *
- * No account is taken of the Gregorian calendar reform.
+ * jd -- The Julian Day Number. Must correspond to a date on or after
+ *       Jan. 1, 4800BC in the proleptic Gregorian calendar.
+ * year -- Year number using astronomical reckoning.
+ * month -- Month of the year.
+ * day -- Day of the month.
+ * day_fraction -- Fractional part of day (0 = midnight, 0.5 = noon).
  *
- * jd The Julian Day Number. Must correspond to a date on or after
- * Jan. 1, 4800BC in the proleptic Gregorian calendar.
- * year Year number using astronomical reckoning.
- * month Month of the year.
- * day Day of the month.
- * day_fraction Fractional part of day (0 = midnight, 0.5 = noon).
- *
- * Return: SUCCESS Gregorian date calculated successfully.
- * Return: ERR_INVALID_DATE Julian Day Number specified is out of range.
+ * Return: SUCCESS -- Gregorian date calculated successfully.
+ *         ERR_INVALID_DATE -- Julian Day Number specified is out of range.
  */
 int julian_to_calendar_date(struct julian_date *jd, int *year, int *month,
 			int *day, double *day_fraction)

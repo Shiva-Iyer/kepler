@@ -36,8 +36,8 @@ extern u_short iau2000a_planetary_count;
 /*
  * Calculates the mean obliquity of the ecliptic using the IAU 2000 formula.
  *
- * tdb TDB to be used for calculations. TT may be used for all but
- * the most exacting applications.
+ * tdb -- TDB to be used for calculations. TT may be used for all but the most
+ *        exacting applications.
  *
  * Return: The mean obliquity of the ecliptic in radians.
  */
@@ -56,10 +56,10 @@ double iau2000a_mean_obliquity(struct julian_date *tdb)
  * Calculates the nutation in longitude and obliquity using the IAU 2000A 
  * nutation model in its entirety.
  *
- * tdb TDB to be used for calculations. TT may be used for all but
- * the most exacting applications.
- * d_psi The nutation in longitude expressed in radians.
- * d_epsilon The nutation in obliquity expressed in radians.
+ * tdb -- TDB to be used for calculations. TT may be used for all but the most
+ *        exacting applications.
+ * d_psi -- The nutation in longitude expressed in radians.
+ * d_epsilon -- The nutation in obliquity expressed in radians.
  */
 void iau2000a_nutation(struct julian_date *tdb, double *d_psi, double *d_epsilon)
 {
@@ -133,13 +133,12 @@ void iau2000a_nutation(struct julian_date *tdb, double *d_psi, double *d_epsilon
 }
 
 /*
- * Calculates the nutation matrix using the IAU 2000A nutation model
- * in its entirety. The resulting matrix may be used in the rotation
- * of coordinates.
+ * Calculates the nutation matrix using the IAU 2000A nutation model in its
+ * entirety. The resulting matrix may be used in the rotation of coordinates.
  *
- * tdb TDB to be used for calculations. TT may be used for all but
- * the most exacting applications.
- * nut_matrix The nutation matrix.
+ * tdb -- TDB to be used for calculations. TT may be used for all but the most
+ *        exacting applications.
+ * nut_matrix -- The nutation matrix.
  */
 void iau2000a_nutation_matrix(struct julian_date *tdb, double nut_matrix[3][3])
 {

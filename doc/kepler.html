@@ -1,0 +1,761 @@
+<html>
+<title>kepler library documentation</title>
+<body>
+
+<a href="#copyright">Copyright</a><br>
+<a href="#introduction">Introduction</a><br>
+<a href="#files">Files</a><br>
+<a href="#functions">Functions</a><br>
+<a href="#structs">Structs</a><br>
+<a href="#enums">Enums</a><br>
+<p>
+
+<a name="copyright"><h3>Copyright</h3></a>
+<code>
+Documentation for the kepler library<br>
+Copyright (C) 2010 Shiva Iyer {shiva.iyer AT g m a i l DOT c o m}<br>
+<br>
+This program is free software: you can redistribute it and/or modify<br>
+it under the terms of the GNU General Public License as published by<br>
+the Free Software Foundation, either version 3 of the License, or<br>
+(at your option) any later version.<br>
+<br>
+This program is distributed in the hope that it will be useful,<br>
+but WITHOUT ANY WARRANTY; without even the implied warranty of<br>
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the<br>
+GNU General Public License for more details.<br>
+<br>
+You should have received a copy of the GNU General Public License<br>
+along with this program.  If not, see http://www.gnu.org/licenses/.<br>
+</code>
+<p>
+
+<a name="introduction"><h3>Introduction</h3></a>
+The kepler library provides a set of routines for astronomical calculations.<br>
+The library is implemented in ANSI C and the optional pykepler package provides<br>
+support for programs written in Python.
+<p>
+The intent is to provide the basic building blocks necessary for more advanced<br>
+applications. Consequently, no attempt has been made to provide an user interface<br>
+or to write programs that meet various needs (observation, historical research etc.).
+<p>
+
+<a name="files"><h3>Files</h3></a>
+<table border="1">
+<tr><td>
+<a href="#aberration.c">aberration.c</a><br>
+aberration.h
+</td>
+<td>Implementation of the Ron-Vondrak theory of aberration</td>
+</tr>
+<tr><td>
+<a href="#coordinates.c">coordinates.c</a><br>
+coordinates.h
+</td>
+<td>Coordinate transformations and rotations</td>
+</tr>
+<tr><td>
+<a href="#delta-t.c">delta-t.c</a><br>
+delta-t.h
+</td>
+<td>Approximation of Delta-T (TT - UT1)</td>
+</tr>
+<tr><td>
+<a href="#earth_figure.c">earth_figure.c</a><br>
+earth_figure.h
+</td>
+<td>Values related to the oblateness of the Earth</td>
+</tr>
+<tr><td>
+<a href="#elp82b.c">elp82b.c</a><br>
+elp82b.h
+</td>
+<td>Implementation of the ELP2000-82B theory for lunar coordinates</td>
+</tr>
+<tr><td>
+<a href="#fund_args.c">fund_args.c</a><br>
+fund_args.h
+</td>
+<td>Values of fundamental lunisolar, planetary and precession arguments</td>
+</tr>
+<tr><td>
+<a href="#iau2000a_nutation.c">iau2000a_nutation.c</a><br>
+iau2000a_nutation.h
+</td>
+<td>Nutation calculations using the IAU 2000A model</td>
+</tr>
+<tr><td>
+<a href="#iau2006_precession.c">iau2006_precession.c</a><br>
+iau2006_precession.h
+</td>
+<td>Precession calculations using the IAU 2006 model</td>
+</tr>
+<tr><td>
+<a href="#julian_date.c">julian_date.c</a><br>
+julian_date.h
+</td>
+<td>Julian date conversions</td>
+</tr>
+<tr><td>
+<a href="#kepler.h">kepler.h</a>
+</td>
+<td>Constants, macros and utility functions</td>
+</tr>
+<tr><td>
+<a href="#magnitude.c">magnitude.c</a><br>
+magnitude.h
+</td>
+<td>Apparent magnitudes of minor planets and comets</td>
+</tr>
+<tr><td>
+<a href="#mpc_file.c">mpc_file.c</a><br>
+mpc_file.h
+</td>
+<td>Minor Planet Center orbit database parser</td>
+</tr>
+<tr><td>
+<a href="#orbital_elements.c">orbital_elements.c</a><br>
+orbital_elements.h
+</td>
+<td>Reduction of orbital elements to ephemeris</td>
+</tr>
+<tr><td>
+<a href="#parallax.c">parallax.c</a><br>
+parallax.h
+</td>
+<td>Values for the geocentric parallax of celestial bodies</td>
+</tr>
+<tr><td>
+<a href="#pluto.c">pluto.c</a><br>
+pluto.h
+</td>
+<td>Implementation of the PLUTO95 theory for Pluto's coordinates</td>
+</tr>
+<tr><td>
+<a href="#sidereal_time.c">sidereal_time.c</a><br>
+sidereal_time.h
+</td>
+<td>Sidereal time calculations using the IERS 2003 conventions </td>
+</tr>
+<tr><td>
+<a href="#vsop87.c">vsop87.c</a><br>
+vsop87.h
+</td>
+<td>Implementation of the VSOP87 theory for the coordinates of the Sun and planets</td>
+</tr>
+</table>
+<p>
+
+<a name="functions"><h3>Functions</h3></a>
+
+<a name="aberration.c"><h4>aberration.c</h4></a>
+<code><b>
+void aberration_earth_velocity(struct julian_date *tdb, struct rectangular_coordinates *vel)<p>
+</b></code>
+Calculates the components of the earth's velocity.<p>
+<p>
+tdb: TDB to be used for calculations. TT may be used for all but the most exacting applications.<br>
+vel: The Earth's velocity components in 10**(-8) AU/day. The reference frame is the equinox & equator of J2000.<br>
+<br>
+<code><b>
+void annual_aberration(struct julian_date *tdb, struct equatorial_coordinates *e,double *d_ra, double *d_dec)<p>
+</b></code>
+Calculates the annual aberration in right ascension and declination.<br>
+<br>
+tdb: TDB to be used for calculations.<br>
+e: Equatorial coordinates of the celestial body.<br>
+d_ra: Aberration in right ascension.<br>
+d_dec: Aberration in declination.<br>
+<p>
+
+<a name="coordinates.c"><h4>coordinates.c</h4></a>
+<code><b>
+void rectangular_to_spherical(struct rectangular_coordinates *pla,
+			struct rectangular_coordinates *ear, double *lon,
+			double *lat, double *rad)<p>
+</code></b>
+Converts the heliocentric rectangular coordinates of a celestial body to geocentric spherical coordinates.<br>
+Since no rotation is involved, the resulting coordinates will be in the same reference frame (xy plane) as the<br>
+original coordinates.<br>
+<br>
+pla: The body's heliocentric rectangular coordinates. Must be in the same reference frame and units as ear.<br>
+ear: The Earth's heliocentric rectangular coordinates. Must be in the same reference frame and units as pla.<br>
+lon: The body's geocentric longitude in radians.<br>
+lat: The body's geocentric latitude in radians.<br>
+rad: The body's geocentric distance in the units of pla and ear.<br>
+<br>
+<code><b>
+void spherical_to_rectangular(double lon, double lat, double rad, struct rectangular_coordinates *rec)<p>
+</code></b>
+Converts the spherical coordinates of a celestial body to rectangular coordinates with the same origin and<br>
+reference frame (xy plane).<br>
+<br>
+lon: The body's longitude in radians.<br>
+lat: The body's latitude in radians.<br>
+rad: The body's distance from the central body.<br>
+rec: The body's rectangular coordinates in the same units as rad.<br>
+<br>
+<code><b>
+double phase_angle(struct rectangular_coordinates *obj, struct rectangular_coordinates *ear)<p>
+</code></b>
+Calculates the Sun-body-Earth phase angle.<br>
+<br>
+obj: The body's heliocentric rectangular coordinates. Must be in the same reference frame and units as ear.<br>
+ear: The Earth's heliocentric rectangular coordinates. Must be in the same reference frame and units as obj.<br>
+<br>
+Return: The Sun-body-Earth phase angle in radians.<br>
+<br>
+<code><b>
+void equatorial_to_ecliptic(struct equatorial_coordinates *equ, double obl, struct ecliptic_coordinates *ecl)<p>
+</code></b>
+Converts the geocentric equatorial coordinates of a celestial body to geocentric ecliptic coordinates. <br>
+<br>
+equ: The body's geocentric equatorial coordinates.<br>
+obl: The obliquity of the ecliptic in radians.<br>
+ecl: The body's geocentric ecliptic coordinates.<br>
+<br>
+<code><b>
+void ecliptic_to_equatorial(struct ecliptic_coordinates *ecl, double obl, struct equatorial_coordinates *equ)<p>
+</code></b>
+Converts the geocentric ecliptic coordinates of a celestial body to geocentric equatorial coordinates. <br>
+<br>
+ecl: The body's geocentric ecliptic coordinates.<br>
+obl: The obliquity of the ecliptic in radians.<br>
+equ: The body's geocentric equatorial coordinates.<br>
+<br>
+<code><b>
+void equatorial_to_horizontal(double ha, double decl, double lat, struct horizontal_coordinates *hor)<p>
+</code></b>
+Converts the geocentric equatorial coordinates of a celestial body to horizontal coordinates.<br>
+<br>
+ha: The body's local hour angle in radians.<br>
+decl: The body's declination in radians.<br>
+lat: The observer's geographic latitude in radians.<br>
+hor: The body's horizontal coordinates.<br>
+<br>
+<code><b>
+void horizontal_to_equatorial(struct horizontal_coordinates *hor, double lat, double *ha, double *decl)<p>
+</code></b>
+Converts the horizontal coordinates of a celestial body to geocentric equatorial coordinates.<br>
+<br>
+hor: The body's horizontal coordinates.<br>
+lat: The observer's geographic latitude in radians.<br>
+ha: The body's local hour angle in radians.<br>
+decl: The body's declination in radians.<br>
+<br>
+<code><b>
+void rotate_rectangular(double mat[3][3], struct rectangular_coordinates *pos)<p>
+</code></b>
+Applies a rotation matrix to a body's rectangular coordinates.<br>
+<br>
+mat: The rotation matrix.<br>
+pos: The coordinates to be rotated in-place.<br>
+<br>
+<code><b>
+void rotate_equatorial(double mat[3][3], struct equatorial_coordinates *pos)<p>
+</code></b>
+Applies a rotation matrix to a body's geocentric equatorial coordinates. This function can be used to apply the<br>
+IAU2006/2000A precession/nutation matrices.<br>
+<br>
+mat: The rotation matrix.<br>
+pos: The coordinates to be rotated in-place.<br>
+<br>
+<code><b>
+void rotate_ecliptic_to_equator(double obl, struct rectangular_coordinates *pos)<p>
+</code></b>
+Rotates rectangular coordinates in the ecliptic frame to the equatorial frame.<br>
+<br>
+obl: The obliquity of the ecliptic in radians.<br>
+pos: The coordinates to be rotated in-place.<br>
+<p>
+
+<a name="delta-t.c"><h4>delta-t.c</h4></a>
+<code><b>
+int delta_t(int year, int month, double *delta_t, double *correction)<p>
+</code></b>
+Returns an approximate value for Delta-T (TT - UT1) valid for a limited historical period.<br>
+<br>
+year: Astronomical year number between 2000BC and 3000AD inclusive.<br>
+month: Month of the year.<br>
+delta_t: An approximate value for Delta-T in seconds.<br>
+correction: A correction, in seconds, to be added to Delta-T for years before 1955AD or after 2005AD<br>
+and when used in conjunction with NASA's publication "Five millennium canon of solar eclipses".<br>
+<br>
+Return: SUCCESS: Delta-T calculated successfully.<br>
+ERR_INVALID_DATE: Invalid year or month specified.<br>
+<p>
+
+<a name="earth_figure.c"><h4>earth_figure.c</h4></a>
+<code><b>
+void earth_figure_values(double geog_lat, double height_msl, double *gc_lat, double *gc_radius)<p>
+</code></b>
+Calculates various values related to the oblateness of the Earth.<br>
+<br>
+geog_lat: The observer's geographic latitude in radians.<br>
+height_msl: The observer's height above mean sea level in meters.<br>
+gc_lat: The observer's geocentric latitude in radians.<br>
+gc_radius: The observer's geocentric radius as a fraction of the Earth's equatorial radius.<br>
+<p>
+
+<a name="elp82b.c"><h4>elp82b.c</h4></a>
+<code><b>
+void elp82b_coordinates(struct julian_date *tdb,struct ecliptic_coordinates *ecl, double *radius)<p>
+</code></b>
+Calculates the Moon's geocentric ecliptic coordinates and distance using the ELP 2000-82B lunar theory in its entirety.<br>
+<br>
+tdb: TDB to be used for calculations. TT may be used for all but the most exacting applications.<br>
+ecl: The Moon's geocentric ecliptic coordinates. The reference frame is the equinox & ecliptic of J2000.<br>
+radius: The Moon's distance from the Earth in KM.<br>
+<p>
+
+<a name="fund_args.c"><h4>fund_args.c</h4></a>
+<code><b>
+double fundamental_argument(enum fund_argument arg, double t)<p>
+</code></b>
+Calculates values for the various fundamental arguments used in the planetary, lunar, precession and nutation models.<br>
+<br>
+arg: One of the values from the fund_argument enumeration.<br>
+t: Number of Julian centuries of TDB since 2000-01-01 12h TDB. TT may be used for all but the most exacting applications.<br>
+<br>
+Return: -1 if the arg parameter is invalid. The value of the fundamental argument in radians otherwise.<br>
+<p>
+
+<a name="iau2000a_nutation.c"><h4>iau2000a_nutation.c</h4></a>
+<code><b>
+double iau2000a_mean_obliquity(struct julian_date *tdb)<p>
+</code></b>
+Calculates the mean obliquity of the ecliptic using the IAU 2000 formula.<br>
+<br>
+tdb: TDB to be used for calculations. TT may be used for all but the most exacting applications.<br>
+<br>
+Return: The mean obliquity of the ecliptic in radians.<br>
+<br>
+<code><b>
+void iau2000a_nutation(struct julian_date *tdb, double *d_psi, double *d_epsilon)<p>
+</code></b>
+Calculates the nutation in longitude and obliquity using the IAU 2000A nutation model in its entirety.<br>
+<br>
+tdb: TDB to be used for calculations. TT may be used for all but the most exacting applications.<br>
+d_psi: The nutation in longitude expressed in radians.<br>
+d_epsilon: The nutation in obliquity expressed in radians.<br>
+<br>
+<code><b>
+void iau2000a_nutation_matrix(struct julian_date *tdb, double nut_matrix[3][3])<p>
+</code></b>
+Calculates the nutation matrix using the IAU 2000A nutation model in its entirety. The resulting matrix may<br>
+be used in the rotation of coordinates.<br>
+<br>
+tdb: TDB to be used for calculations. TT may be used for all but the most exacting applications.<br>
+nut_matrix: The nutation matrix.<br>
+<p>
+
+<a name="iau2006_precession.c"><h4>iau2006_precession.c</h4></a>
+<code><b>
+void iau2006_precession_matrix(struct julian_date *tdb, int toJ2000, double prec_matrix[3][3])<p>
+</code></b>
+Calculates the precession matrix using the IAU 2006 precession model in its entirety. The resulting matrix may<br>
+be used in the rotation of coordinates.<br>
+<br>
+tdb: TDB to be used for calculations. TT may be used for all but the most exacting applications.<br>
+toJ2000: If 0, the resulting matrix is for precessing from J2000 to another epoch. Otherwise, the precession<br>
+is from another epoch to J2000.<br>
+prec_matrix: The precession matrix.<br>
+<p>
+
+<a name="julian_date.c"><h4>julian_date.c</h4></a>
+<code><b>
+int calendar_to_julian_date(int year, int month, int day, struct julian_date *jd)<p>
+</code></b>
+Calculates the Julian Day Number for a date in the proleptic Gregorian calendar. The Gregorian calendar reform is<br>
+ignored and dates prior to Jan. 1, 4800BC are not supported.<br>
+<br>
+year: Year number using astronomical reckoning and after 4800BC.<br>
+month: Month of the year.<br>
+day: Day of the month.<br>
+jd: The calculated Julian Day Number.<br>
+<br>
+Return: SUCCESS: Julian date calculated successfully.<br>
+ERR_INVALID_DATE: Gregorian date specified is invalid or out of range.<br>
+<br>
+<code><b>
+int julian_to_calendar_date(struct julian_date *jd, int *year, int *month, int *day, double *day_fraction)<p>
+</code></b>
+Calculates the date in the proleptic Gregorian calendar that corresponds to the given Julian Day Number. The Gregorian<br>
+calendar reform is ignored.<br>
+<br>
+jd: The Julian Day Number. Must correspond to a date on or after Jan. 1, 4800BC in the proleptic Gregorian calendar.<br>
+year: Year number using astronomical reckoning.<br>
+month: Month of the year.<br>
+day: Day of the month.<br>
+day_fraction: Fractional part of day (0 = midnight, 0.5 = noon).<br>
+<br>
+Return: SUCCESS: Gregorian date calculated successfully.<br>
+ERR_INVALID_DATE: Julian Day Number specified is out of range.<br>
+<p>
+
+<a name="kepler.h"><h4>kepler.h</h4></a>
+<code><b>
+static __inline__ double reduce_angle(double angle, double limit)<p>
+</code></b>
+Returns an angle that is between 0 and limit.<br>
+<br>
+angle: The angle to be reduced.<br>
+limit: The maximum value for the angle.<br>
+<br>
+Return: An angle that is between 0 and limit.<br>
+<br>
+<code><b>
+static __inline__ void degrees_to_dms(double d, struct deg_min_sec *out)<p>
+</code></b>
+Converts an angle in decimal degrees to degrees/minutes/seconds form.<br>
+<br>
+d: The angle to convert.<br>
+out: Converted value. If d is negative, the members of out will be negative.<br>
+<p>
+
+<a name="magnitude.c"><h4>magnitude.c</h4></a>
+<code><b>
+double minor_planet_magnitude(struct rectangular_coordinates *obj,struct rectangular_coordinates *ear, double abs_mag, double slope)<p>
+</code></b>
+Calculates the apparent magnitude of a minor planet.<br>
+<br>
+obj: The minor planet's heliocentric rectangular coordinates. Must be in the same reference frame and units as ear (AU).<br>
+ear: The Earth's heliocentric rectangular coordinates. Must be in the same reference frame and units as obj (AU).<br>
+abs_mag: The mean absolute visual magnitude of the minor planet, H.<br>
+slope: The magnitude slope parameter of the minor planet, G.<br>
+<br>
+Return: The minor planet's apparent magnitude.<br>
+<br>
+<code><b>
+double comet_magnitude(struct rectangular_coordinates *obj, struct rectangular_coordinates *ear, double abs_mag, double slope)<p>
+</code></b>
+Calculates the apparent magnitude of a comet.<br>
+<br>
+obj: The comet's heliocentric rectangular coordinates. Must be in the same reference frame and units as ear (AU).<br>
+ear: The Earth's heliocentric rectangular coordinates. Must be in the same reference frame and units as obj (AU).<br>
+abs_mag: The mean absolute visual magnitude of the comet, H.<br>
+slope: The magnitude slope parameter of the comet, G.<br>
+<br>
+Return: The comet's apparent magnitude.<br>
+<p>
+
+<a name="mpc_file.c"><h4>mpc_file.c</h4></a>
+<code><b>
+int minor_planet_info(char *data, struct julian_date *tt, struct mpc_body *info)<p>
+</code></b>
+Parses data in the MPC's Orbit Database for minor planets. For details on the format, see http://www.cfa.harvard.edu/iau/info/MPOrbitFormat.html.<br>
+Download the database from http://www.cfa.harvard.edu/iau/MPCORB.html.<br>
+<br>
+data: A line of data from the MPCORB minor planet database file.<br>
+tt: TT to be used for calculations.<br>
+info: The minor planet's details and heliocentric coordinates. The reference frame is the equinox & ecliptic of J2000.<br>
+<br>
+Return: SUCCESS: The data was parsed and the coordinates were calculated.<br>
+ERR_INVALID_DATA: The data was in an unrecognized format.<br>
+ERR_CONVERGENCE: The solution to Kepler's equation didn't converge<br>
+to the required precision within the specified number of iterations.<br>
+<br>
+<code><b>
+int comet_info(char *data, struct julian_date *tt, struct mpc_body *info)<p>
+</code></b>
+Parses data in the MPC's Orbit Database for comets. For details on the format, see http://www.cfa.harvard.edu/iau/info/CometOrbitFormat.html.<br>
+Download the database from http://www.cfa.harvard.edu/iau/MPCORB.html.<br>
+<br>
+data: A line of data from the MPCORB comet database file.<br>
+tt: TT to be used for calculations.<br>
+info: The comet's details and heliocentric coordinates. The reference frame is the equinox & ecliptic of J2000.<br>
+<br>
+Return: SUCCESS: The data was parsed and the coordinates were calculated.<br>
+ERR_INVALID_DATA: The data was in an unrecognized format.<br>
+ERR_CONVERGENCE: The solution to Kepler's equation didn't converge to the required precision within the specified number of iterations.<br>
+<p>
+
+<a name="orbital_elements.c"><h4>orbital_elements.c</h4></a>
+<code><b>
+int elements_to_ephemeris(struct julian_date *tt, struct orbital_elements *elt,	struct rectangular_coordinates *eph)<p>
+</code></b>
+Calculates the heliocentric rectangular coordinates of a celestial body given its osculating orbital elements.<br>
+<br>
+tt: TT to be used for calculations.<br>
+elt: The body's osculating orbital elements.<br>
+eph: The body's heliocentric rectangular coordinates in AU. The reference frame is the equinox & ecliptic of J2000.<br>
+<br>
+Return: SUCCESS: If the coordinates were calculated successfully.<br>
+ERR_INVALID_ECCENTRICITY: If the body's eccentricity is negative.<br>
+ERR_CONVERGENCE: If Kepler's equation didn't converge to the required precision within the specified number of iterations.<br>
+<br>
+<code><b>
+int eccentric_anomaly(double mean_ano, double ecc, double *ecc_ano)<p>
+</code></b>
+Solves Kepler's equation for elliptic orbits and returns the resulting value of the eccentric anomaly.<br>
+<br>
+mean_ano: The celestial body's mean anomaly in radians.<br>
+ecc: The eccentricity of the orbit.<br>
+ecc_ano: On success, the body's eccentric anomaly in radians.<br>
+<br>
+Return: SUCCESS: If Kepler's equation was solved successfully.<br>
+ERR_CONVERGENCE: If Kepler's equation didn't converge to the required precision within the specified number of iterations.<br>
+<br>
+<code><b>
+int hyperbolic_anomaly(double mean_ano, double ecc, double *hyp_ano)<p>
+</code></b>
+Solves Kepler's equation for hyperbolic orbits and returns the resulting value of the hyperbolic anomaly.<br>
+<br>
+mean_ano: The celestial body's mean anomaly in radians.<br>
+ecc: The eccentricity of the orbit.<br>
+hyp_ano: On success, the body's hyperbolic anomaly in radians.<br>
+<br>
+Return: SUCCESS: If Kepler's equation was solved successfully.<br>
+ERR_CONVERGENCE: If Kepler's equation didn't converge to the required precision within the specified number of iterations.<br>
+<p>
+
+<a name="parallax.c"><h4>parallax.c</h4></a>
+<code><b>
+void geocentric_parallax(double hr_ang, double decl, double distance, double geog_lat, double height_msl, double *d_ra,	double *d_decl)<p>
+</code></b>
+Calculates the geocentric parallax in the equatorial coordinates of a celestial body.<br>
+<br>
+hr_ang: The body's local hour angle in radians.<br>
+decl: The body's declination in radians.<br>
+distance: The body's distance from the Earth in AU. <br>
+geog_lat: The observer's geographic latitude in radians.<br>
+height_msl: The observer's height above mean sea level in meters.<br>
+d_ra: The parallax in right ascension expressed in radians.<br>
+d_decl: The parallax in declination expressed in radians.<br>
+<p>
+
+<a name="pluto.c"><h4>pluto.c</h4></a>
+<code><b>
+int pluto_coordinates(struct julian_date *tdb, struct rectangular_coordinates *pos)<p>
+</code></b>
+Calculates the heliocentric rectangular coordinates of Pluto using an analytical model developed at the Bureau des Longitudes (Pluto95).<br>
+This theory is valid only between Jan 01, 1700 (inclusive) and Jan 24, 2100 (exclusive).<br>
+<br>
+tdb: TDB to be used for calculations. TT may be used for all but the most exacting applications. Must be between 1700-01-01 and 2100-01-24.<br>
+pos: On success, the heliocentric rectangular coordinates of Pluto in AU. The reference frame is the equinox and equator of J2000.<br>
+<br>
+Return: SUCCESS: If the coordinates were calculated successfully.<br>
+ERR_INVALID_DATE: If tdb was out of range for the theory.<br>
+<p>
+
+<a name="sidereal_time.c"><h4>sidereal_time.c</h4></a>
+<code><b>
+double mean_sidereal_time(struct julian_date *ut1, struct julian_date *tdb, double longitude)<p>
+</code></b>
+Calculates the local mean sidereal time using the latest IAU/IERS conventions.<br>
+<br>
+ut1: UT1 for calculating the Earth Rotation Angle.<br>
+tdb: TDB to be used for calculating the LMST. TT may be used  for all but the most exacting applications.<br>
+longitude: The observer's longitude in radians, positive east of Greenwich.<br>
+<br>
+Return: The local mean sidereal time in radians, between 0 and 2*PI.<br>
+<br>
+<code><b>
+double apparent_sidereal_time(struct julian_date *ut1, struct julian_date *tdb, double longitude)<p>
+</code></b>
+Calculates the local apparent sidereal time using the latest IAU/IERS conventions. Apparent sidereal time takes<br>
+into account the motion of the equinox due to nutation.<br>
+<br>
+ut1: UT1 for calculating the Earth Rotation Angle.<br>
+tdb: TDB to be used for calculating the LAST. TT may be used  for all but the most exacting applications.<br>
+longitude: The observer's longitude in radians, positive east of Greenwich.<br>
+<br>
+Return: The local apparent sidereal time in radians, between 0 and 2*PI.<br>
+<br>
+<code><b>
+double equation_of_the_equinoxes(struct julian_date *tdb)<p>
+</code></b>
+Calculates the value of the equation of the equinoxes. This accounts for the motion of the equinox due to nutation.<br>
+<br>
+tdb: TDB to be used for calculations. TT may be used for all but the most exacting applications.<br>
+<br>
+Return: The value of the equation of the equinoxes, in radians.<br>
+<p>
+
+<a name="vsop87.c"><h4>vsop87.c</h4></a>
+<code><b>
+int vsop87_coordinates(enum solar_system_planets planet, struct julian_date *tdb, struct rectangular_coordinates *pos)<p>
+</code></b>
+Calculates a major planet's heliocentric rectangular coordinates using the VSOP87 (version A) theory in its entirety.<br>
+<br>
+planet: Enumeration that identifies the planet for calculations.<br>
+tdb: TDB to be used for calculations. TT may be used for all but the most exacting applications.<br>
+pos: The planet's heliocentric rectangular coordinates in AU. The reference frame is the equinox & ecliptic of J2000.<br>
+<br>
+Return: SUCCESS: If the coordinates have been calculated successfully.<br>
+ERR_INVALID_PLANET: If the planet's identifier is invalid.<br>
+<br>
+<code><b>
+void vsop87_ecliptic_to_equator(struct rectangular_coordinates *pos)<p>
+</code></b>
+Rotates a body's coordinates from the dynamical ecliptic frame of J2000 to the equatorial frame of J2000/FK5.<br>
+<br>
+pos: The coordinates to be rotated in-place<br>
+<p>
+
+<a name="structs"><h3>Structs</h3></a>
+
+<h4>coordinates.h</h4> 
+Used for rectangular coordinates. The origin and orientation of the xy axes are application specific.<br>
+The xy plane could be the ecliptic or the Earth's equator.<br>
+<br>
+<code>
+struct rectangular_coordinates {<br>
+	double x; /* x-coordinate. The unit is application specific. */<br>
+	double y; /* y-coordinate. The unit is application specific. */<br>
+	double z; /* z-coordinate. The unit is application specific. */<br>
+};<br>
+</code>
+<br>
+Used for coordinates in the Earth's equatorial frame.<br>
+<br>
+<code>
+struct equatorial_coordinates {<br>
+	double right_ascension; /* Right ascension in radians. */<br>
+	double declination;     /* Declination in radians. */<br>
+};<br>
+</code>
+<br>
+Used for ecliptic coordinates. The origin is application specific.<br>
+<br>
+<code>
+struct ecliptic_coordinates {<br>
+	double longitude; /* Longitude in radians. */<br>
+	double latitude;  /* Latitude in radians. */<br>
+};<br>
+</code>
+<br>
+Used for horizontal coordinates.<br>
+<br>
+<code>
+struct horizontal_coordinates {<br>
+	double azimuth;  /* Azimuth in radians. Clockwise from the South. */<br>
+	double altitude; /* Altitude in radians. */<br>
+};
+</code>
+
+<h4>julian_date.h</h4> 
+This structure is used wherever a Julian Day Number (JDN) is expected or returned. Two doubles are used to preserve precision.<br>
+A given JDN may be partitioned between date1 & date2 in any convenient manner. The JDN that corresponds to this structure is date1 + date2.<br>
+<br>
+<code>
+struct julian_date {<br>
+	double date1;<br>
+	double date2;<br>
+};
+</code>
+
+<h4>kepler.h</h4> 
+Used in conversions from decimal degrees to degree/minute/second form.<br>
+<br>
+<code>
+struct deg_min_sec {<br>
+	int degrees;<br>
+	int minutes;<br>
+	double seconds;<br>
+};
+</code>
+
+<h4>mpc_file.h</h4> 
+Used to store the details of a celestial body in the MPCORB Database.<br>
+<br>
+<code>
+struct mpc_body {<br>
+	char id[12]; /* The body's ID or unpacked provisional designation. */<br>
+	char name[36]; /* The body's name, if it is included in the file. */<br>
+	enum mpc_body_types type; /* The type of body. */<br>
+<br>
+	double magnitude; /* The body's absolute magnitude, H. */<br>
+	double slope; /* Slope parameter, G. */<br>
+<br>
+	struct orbital_elements elements; /* The body's orbital elements. */<br>
+<br>
+	/*<br>
+	 * The body's coordinates at the desired epoch. For minor planets and<br>
+	 * comets, the origin is the Sun and the reference frame is the equinox<br>
+	 * and ecliptic of J2000.<br>
+	 */<br>
+	struct rectangular_coordinates position;<br>
+};<br>
+</code>
+
+<h4>orbital_elements.h</h4> 
+Used wherever the osculating orbital elements of a celestial body are expected or returned.<br>
+These values may be obtained from the circulars of the Minor Planet Center, the Astronomical Almanac<br>
+or other publications. See mpc_file.c for some ways in which this structure is used.<br>
+<br>
+<code>
+struct orbital_elements {<br>
+	struct julian_date epoch; /* Epoch of osculation. */<br>
+<br>
+	double mean_anomaly; /* Mean anomaly in radians at epoch. */<br>
+	double daily_motion; /* Daily motion in radians/day. */<br>
+<br>
+	double perihelion; /* Perihelion distance in AU. */<br>
+	double eccentricity; /* Eccentricity of the orbit. */<br
+<br>
+	/* The values for the orbit's orientation must be referred to J2000. */<br>
+	double arg_perihelion; /* Argument of the perihelion in radians. */<br>
+	double lon_asc_node; /* Longitude of the ascending node in radians. */<br>
+	double inclination; /* Inclination of the orbit in radians. */<br>
+};<br>
+</code>
+
+<p>
+
+<a name="enums"><h3>Enums</h3></a>
+
+<h4>fund_args.h</h4> 
+
+Enum for the various fundamental arguments used throughout the program. These values are parameters to fundamental_argument().<p>
+<code>
+enum fund_argument {<br>
+	ARG_LONGITUDE_MERCURY = 0,<br>
+	ARG_LONGITUDE_VENUS,<br>
+	ARG_LONGITUDE_EARTH,<br>
+	ARG_LONGITUDE_MARS,<br>
+	ARG_LONGITUDE_JUPITER,<br>
+	ARG_LONGITUDE_SATURN,<br>
+	ARG_LONGITUDE_URANUS,<br>
+	ARG_LONGITUDE_NEPTUNE,<br>
+	ARG_PRECESSION,<br>
+	ARG_ANOMALY_MOON,<br>
+	ARG_ANOMALY_SUN,<br>
+	ARG_LATITUDE_MOON,<br>
+	ARG_ELONGATION_MOON,<br>
+	ARG_LONGITUDE_NODE,<br>
+	ARG_LONGITUDE_MOON<br>
+};<br>
+</code>
+
+<h4>kepler.h</h4> 
+
+Identifiers for the planets in the solar system. Following the IAU's resolutions of 2006, Pluto is not considered a planet.<p>
+<code>
+enum solar_system_planets {<br>
+	MERCURY,<br>
+	VENUS,<br>
+	EARTH,<br>
+	MARS,<br>
+	JUPITER,<br>
+	SATURN,<br>
+	URANUS,<br>
+	NEPTUNE<br>
+};<br>
+</code>
+
+<h4>mpc_file.h</h4> 
+
+The types of celestial bodies included in the MPCORB Database.<p>
+<code>
+enum mpc_body_types {<br>
+	MINOR_PLANET,<br>
+	LONG_PERIOD_COMET,<br>
+	SHORT_PERIOD_COMET,<br>
+	DEFUNCT_COMET,<br>
+	UNCERTAIN_COMET<br>
+};<br>
+</code>
+
+</body>
+</html>
