@@ -1,6 +1,6 @@
 /*
  * rise_set.c - Display rise/set times for the Sun, Moon, planets & Pluto
- * Copyright (C) 2010 Shiva Iyer <shiva.iyer AT g m a i l DOT c o m>
+ * Copyright (C) 2010-2011 Shiva Iyer <shiva.iyer AT g m a i l DOT c o m>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -121,8 +121,7 @@ int main(int argc, char *argv[])
 void get_equatorial(int pla, struct julian_date *jd, double obl,
 		struct equatorial_coordinates *equ, double *dist)
 {
-	struct ecliptic_coordinates ecl;
-	struct rectangular_coordinates rec;
+	struct rectangular_coordinates rec,zero = {0, 0, 0};
 	static struct julian_date jd_saved = {0, 0};
 	static struct rectangular_coordinates ear_saved;
 
@@ -139,7 +138,7 @@ void get_equatorial(int pla, struct julian_date *jd, double obl,
 		/* Use VSOP87 for all eight major planets */
 		vsop87_coordinates(pla, jd, &rec);
 
-		/* Rotate from the J2000 ecliptic of VSOP87 to the equator */
+		/* Rotate from the J2000 ecliptic to the equator */
 		vsop87_ecliptic_to_equator(&rec);
 	} else if (pla == PLUTO) {
 		/* Pluto has its own analytical theory */
@@ -151,21 +150,31 @@ void get_equatorial(int pla, struct julian_date *jd, double obl,
 		rec.z = 0;
 	} else {
 		/* Use ELP 2000-82B for the Moon */
-		elp82b_coordinates(jd, &ecl, dist);
-		/* Convert the Moon's distance to AU */
-		*dist = *dist / AU;
+		elp82b_coordinates(jd, &rec);
+
+		/* Rotate from the J2000 ecliptic to the equator */
+		elp82b_ecliptic_to_equator(&rec);
 	}
 
 	/*
 	 * Convert heliocentric rectangular coordinates (planets, Pluto)
-	 * and geocentric ecliptic coordinates (the Moon) to geocentric 
-	 * equatorial coordinates
+	 * and geocentric rectangular coordinates (the Moon) to geocentric 
+	 * equatorial coordinates.
 	 */
-	if (pla <= SUN)
+	if (pla == MOON) {
+		/*
+		 * The Moon is already in geocentric coordinates, so we just
+		 * convert to equatorial, without a Sun->Moon translation.
+		 */
+		rectangular_to_spherical(&rec, &zero, &equ->right_ascension,
+					&equ->declination, dist);
+
+		/* Convert the Moon's distance to AU */
+		*dist = *dist / AU;
+	} else {
 		rectangular_to_spherical(&rec, &ear_saved, &equ->right_ascension,
 					&equ->declination, dist);
-	else
-		ecliptic_to_equatorial(&ecl, obl, equ);
+	}
 }
 
 char *format_time(double t, char *buf, u_short sec)

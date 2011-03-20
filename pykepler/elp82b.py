@@ -1,5 +1,5 @@
 # elp82b.py - Wrapper for ELP2000-82B routines
-# Copyright (C) 2010 Shiva Iyer <shiva.iyer AT g m a i l DOT c o m>
+# Copyright (C) 2010-2011 Shiva Iyer <shiva.iyer AT g m a i l DOT c o m>
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -24,31 +24,44 @@ from pykepler import _libkepler
 
 def elp82b_coordinates(tdb):
     """
-    Calculate the Moon's geocentric ecliptic coordinates and distance using the
+    Calculate the Moon's geocentric rectangular coordinates using the
     ELP 2000-82B lunar theory in its entirety.
 
     tdb -- TDB to be used for calculations. TT may be used for all but the most
            exacting applications.
 
-    Return 1: The Moon's geocentric ecliptic coordinates. The reference frame is
-              the equinox & ecliptic of J2000.
-    Return 2: The Moon's distance from the Earth in KM.
+    Return 1: The Moon's geocentric rectangular coordinates in KM. The reference
+              frame is the equinox & ecliptic of J2000.
 
     """
-    ecliptic = EclipticCoordinates()
-    radius = c_double()
+    rectangular = RectangularCoordinates()
 
-    _libkepler.elp82b_coordinates(byref(tdb), byref(ecliptic), byref(radius))
+    _libkepler.elp82b_coordinates(byref(tdb), byref(rectangular))
 
-    return ecliptic, radius.value
+    return rectangular
+
+def elp82b_ecliptic_to_equator(ecliptic):
+    """
+    Rotate the Moon's coordinates from the ecliptic frame of J2000 to the
+    equatorial frame of J2000/FK5.
+
+    ecliptic -- The coordinates to be rotated in-place
+
+    """
+    _libkepler.elp82b_ecliptic_to_equator(byref(ecliptic))
 
 _libkepler.elp82b_coordinates.restype = None
 _libkepler.elp82b_coordinates.argtypes = [
     POINTER(JulianDate),
-    POINTER(EclipticCoordinates),
-    POINTER(c_double)
+    POINTER(RectangularCoordinates)
+]
+
+_libkepler.elp82b_ecliptic_to_equator.restype = None
+_libkepler.elp82b_ecliptic_to_equator.argtypes = [
+    POINTER(RectangularCoordinates)
 ]
 
 __all__ = [
-    "elp82b_coordinates"
+    "elp82b_coordinates",
+    "elp82b_ecliptic_to_equator"
 ]

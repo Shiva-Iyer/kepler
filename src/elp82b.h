@@ -1,6 +1,6 @@
 /*
  * elp82b.h - Structs & declarations for the ELP 2000-82B lunar theory
- * Copyright (C) 2010 Shiva Iyer <shiva.iyer AT g m a i l DOT c o m>
+ * Copyright (C) 2010-2011 Shiva Iyer <shiva.iyer AT g m a i l DOT c o m>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -64,7 +64,8 @@ struct elp82b_term3 {
 	double a;
 };
 
-void elp82b_coordinates(struct julian_date *tdb,
-			struct ecliptic_coordinates *ecl, double *radius);
+void elp82b_coordinates(struct julian_date *tdb, struct rectangular_coordinates *pos);
+
+void elp82b_ecliptic_to_equator(struct rectangular_coordinates *pos);
 
 #endif

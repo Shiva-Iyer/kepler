@@ -1,6 +1,6 @@
 /*
  * kepler_test.c - Testbed for all the kepler routines
- * Copyright (C) 2010 Shiva Iyer <shiva.iyer AT g m a i l DOT c o m>
+ * Copyright (C) 2010-2011 Shiva Iyer <shiva.iyer AT g m a i l DOT c o m>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -70,12 +70,10 @@ int main(int argc, char *argv[])
 	FILE *fp;
 	int i,year,month,day,retval,show_all;
 	struct julian_date jd;
-	struct ecliptic_coordinates ecl;
 	struct equatorial_coordinates eq;
-	struct rectangular_coordinates xyz[9],sun = {0, 0, 0};
+	struct rectangular_coordinates xyz[9],zero = {0, 0, 0},moon;
 	struct mpc_body inf;
-	double radius,dist,df,epsilon,d_psi,d_eps,prec_matrix[3][3],
-		nut_matrix[3][3],mst,ast,d_ra,d_dec;
+	double dist,df,epsilon,d_psi,d_eps,prec_matrix[3][3],nut_matrix[3][3],mst,ast,d_ra,d_dec;
 	char buf[256];
 	static char *planet_names[] = {"Mercury","Venus","Earth","Mars",
 				       "Jupiter","Saturn","Uranus","Neptune",
@@ -117,10 +115,10 @@ int main(int argc, char *argv[])
 			planet_names[i], xyz[i].x, xyz[i].y, xyz[i].z);
 	}
 
-	elp82b_coordinates(&jd, &ecl, &radius);
-	printf("\nGeocentric ecliptic coordinates for 2010-01-04 00:00:00 TDB (in rad, rad, KM)\n\n");
-	printf("%10s: l = %13.10f, b = %13.10f, r = %13.10f\n","Moon",
-		ecl.longitude, ecl.latitude, radius);
+	elp82b_coordinates(&jd, &moon);
+	elp82b_ecliptic_to_equator(&moon);
+	printf("\nGeocentric rectangular coordinates for 2010-01-04 00:00:00 TDB (in KM, KM, KM)\n\n");
+	printf("%10s: x = %14.10f, y = %14.10f, z = %14.10f\n","Moon", moon.x, moon.y, moon.z);
 
 	printf("\nEquatorial coordinates for 2010-01-04 00:00:00 TDB (in hours, degrees, AU)\n\n");
 	for (i = MERCURY; i <= NEPTUNE + 1; i++) {
@@ -128,17 +126,19 @@ int main(int argc, char *argv[])
 			continue;
 
 		if (i == 0) {
-			rectangular_to_spherical(&sun, &xyz[2],
+			rectangular_to_spherical(&zero, &xyz[2],
 						&eq.right_ascension,
 						&eq.declination, &dist);
 			printf("%10s: RA = %14.10f, Dec = %14.10f, Distance = %14.10f\n","Sun", 
 				eq.right_ascension * RAD_TO_HRS,
 				eq.declination * RAD_TO_DEG, dist);
 
-			ecliptic_to_equatorial(&ecl, epsilon, &eq);
+			rectangular_to_spherical(&moon, &zero,
+						&eq.right_ascension,
+						&eq.declination, &dist);
 			printf("%10s: RA = %14.10f, Dec = %14.10f, Distance = %14.7f KM\n","Moon", 
 				eq.right_ascension * RAD_TO_HRS,
-				eq.declination * RAD_TO_DEG, radius);
+				eq.declination * RAD_TO_DEG, dist);
 		}
 
 		rectangular_to_spherical(&xyz[i], &xyz[2], &eq.right_ascension,

@@ -299,13 +299,19 @@ gc_radius: The observer's geocentric radius as a fraction of the Earth's equator
 
 <a name="elp82b.c"><h4>elp82b.c</h4></a>
 <code><b>
-void elp82b_coordinates(struct julian_date *tdb,struct ecliptic_coordinates *ecl, double *radius)<p>
+void elp82b_coordinates(struct julian_date *tdb,struct rectangular_coordinates *pos)<p>
 </code></b>
-Calculates the Moon's geocentric ecliptic coordinates and distance using the ELP 2000-82B lunar theory in its entirety.<br>
+Calculates the Moon's geocentric rectangular coordinates using the ELP 2000-82B lunar theory in its entirety.<br>
 <br>
 tdb: TDB to be used for calculations. TT may be used for all but the most exacting applications.<br>
-ecl: The Moon's geocentric ecliptic coordinates. The reference frame is the equinox & ecliptic of J2000.<br>
-radius: The Moon's distance from the Earth in KM.<br>
+pos: The Moon's geocentric rectangular coordinates in KM. The reference frame is the equinox & ecliptic of J2000.<br>
+<br>
+<code><b>
+void elp82b_ecliptic_to_equator(struct rectangular_coordinates *pos)<p>
+</code></b>
+Rotates the Moon's coordinates from the ecliptic frame of J2000 to the equatorial frame of J2000/FK5.<br>
+<br>
+pos: The coordinates to be rotated in-place<br>
 <p>
 
 <a name="fund_args.c"><h4>fund_args.c</h4></a>
