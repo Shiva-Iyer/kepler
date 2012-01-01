@@ -1,5 +1,5 @@
 # makefile - makefile for the kepler library
-# Copyright (C) 2010 Shiva Iyer <shiva.iyer AT g m a i l DOT c o m>
+# Copyright (C) 2010-2012 Shiva Iyer <shiva.iyer AT g m a i l DOT c o m>
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -14,7 +14,11 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-CFLAGS = -I . -D_GNU_SOURCE -c -fPIC -ansi -pedantic -Wall
+CFLAGS = -I . -D_GNU_SOURCE -c -pedantic -Wall
+ifeq ($(target),posix)
+ CFLAGS := $(CFLAGS) -fPIC
+endif
+
 LDFLAGS = -shared -Wl,-soname,$(LIB_SONAME)
 
 OBJS = julian_date.o delta-t.o vsop87_data.o vsop87.o fund_args.o elp82b_data.o \

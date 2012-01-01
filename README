@@ -1,6 +1,6 @@
 *************************************************************************
 * README file for the kepler library					*
-* Copyright (C) 2010-2011 Shiva Iyer <shiva.iyer AT g m a i l DOT c o m>    	*
+* Copyright (C) 2010-2012 Shiva Iyer <shiva.iyer AT g m a i l DOT c o m>*
 *								      	*
 * This program is free software: you can redistribute it and/or modify	*
 * it under the terms of the GNU General Public License as published by	*
@@ -41,23 +41,29 @@ installed. The following are the minimum version requirements.
       * GNU Make	3.81
       * Python		2.6.5 (needed only if you use the Python interface)
 
+kepler can also be used with Microsoft Windows provided you have MinGW and
+MSYS installed. These tools may be downloaded from <http://www.mingw.org/>.
+
 Installation
 ------------
 
 Instructions for downloading the source archives and accessing the development
 repository may be found at <http://savannah.nongnu.org/projects/kepler>.
 
-Run 'make' in the kepler installation directory to compile all the library
-files and example programs. In order to call kepler's functions from your own
-applications, you will need to create your own makefile along the lines of the
-one in the 'examples' subdirectory.
+Run 'make target={posix|windows}' in the kepler installation directory to compile
+all the library files and example programs. In order to call kepler's functions
+from your own applications, you will need to create your own makefile along the
+lines of the one in the 'examples' subdirectory.
 
-Run 'make install' to deploy the shared library that is created in the previous
-step. On most systems, you will need to run this as root. You will need to do
-this before you run the example programs or use the pykepler Python package.
+Run 'make target={posix|windows} install' to deploy the shared library that is
+created in the previous step. On most systems, you will need to run this as root.
+You will need to do this before you run the example programs or use the pykepler
+Python package. On Windows, please copy src/libkepler.dll manually to your
+application or Windows system directory.
 
-Run 'make clean' to remove all the files created by running 'make'. This will not
-remove the shared libraries or symbolic links in /usr/lib.
+Run 'make target={posix|windows} clean' to remove all the files created by
+running 'make'. This will not remove the shared libraries or symbolic links
+in /usr/lib.
 
 The 'pykepler' subdirectory contains the sources for the pykepler Python package.
 This package allows you to call kepler routines from Python.
@@ -95,8 +101,9 @@ astronomical literature in the source code.
 No work of this nature would be possible without the following standard works on
 astronomical algorithms:
 
-  * Explanatory supplement to the Astronomical Almanac by P. Kenneth Seidelmann
-  * Astronomical Algorithms by Jean Meeus
+  * "Explanatory supplement to the Astronomical Almanac" by P. Kenneth Seidelmann
+  * "Celestial Mechanics" by Forest Ray Moulton
+  * "Astronomical Algorithms" by Jean Meeus
 
 Bugs
 ----

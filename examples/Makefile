@@ -1,5 +1,5 @@
 # makefile - makefile for the examples in the kepler library
-# Copyright (C) 2010 Shiva Iyer <shiva.iyer AT g m a i l DOT c o m>
+# Copyright (C) 2010-2012 Shiva Iyer <shiva.iyer AT g m a i l DOT c o m>
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -14,7 +14,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-CFLAGS = -I ../src -I . -D_GNU_SOURCE -c -ansi -pedantic -Wall 
+CFLAGS = -I ../src -I . -D_GNU_SOURCE -c -pedantic -Wall 
 LDFLAGS = -L../src/ -lm -lkepler
 
 all: kepler_test rise_set
@@ -33,4 +33,5 @@ rise_set: rise_set.o
 
 .PHONY: clean
 clean:
-	@$(RM) kepler_test.o kepler_test rise_set.o rise_set
+	@$(RM) kepler_test.o kepler_test kepler_test.exe rise_set.o rise_set rise_set.exe
+

@@ -1,6 +1,6 @@
 /*
  * aberration.c - Implementation of Ron-Vondrak theory of aberration
- * Copyright (C) 2010 Shiva Iyer <shiva.iyer AT g m a i l DOT c o m>
+ * Copyright (C) 2010-2012 Shiva Iyer <shiva.iyer AT g m a i l DOT c o m>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -25,6 +25,7 @@
 
 #include <math.h>
 #include <memory.h>
+#include <kepler.h>
 #include <fund_args.h>
 #include <aberration.h>
 

@@ -1,6 +1,6 @@
 /*
  * kepler.h - Constants, macros, utility routines
- * Copyright (C) 2010 Shiva Iyer <shiva.iyer AT g m a i l DOT c o m>
+ * Copyright (C) 2010-2012 Shiva Iyer <shiva.iyer AT g m a i l DOT c o m>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -165,5 +165,20 @@ static __inline__ char *strncpyn(char *dest, const char *src, size_t len)
 
 	return dest;
 }
+
+#ifndef __USE_GNU
+
+/*
+ * The MinGW implementation of gcc lacks the sincos() function, and so we
+ * define our own. This is not an efficient implementation, and will need
+ * to be revisited.
+ */
+static __inline__ void sincos(double x, double *sinx, double *cosx)
+{
+  *sinx = sin(x);
+  *cosx = cos(x);
+}
+
+#endif
 
 #endif

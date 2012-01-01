@@ -1,5 +1,5 @@
 # makefile - base makefile for the kepler library
-# Copyright (C) 2010 Shiva Iyer <shiva.iyer AT g m a i l DOT c o m>
+# Copyright (C) 2010-2012 Shiva Iyer <shiva.iyer AT g m a i l DOT c o m>
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -14,15 +14,32 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+ifndef target
+ $(error Please specify target OS on the command line. Syntax: make target={posix|windows})
+endif
+
+ifeq ($(target),posix)
+
+ export LIB_DEST_PATH = /usr/lib
+ export LIB = libkepler.so
+ export LIB_SONAME = $(LIB).1
+ export LIB_DEST = $(LIB_SONAME).0.0
+
+ CP = cp
+ LN = ln -sf
+
+else
+
+ ifeq ($(target),windows)
+  export LIB = libkepler.dll
+  export LIB_SONAME = $(LIB).1
+ else
+  $(error Invalid target OS specified. Must be posix or windows)
+ endif
+
+endif
+
 export CC = gcc
-
-export LIB_SONAME = libkepler.so.1
-export LIB = libkepler.so
-export LIB_DEST_PATH = /usr/lib
-export LIB_DEST = libkepler.so.1.0.0
-
-CP = cp
-LN = ln -sf
 
 SUBDIRS = src examples
 
@@ -36,8 +53,12 @@ $(SUBDIRS):
 examples: src
 
 install: $(SUBDIRS)
+ifeq ($(target),posix)
 	$(CP) src/$(LIB) $(LIB_DEST_PATH)/$(LIB_DEST)
 	$(LN) $(LIB_DEST_PATH)/$(LIB_DEST) $(LIB_DEST_PATH)/$(LIB_SONAME)
+else
+	$(warning Please manually copy $(LIB) to your application or Windows system directory)
+endif
 
 clean:
 	@for dir in $(SUBDIRS); do \

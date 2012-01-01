@@ -1,6 +1,6 @@
 /*
  * rise_set.c - Display rise/set times for the Sun, Moon, planets & Pluto
- * Copyright (C) 2010-2011 Shiva Iyer <shiva.iyer AT g m a i l DOT c o m>
+ * Copyright (C) 2010-2012 Shiva Iyer <shiva.iyer AT g m a i l DOT c o m>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -207,7 +207,12 @@ void parse_command_line(int argc, char *argv[], int *year, int *month,
 	*year = 1900 + tt->tm_year;
 	*month = 1 + tt->tm_mon;
 	*day = tt->tm_mday;
+
+#ifdef tm_gmtoff
 	*ut_off = tt->tm_gmtoff / 3600.0;
+#else
+	*ut_off = 0;
+#endif
 
 	/* Default to the longitude & latitude of Boston, MA */
 	*longitude = -DEGREES(71, 3, 42);

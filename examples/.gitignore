@@ -1,6 +1,8 @@
 *.o
 kepler_test
+kepler_test.exe
 rise_set
+rise_set.exe
 *.DAT
 
 

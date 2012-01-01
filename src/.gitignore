@@ -1,2 +1,2 @@
 *.o
-libkepler.so*
+libkepler*

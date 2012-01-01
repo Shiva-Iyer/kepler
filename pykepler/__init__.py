@@ -1,5 +1,5 @@
 # __init__.py - Package definition file for pykepler
-# Copyright (C) 2010 Shiva Iyer <shiva.iyer AT g m a i l DOT c o m>
+# Copyright (C) 2010-2012 Shiva Iyer <shiva.iyer AT g m a i l DOT c o m>
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -45,8 +45,14 @@ if __name__ == "__main__":
 import sys
 from ctypes import *
 
-# Load the kepler shared library and save for use in the pykepler modules
-_libkepler = CDLL("libkepler.so.1")
+import os
+
+# Load the kepler shared library and save for use in the pykepler modules.
+# The library is operating system dependent.
+if os.name == "posix": 
+    _libkepler = CDLL("libkepler.so.1")
+elif os.name == "nt":
+    _libkepler = CDLL("libkepler.dll")
 
 from julian_date import *
 from delta_t import *
