@@ -15,7 +15,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 CFLAGS = -I ../src -I . -D_GNU_SOURCE -c -pedantic -Wall 
-LDFLAGS = -L../src/ -lm -lkepler
+LDFLAGS = -L../src/ -Wl,--no-as-needed -lm -lkepler
 
 all: kepler_test rise_set
 
