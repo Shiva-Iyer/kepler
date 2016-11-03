@@ -1,6 +1,6 @@
 *************************************************************************
 * README file for the kepler library					*
-* Copyright (C) 2010-2012 Shiva Iyer <shiva.iyer AT g m a i l DOT c o m>*
+* Copyright (C) 2016 Shiva Iyer <shiva.iyer AT g m a i l DOT c o m>     *
 *								      	*
 * This program is free software: you can redistribute it and/or modify	*
 * it under the terms of the GNU General Public License as published by	*
@@ -85,11 +85,10 @@ kepler_test.c calls most of the functions in kepler and displays the results in 
 terminal window. To test the routines in mpc_file.c, you must download the MPC
 Orbit Database files from <http://www.cfa.harvard.edu/iau/MPCORB.html>.
 
-rise_set.c is a program that accepts some command line arguments and displays
-the rise, upper transit and set times for the Sun, Moon, planets and Pluto.
-No corrections are made for planetary aberration, nutation, geocentric parallax
-or for the motion of the swifter objects (Moon, Mercury, Venus and Mars).
-Consequently, the displayed times could be between 3 to 6 minutes in error.
+rise_set.c is a program that accepts command line arguments and displays
+the rise, transit and setting times for the Sun, Moon, planets and Pluto.
+The program implements the algorithm given in Chapter 15 of Meeus. The results
+are quite unsatisfactory for the swift movers: the Moon and Mercury.
 
 References
 ----------

@@ -1,6 +1,6 @@
 /*
  * rise_set.h - Declarations for the kepler rise/set example program
- * Copyright (C) 2010 Shiva Iyer <shiva.iyer AT g m a i l DOT c o m>
+ * Copyright (C) 2016 Shiva Iyer <shiva.iyer AT g m a i l DOT c o m>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -33,8 +33,11 @@ enum {
 #define MOON_REFRACTION		(450 * ACS_TO_RAD)   /* +7.5 arc minutes */
 #define PLANET_REFRACTION	(-2040 * ACS_TO_RAD) /* -34 arc minutes */
 
-void get_equatorial(int pla, struct julian_date *jd, double obl,
-		struct equatorial_coordinates *equ, double *dist);
+void riseset(double *ra, double *dec, double gast, double lon,
+	     double lat, double dt, double h0, double *rts);
+
+void get_equatorial(int pla, struct julian_date *jd,
+		    struct equatorial_coordinates *equ, double *dist);
 
 char *format_time(double t, char *buf, u_short sec);
 
