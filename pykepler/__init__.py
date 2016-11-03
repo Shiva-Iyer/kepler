@@ -1,5 +1,5 @@
 # __init__.py - Package definition file for pykepler
-# Copyright (C) 2010-2012 Shiva Iyer <shiva.iyer AT g m a i l DOT c o m>
+# Copyright (C) 2016 Shiva Iyer <shiva.iyer AT g m a i l DOT c o m>
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -35,6 +35,7 @@ aberration -- Ron-Vondrak theory of aberration
 earth_figure -- Values related to the oblateness of the Earth
 parallax -- Values for the geocentric parallax of celestial bodies
 magnitude -- Apparent magnitude of minor planets and comets
+riseset -- Rise/transit/set times
 constants -- Constants and utility routines
 
 """
@@ -70,6 +71,7 @@ from aberration import *
 from earth_figure import *
 from parallax import *
 from magnitude import *
+from riseset import *
 from constants import *
 
 __all__ = []

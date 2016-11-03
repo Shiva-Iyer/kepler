@@ -132,10 +132,16 @@ pluto.h
 <td>Implementation of the PLUTO95 theory for Pluto's coordinates</td>
 </tr>
 <tr><td>
+<a href="#riseset.c">riseset.c</a><br>
+riseset.h
+</td>
+<td>Calculate rise/transit/setting times of celestial bodies</td>
+</tr>
+<tr><td>
 <a href="#sidereal_time.c">sidereal_time.c</a><br>
 sidereal_time.h
 </td>
-<td>Sidereal time calculations using the IERS 2003 conventions </td>
+<td>Sidereal time calculations using the IERS 2003 conventions</td>
 </tr>
 <tr><td>
 <a href="#vsop87.c">vsop87.c</a><br>
@@ -542,6 +548,37 @@ pos: On success, the heliocentric rectangular coordinates of Pluto in AU. The re
 <br>
 Return: SUCCESS: If the coordinates were calculated successfully.<br>
 ERR_INVALID_DATE: If tdb was out of range for the theory.<br>
+<p>
+
+<a name="riseset.c"><h4>riseset.c</h4></a>
+<code><b>
+void riseset(int N, double *df, double *ra, double *dec, double gast,
+	     double lon, double lat, double delt, double h0, double *rts)<p>
+</code></b>
+Calculate rise/transit/setting times for an object given its positions in equatorial coordinates.<br>
+<br>
+N: Number of entries in &lt;df&gt;, &lt;ra&gt, &lt;dec&gt.<br>
+df: Array of day fractions, each in the range [0,1].<br>
+ra: RA of the object in radians at the times given in &lt;df&gt.<br>
+dec: Declination of the object in radians at the times given in &lt;df&gt;.<br>
+gast: Greenwich apparent sidereal time in radians at &lt;df[0]&gt;.<br>
+lon: Observer's longitude in radians, positive east of Greenwich.<br>
+lat: Observer's latitude in radians, positive north of the equator.<br>
+delt: Delta-T in seconds at &lt;df[0]&gt;.<br>
+h0: Correction to use for atmospheric refraction in radians.<br>
+rts: On exit: rts[0] = rise, rts[1] = transit, rts[2] = setting times, all in UTC day fractions in the range [0,1]. Values will be -1 for objects that don't rise/transit/set.<br>
+<br>
+<code><b>
+double interpolate(int N, double *X, double *Y, double xint)<p>
+</code></b>
+Interpolate using Lagrange's interpolation formula.<br>
+<br>
+N: Number of entries in &lt;X&gt;, &lt;Y&gt;.<br>
+X: x-values for interpolation.<br>
+Y: y-values for interpolation.<br>
+xint: Interpolant.<br>
+<br>
+Return: Interpolated y-value corresponding to &lt;xint&gt;.<br>
 <p>
 
 <a name="sidereal_time.c"><h4>sidereal_time.c</h4></a>
