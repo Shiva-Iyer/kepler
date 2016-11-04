@@ -16,10 +16,6 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-/*
- * See README for limitations and other known issues
- */
-
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
@@ -31,6 +27,7 @@
 #include <elp82b.h>
 #include <pluto.h>
 #include <iau2000a_nutation.h>
+#include <riseset.h>
 #include <rise_set.h>
 
 int main(int argc, char *argv[])
@@ -106,73 +103,7 @@ int main(int argc, char *argv[])
   free(df);
   free(rad);
   free(decd);
-  return 0;
-}
-
-/*
- * Implement a modified version of the algorithm in Chapter 15 of Meeus
- * using Lagrange interpolation on a larger set of planet positions. The
- * accuracy improvements over the Meeus approach are significant,
- * especially for the Moon and Mercury.
- */
-void riseset(int N, double *df, double *ra, double *dec, double gast,
-	     double lon, double lat, double delt, double h0, double *rts)
-{
-  int i,j;
-  double cH0,m,t0,n,r,d,H,h,dm;
-
-  rts[0] = rts[1] = rts[2] = -1;
-
-  cH0 = (sin(h0) - sin(lat)*sin(dec[0]))/(cos(lat)*cos(dec[0]));
-  if (cH0 < -1 || cH0 > 1)
-    return;
-  cH0 = acos(cH0);
-
-  for (i = 0; i < 3; i++) {
-    m = (ra[0] - lon - gast)/TWO_PI;
-    if (i == 0)
-      m -= cH0/TWO_PI;
-    else if (i == 2)
-      m += cH0/TWO_PI;
-
-    for (j = 0; j < 10; j++) {
-      n = m + delt/86400;
-      r = interpolate(N, df, ra, n);
-      d = interpolate(N, df, dec, n);
-
-      t0 = gast + 360.985647*DEG_TO_RAD*m;
-      H = t0 + lon - r;
-      h = asin(sin(lat)*sin(d) + cos(lat)*cos(d)*cos(H));
-      if (i == 1)
-	dm = -H/TWO_PI;
-      else
-	dm = (h-h0)/(TWO_PI*cos(d)*cos(lat)*sin(H));
-
-      m += dm;
-      if (fabs(dm) <= 1E-5)
-	break;
-    }
-    rts[i] = m;
-  }
-}
-
-/* Interpolate using Lagrange's interpolation formula */
-double interpolate(int N, double *X, double *Y, double xint)
-{
-  int i,j;
-  double L,yint;
-
-  yint = 0;
-  for (i = 0; i < N; i++) {
-    L = 1;
-    for (j = 0; j < N; j++) {
-      if (i != j)
-	L *= (xint - X[j])/(X[i] - X[j]);
-    }
-    yint += L*Y[i];
-  }
-
-  return(yint);
+  return(0);
 }
 
 void get_equatorial(int pla, struct julian_date *jd,

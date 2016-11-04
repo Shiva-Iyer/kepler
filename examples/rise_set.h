@@ -35,10 +35,6 @@ enum {
 #define MOON_REFRACTION		(450 * ACS_TO_RAD)   /* +7.5 arc minutes */
 #define PLANET_REFRACTION	(-2040 * ACS_TO_RAD) /* -34 arc minutes */
 
-void riseset(int N, double *df, double *ra, double *dec, double gast,
-	     double lon, double lat, double delt, double h0, double *rts);
-double interpolate(int N, double *X, double *Y, double xint);
-
 void get_equatorial(int pla, struct julian_date *jd,
 		    struct equatorial_coordinates *equ);
 

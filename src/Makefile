@@ -1,5 +1,5 @@
 # makefile - makefile for the kepler library
-# Copyright (C) 2010-2012 Shiva Iyer <shiva.iyer AT g m a i l DOT c o m>
+# Copyright (C) 2016 Shiva Iyer <shiva.iyer AT g m a i l DOT c o m>
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -24,7 +24,7 @@ LDFLAGS = -shared -Wl,-soname,$(LIB_SONAME)
 OBJS = julian_date.o delta-t.o vsop87_data.o vsop87.o fund_args.o elp82b_data.o \
 	elp82b.o iau2006_precession.o iau2000a_data.o iau2000a_nutation.o \
 	coordinates.o sidereal_time.o pluto.o orbital_elements.o mpc_file.o \
-	aberration.o earth_figure.o parallax.o magnitude.o
+	aberration.o earth_figure.o parallax.o magnitude.o riseset.o
 
 all: $(LIB)
 
@@ -88,6 +88,9 @@ parallax.o: parallax.c parallax.h earth_figure.h kepler.h
 	$(CC) $(CFLAGS) -o $@ $<
 
 magnitude.o: magnitude.c magnitude.h coordinates.h
+	$(CC) $(CFLAGS) -o $@ $<
+
+riseset.o: riseset.c riseset.h kepler.h
 	$(CC) $(CFLAGS) -o $@ $<
 
 $(LIB): $(OBJS)

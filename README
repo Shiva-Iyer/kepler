@@ -87,10 +87,6 @@ Orbit Database files from <http://www.cfa.harvard.edu/iau/MPCORB.html>.
 
 rise_set.c is a program that accepts command line arguments and displays
 the rise, transit and setting times for the Sun, Moon, planets and Pluto.
-It implements a modified version of the algorithm in Chapter 15 of Meeus
-using Lagrange interpolation on a larger set of planet positions. The
-accuracy improvements over the Meeus approach are significant, especially
-for the Moon and Mercury.
 
 References
 ----------
