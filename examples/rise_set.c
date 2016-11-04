@@ -24,6 +24,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include <time.h>
+#include <memory.h>
 #include <sidereal_time.h>
 #include <delta-t.h>
 #include <vsop87.h>
@@ -37,11 +38,11 @@ int main(int argc, char *argv[])
   static char *object_names[] = {"Mercury","Venus","Earth","Mars",
 				 "Jupiter","Saturn","Uranus","Neptune",
 				 "Pluto","Sun","Moon"};
-  int i,j,year,month,day;
-  struct julian_date jd;
+  int i,j,year,month,day,steps;
+  struct julian_date jd0,jd;
   struct equatorial_coordinates equ;
-  double longitude,latitude,ut_off,dist,h0,gast,del_t,corr,
-    rad[3],decd[3],rts[3];
+  double longitude,latitude,ut_off,h0,gast,del_t,corr,
+    *df,*rad,*decd,rts[3];
   char msg[256],rise[10],trans[10],set[10],ra[10],dec[10];
 
   /* Parse command line parameters */
@@ -49,18 +50,24 @@ int main(int argc, char *argv[])
 		     &day, &longitude, &latitude, &ut_off);
 
   /* Get the Julian Day Number corresponding to user input */
-  calendar_to_julian_date(year, month, day, &jd);
+  calendar_to_julian_date(year, month, day, &jd0);
+  jd = jd0;
 
   /* Greenwich apparent sidereal time */
-  gast = apparent_sidereal_time(&jd, &jd, 0);
+  gast = apparent_sidereal_time(&jd0, &jd0, 0);
 
   /* TT/TDB is needed for calculating coordinates, so get delta-T */
   delta_t(year, month, &del_t, &corr);
 
   printf("Information for %4d-%02d-%02d (JD %9.1f) at lon: %-7.2f & lat: %-7.2f\n",
-	 year, month, day, jd.date1 + jd.date2, longitude, latitude);
-  printf("Rise, transit, set, RA (h:m:s), declination (d:m:s)\n");
-  printf("RA and declination are for UT 0h on the date specified\n\n");
+	 year, month, day, jd0.date1 + jd0.date2, longitude, latitude);
+  printf("Rise, transit, set, RA (h:m:s), dec. (d:m:s)\n");
+  printf("RA, dec. are for 0h UT on the given date\n\n");
+
+  steps = 24/TIME_STEP + 1;
+  df = malloc(steps*sizeof(double));
+  rad = malloc(steps*sizeof(double));
+  decd = malloc(steps*sizeof(double));
 
   /* kepler expects all angles to be in radians */
   longitude *= DEG_TO_RAD;
@@ -69,11 +76,10 @@ int main(int argc, char *argv[])
     if (i == EARTH)
       continue;
 
-    calendar_to_julian_date(year, month, day, &jd);
-    jd.date2 -= 1;
-    for (j = 0; j < 3; j++) {
-      jd.date2 += j;
-      get_equatorial(i, &jd, &equ, &dist);
+    for (j = 0; j < steps; j++) {
+      df[j] = (double)j*TIME_STEP/24;
+      jd.date2 = jd0.date2 + df[j];
+      get_equatorial(i, &jd, &equ);
       rad[j] = equ.right_ascension;
       decd[j] = equ.declination;
     }
@@ -85,7 +91,7 @@ int main(int argc, char *argv[])
     else
       h0 = PLANET_REFRACTION;
 
-    riseset(rad, decd, gast, longitude, latitude, del_t, h0, rts);
+    riseset(steps, df, rad, decd, gast, longitude, latitude, del_t, h0, rts);
     for (j = 0; j < 3; j++)
       rts[j] = reduce_angle(rts[j]*24 + ut_off, 24);
 
@@ -95,42 +101,44 @@ int main(int argc, char *argv[])
 	    format_time(rad[1]*RAD_TO_HRS, ra, 1),
 	    format_time(decd[1]*RAD_TO_DEG, dec, 1));
     printf("%s\n", msg);
-
   }
 
+  free(df);
+  free(rad);
+  free(decd);
   return 0;
 }
 
 /*
- * Implement the algorithm in Chapter 15 of Meeus. The results are very
- * unsatisfactory for Mercury and the Moon and therefore this algorithm
- * is in need of significant revision.
+ * Implement a modified version of the algorithm in Chapter 15 of Meeus
+ * using Lagrange interpolation on a larger set of planet positions. The
+ * accuracy improvements over the Meeus approach are significant,
+ * especially for the Moon and Mercury.
  */
-void riseset(double *ra, double *dec, double gast, double lon,
-	     double lat, double dt, double h0, double *rts)
+void riseset(int N, double *df, double *ra, double *dec, double gast,
+	     double lon, double lat, double delt, double h0, double *rts)
 {
   int i,j;
   double cH0,m,t0,n,r,d,H,h,dm;
 
   rts[0] = rts[1] = rts[2] = -1;
 
-  cH0 = (sin(h0) - sin(lat)*sin(dec[1]))/(cos(lat)*cos(dec[1]));
+  cH0 = (sin(h0) - sin(lat)*sin(dec[0]))/(cos(lat)*cos(dec[0]));
   if (cH0 < -1 || cH0 > 1)
     return;
   cH0 = acos(cH0);
 
   for (i = 0; i < 3; i++) {
-    m = (ra[1] - lon - gast)/TWO_PI;
+    m = (ra[0] - lon - gast)/TWO_PI;
     if (i == 0)
       m -= cH0/TWO_PI;
     else if (i == 2)
       m += cH0/TWO_PI;
-    m = reduce_angle(m, 1);
 
     for (j = 0; j < 10; j++) {
-      n = m + dt/86400;
-      r = ra[1] + n*(ra[2]-ra[0]+n*(ra[0]-2*ra[1]+ra[2]))/2;
-      d = dec[1] + n*(dec[2]-dec[0]+n*(dec[0]-2*dec[1]+dec[2]))/2;
+      n = m + delt/86400;
+      r = interpolate(N, df, ra, n);
+      d = interpolate(N, df, dec, n);
 
       t0 = gast + 360.985647*DEG_TO_RAD*m;
       H = t0 + lon - r;
@@ -144,14 +152,34 @@ void riseset(double *ra, double *dec, double gast, double lon,
       if (fabs(dm) <= 1E-5)
 	break;
     }
-    rts[i] = reduce_angle(m, 1);
+    rts[i] = m;
   }
 }
 
-void get_equatorial(int pla, struct julian_date *jd,
-		    struct equatorial_coordinates *equ, double *dist)
+/* Interpolate using Lagrange's interpolation formula */
+double interpolate(int N, double *X, double *Y, double xint)
 {
-  struct rectangular_coordinates rec,ear,zero = {0, 0, 0};
+  int i,j;
+  double L,yint;
+
+  yint = 0;
+  for (i = 0; i < N; i++) {
+    L = 1;
+    for (j = 0; j < N; j++) {
+      if (i != j)
+	L *= (xint - X[j])/(X[i] - X[j]);
+    }
+    yint += L*Y[i];
+  }
+
+  return(yint);
+}
+
+void get_equatorial(int pla, struct julian_date *jd,
+		    struct equatorial_coordinates *equ)
+{
+  double dist;
+  struct rectangular_coordinates ear,rec = {0, 0, 0},zero = {0, 0, 0};
 
   if (pla < PLUTO) {
     /* Use VSOP87 for all eight major planets */
@@ -162,12 +190,7 @@ void get_equatorial(int pla, struct julian_date *jd,
   } else if (pla == PLUTO) {
     /* Pluto has its own analytical theory */
     pluto_coordinates(jd, &rec);
-  } else if (pla == SUN) {
-    /* The Sun's heliocentric coordinates are zero (duh) */
-    rec.x = 0;
-    rec.y = 0;
-    rec.z = 0;
-  } else {
+  } else if (pla == MOON) {
     /* Use ELP 2000-82B for the Moon */
     elp82b_coordinates(jd, &rec);
 
@@ -186,15 +209,12 @@ void get_equatorial(int pla, struct julian_date *jd,
      * convert to equatorial, without a Sun->Moon translation.
      */
     rectangular_to_spherical(&rec, &zero, &equ->right_ascension,
-			     &equ->declination, dist);
-
-    /* Convert the Moon's distance to AU */
-    *dist = *dist / AU;
+			     &equ->declination, &dist);
   } else {
     vsop87_coordinates(EARTH, jd, &ear);
     vsop87_ecliptic_to_equator(&ear);
     rectangular_to_spherical(&rec, &ear, &equ->right_ascension,
-			     &equ->declination, dist);
+			     &equ->declination, &dist);
   }
 }
 
@@ -202,16 +222,19 @@ char *format_time(double t, char *buf, u_short sec)
 {
   struct deg_min_sec dms;
 
-  if (sec) {
-    degrees_to_dms(t, &dms);
-    sprintf(buf, "%02d:%02d:%02d", dms.degrees, abs(dms.minutes),
-	    abs(dms.seconds));
-  } else {
-    degrees_to_dms(round(t * 60) / 60, &dms);
-    sprintf(buf, "%02d:%02d", dms.degrees, abs(dms.minutes));
-  }
+  if (t != -1)
+    if (sec) {
+      degrees_to_dms(t, &dms);
+      sprintf(buf, "%02d:%02d:%02d", dms.degrees, abs(dms.minutes),
+	      abs(dms.seconds));
+    } else {
+      degrees_to_dms(round(t * 60) / 60, &dms);
+      sprintf(buf, "%02d:%02d", dms.degrees, abs(dms.minutes));
+    }
+  else
+    sprintf(buf, " NA  ");
 
-  return buf;
+  return(buf);
 }
 
 void parse_command_line(int argc, char *argv[], int *year, int *month,

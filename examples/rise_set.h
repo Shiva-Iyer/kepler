@@ -24,20 +24,23 @@
 #include <coordinates.h>
 
 enum {
-	PLUTO = NEPTUNE + 1,
-	SUN,
-	MOON
+  PLUTO = NEPTUNE + 1,
+  SUN,
+  MOON
 };
+
+#define TIME_STEP               6                    /* hours */
 
 #define SUN_REFRACTION		(-3000 * ACS_TO_RAD) /* -50 arc minutes */
 #define MOON_REFRACTION		(450 * ACS_TO_RAD)   /* +7.5 arc minutes */
 #define PLANET_REFRACTION	(-2040 * ACS_TO_RAD) /* -34 arc minutes */
 
-void riseset(double *ra, double *dec, double gast, double lon,
-	     double lat, double dt, double h0, double *rts);
+void riseset(int N, double *df, double *ra, double *dec, double gast,
+	     double lon, double lat, double delt, double h0, double *rts);
+double interpolate(int N, double *X, double *Y, double xint);
 
 void get_equatorial(int pla, struct julian_date *jd,
-		    struct equatorial_coordinates *equ, double *dist);
+		    struct equatorial_coordinates *equ);
 
 char *format_time(double t, char *buf, u_short sec);
 
