@@ -1,5 +1,9 @@
 /*
+<<<<<<< HEAD
  * riseset.c - Implementation to calculate rise/transit/set times
+=======
+ * riseset.c - Implementation to calculate rise/transit/setting times
+>>>>>>> 51ac667367b3c4e51de3dab5da8eb5f99453406f
  * Copyright (C) 2016 Shiva Iyer <shiva.iyer AT g m a i l DOT c o m>
  *
  * This program is free software: you can redistribute it and/or modify
@@ -27,11 +31,19 @@
 #include <riseset.h>
 
 /*
+<<<<<<< HEAD
  * Calculate rise/transit/set times for an object given its positions in
  * equatorial coordinates.
  *
  * N    -- Number of entries in <df>, <ra>, <dec>
  * df   -- Array of day fractions, each in the range [0,1]
+=======
+ * Calculate rise/transit/setting times for an object given its positions in
+ * equatorial coordinates.
+ *
+ * N    -- Number of entries in <df>, <ra>, <dec>
+ * df   -- Array of Julian day numbers
+>>>>>>> 51ac667367b3c4e51de3dab5da8eb5f99453406f
  * ra   -- RA of the object in radians at the times given in <df>
  * dec  -- Declination of the object in radians at the times given in <df>
  * gast -- Greenwich apparent sidereal time in radians at <df[0]>
@@ -40,8 +52,12 @@
  * delt -- Delta-T in seconds at <df[0]>
  * h0   -- Correction to use for atmospheric refraction in radians
  * rts  -- On exit: rts[0] = rise, rts[1] = transit, rts[2] = setting times,
+<<<<<<< HEAD
  *         all in UTC day fractions in the range [0,1]. Values will be -1
  *         for objects that don't rise/transit/set
+=======
+ *         all in UTC. Values will be -1 for objects that don't rise/set
+>>>>>>> 51ac667367b3c4e51de3dab5da8eb5f99453406f
  */
 void riseset(int N, double *df, double *ra, double *dec, double gast,
 	     double lon, double lat, double delt, double h0, double *rts)

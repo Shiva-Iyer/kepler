@@ -1,5 +1,9 @@
 /*
+<<<<<<< HEAD
  * riseset.h - Declarations for calculating rise/transit/set times
+=======
+ * riseset.h - Declarations for calculating rise/transit/setting times
+>>>>>>> 51ac667367b3c4e51de3dab5da8eb5f99453406f
  * Copyright (C) 2016 Shiva Iyer <shiva.iyer AT g m a i l DOT c o m>
  *
  * This program is free software: you can redistribute it and/or modify

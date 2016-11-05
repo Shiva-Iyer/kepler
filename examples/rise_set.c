@@ -95,8 +95,13 @@ int main(int argc, char *argv[])
     sprintf(msg,"%10s: %5s, %5s, %5s, %8s, %9s",
 	    object_names[i], format_time(rts[0], rise, 0),
 	    format_time(rts[1], trans, 0), format_time(rts[2], set, 0),
+<<<<<<< HEAD
 	    format_time(rad[0]*RAD_TO_HRS, ra, 1),
 	    format_time(decd[0]*RAD_TO_DEG, dec, 1));
+=======
+	    format_time(rad[1]*RAD_TO_HRS, ra, 1),
+	    format_time(decd[1]*RAD_TO_DEG, dec, 1));
+>>>>>>> 51ac667367b3c4e51de3dab5da8eb5f99453406f
     printf("%s\n", msg);
   }
 
