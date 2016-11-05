@@ -13,7 +13,7 @@
 <a name="copyright"><h3>Copyright</h3></a>
 <code>
 Documentation for the kepler library<br>
-Copyright (C) 2010 Shiva Iyer {shiva.iyer AT g m a i l DOT c o m}<br>
+Copyright (C) 2016 Shiva Iyer {shiva.iyer AT g m a i l DOT c o m}<br>
 <br>
 This program is free software: you can redistribute it and/or modify<br>
 it under the terms of the GNU General Public License as published by<br>
@@ -558,11 +558,7 @@ void riseset(int N, double *df, double *ra, double *dec, double gast,
 Calculate rise/transit/setting times for an object given its positions in equatorial coordinates.<br>
 <br>
 N: Number of entries in &lt;df&gt;, &lt;ra&gt, &lt;dec&gt.<br>
-<<<<<<< HEAD
 df: Array of day fractions, each in the range [0,1].<br>
-=======
-df: Array of Julian day numbers.<br>
->>>>>>> 51ac667367b3c4e51de3dab5da8eb5f99453406f
 ra: RA of the object in radians at the times given in &lt;df&gt.<br>
 dec: Declination of the object in radians at the times given in &lt;df&gt;.<br>
 gast: Greenwich apparent sidereal time in radians at &lt;df[0]&gt;.<br>
@@ -570,11 +566,7 @@ lon: Observer's longitude in radians, positive east of Greenwich.<br>
 lat: Observer's latitude in radians, positive north of the equator.<br>
 delt: Delta-T in seconds at &lt;df[0]&gt;.<br>
 h0: Correction to use for atmospheric refraction in radians.<br>
-<<<<<<< HEAD
-rts: On exit: rts[0] = rise, rts[1] = transit, rts[2] = setting times, all in UTC day fractions in the range [0,1]. Values will be -1 for objects that don't rise/transit/set.<br>
-=======
-rts: On exit: rts[0] = rise, rts[1] = transit, rts[2] = setting, all in UTC. Values will be -1 for objects that don't rise/set.<br>
->>>>>>> 51ac667367b3c4e51de3dab5da8eb5f99453406f
+rts: On exit: rts[0] = rise, rts[1] = transit, rts[2] = set time, all in UTC day fractions in the range [0,1]. Values will be -1 for objects that don't rise/transit/set.<br>
 <br>
 <code><b>
 double interpolate(int N, double *X, double *Y, double xint)<p>
