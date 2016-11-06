@@ -24,9 +24,9 @@
 #include <coordinates.h>
 
 enum {
+  SUN = -2,
+  MOON = SUN + 1,
   PLUTO = NEPTUNE + 1,
-  SUN,
-  MOON
 };
 
 #define TIME_STEP               6                    /* hours */
@@ -35,8 +35,8 @@ enum {
 #define MOON_REFRACTION		(450 * ACS_TO_RAD)   /* +7.5 arc minutes */
 #define PLANET_REFRACTION	(-2040 * ACS_TO_RAD) /* -34 arc minutes */
 
-void get_equatorial(int pla, struct julian_date *jd,
-		    struct equatorial_coordinates *equ);
+void get_equatorial(int body, struct julian_date *jd,
+		    struct equatorial_coordinates *equ, double *dist);
 
 char *format_time(double t, char *buf, u_short sec);
 

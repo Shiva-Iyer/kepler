@@ -32,14 +32,14 @@
 
 int main(int argc, char *argv[])
 {
-  static char *object_names[] = {"Mercury","Venus","Earth","Mars",
-				 "Jupiter","Saturn","Uranus","Neptune",
-				 "Pluto","Sun","Moon"};
+  static char *object_names[] = {"Sun","Moon","Mercury","Venus","Earth",
+				 "Mars","Jupiter","Saturn","Uranus",
+				 "Neptune","Pluto"};
   int i,j,year,month,day,steps;
   struct julian_date jd0,jd;
   struct equatorial_coordinates equ;
   double longitude,latitude,ut_off,h0,gast,del_t,corr,
-    *df,*rad,*decd,rts[3];
+    *df,*rad,*decd,rts[3],dist;
   char msg[256],rise[10],trans[10],set[10],ra[10],dec[10];
 
   /* Parse command line parameters */
@@ -58,8 +58,8 @@ int main(int argc, char *argv[])
 
   printf("Information for %4d-%02d-%02d (JD %9.1f) at lon: %-7.2f & lat: %-7.2f\n",
 	 year, month, day, jd0.date1 + jd0.date2, longitude, latitude);
-  printf("Rise, transit, set, RA (h:m:s), dec. (d:m:s)\n");
-  printf("RA, dec. are for 0h UT on the given date\n\n");
+  printf("Rise, transit, set, RA (h:m:s), dec. (d:m:s), distance\n");
+  printf("RA, dec., distance are at 00:00:00 UTC on the given date\n\n");
 
   steps = 24/TIME_STEP + 1;
   df = malloc(steps*sizeof(double));
@@ -69,14 +69,14 @@ int main(int argc, char *argv[])
   /* kepler expects all angles to be in radians */
   longitude *= DEG_TO_RAD;
   latitude *= DEG_TO_RAD;
-  for (i = MERCURY; i <= MOON; i++) {
+  for (i = SUN; i <= PLUTO; i++) {
     if (i == EARTH)
       continue;
 
-    for (j = 0; j < steps; j++) {
+    for (j = steps-1; j >= 0; j--) {
       df[j] = (double)j*TIME_STEP/24;
       jd.date2 = jd0.date2 + df[j];
-      get_equatorial(i, &jd, &equ);
+      get_equatorial(i, &jd, &equ, &dist);
       rad[j] = equ.right_ascension;
       decd[j] = equ.declination;
     }
@@ -92,11 +92,12 @@ int main(int argc, char *argv[])
     for (j = 0; j < 3; j++)
       rts[j] = reduce_angle(rts[j]*24 + ut_off, 24);
 
-    sprintf(msg,"%10s: %5s, %5s, %5s, %8s, %9s",
-	    object_names[i], format_time(rts[0], rise, 0),
+    sprintf(msg,"%10s: %5s, %5s, %5s, %8s, %9s, %9.2f %2s",
+	    object_names[i+2], format_time(rts[0], rise, 0),
 	    format_time(rts[1], trans, 0), format_time(rts[2], set, 0),
 	    format_time(rad[0]*RAD_TO_HRS, ra, 1),
-	    format_time(decd[0]*RAD_TO_DEG, dec, 1));
+	    format_time(decd[0]*RAD_TO_DEG, dec, 1), dist,
+	    (i != MOON) ? "AU" : "KM");
     printf("%s\n", msg);
   }
 
@@ -106,22 +107,21 @@ int main(int argc, char *argv[])
   return(0);
 }
 
-void get_equatorial(int pla, struct julian_date *jd,
-		    struct equatorial_coordinates *equ)
+void get_equatorial(int body, struct julian_date *jd,
+		    struct equatorial_coordinates *equ, double *dist)
 {
-  double dist;
   struct rectangular_coordinates ear,rec = {0, 0, 0},zero = {0, 0, 0};
 
-  if (pla < PLUTO) {
+  if (body >= MERCURY && body <= NEPTUNE) {
     /* Use VSOP87 for all eight major planets */
-    vsop87_coordinates(pla, jd, &rec);
+    vsop87_coordinates(body, jd, &rec);
 
     /* Rotate from the J2000 ecliptic to the equator */
     vsop87_ecliptic_to_equator(&rec);
-  } else if (pla == PLUTO) {
+  } else if (body == PLUTO) {
     /* Pluto has its own analytical theory */
     pluto_coordinates(jd, &rec);
-  } else if (pla == MOON) {
+  } else if (body == MOON) {
     /* Use ELP 2000-82B for the Moon */
     elp82b_coordinates(jd, &rec);
 
@@ -134,18 +134,18 @@ void get_equatorial(int pla, struct julian_date *jd,
    * and geocentric rectangular coordinates (the Moon) to geocentric 
    * equatorial coordinates.
    */
-  if (pla == MOON) {
+  if (body == MOON) {
     /*
      * The Moon is already in geocentric coordinates, so we just
      * convert to equatorial, without a Sun->Moon translation.
      */
     rectangular_to_spherical(&rec, &zero, &equ->right_ascension,
-			     &equ->declination, &dist);
+			     &equ->declination, dist);
   } else {
     vsop87_coordinates(EARTH, jd, &ear);
     vsop87_ecliptic_to_equator(&ear);
     rectangular_to_spherical(&rec, &ear, &equ->right_ascension,
-			     &equ->declination, &dist);
+			     &equ->declination, dist);
   }
 }
 
