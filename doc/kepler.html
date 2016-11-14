@@ -108,6 +108,12 @@ magnitude.h
 <td>Apparent magnitudes of minor planets and comets</td>
 </tr>
 <tr><td>
+<a href="#moonphase.c">moonphase.c</a><br>
+moonphase.h
+</td>
+<td>Dates and times of Moon phases</td>
+</tr>
+<tr><td>
 <a href="#mpc_file.c">mpc_file.c</a><br>
 mpc_file.h
 </td>
@@ -451,6 +457,27 @@ slope: The magnitude slope parameter of the comet, G.<br>
 Return: The comet's apparent magnitude.<br>
 <p>
 
+<a name="moonphase.c"><h4>moonphase.c</h4></a>
+<code><b>
+double moonlit(struct julian_date *dt)<p>
+</code></b>
+Calculate the fraction of the Moon's disk that is illuminated.<br>
+<br>
+dt: Dynamical time for computation.<br>
+<br>
+Return: A fraction in the range [0,1] indicating the portion of the Moon's disk illuminated at &lt;dt&gt;.<br>
+<br>
+<code><b>
+double moonphase(struct julian_date *dt, enum MoonPhases phase)<p>
+</code></b>
+Calculate the date and time of the specified Moon phase.<br>
+<br>
+dt: Dynamical time at which the search is to commence.<br>
+phase: Enumeration that identifies the phase to be computed.<br>
+<br>
+Return: Dynamical time in JDE form corresponding to the time of the next Moon &lt;phase&gt; on or after &lt;dt&gt;. <br>
+<p>
+
 <a name="mpc_file.c"><h4>mpc_file.c</h4></a>
 <code><b>
 int minor_planet_info(char *data, struct julian_date *tt, struct mpc_body *info)<p>
@@ -784,6 +811,18 @@ enum solar_system_planets {<br>
 	SATURN,<br>
 	URANUS,<br>
 	NEPTUNE<br>
+};<br>
+</code>
+
+<h4>moonphase.h</h4> 
+
+The phases of the Moon.<p>
+<code>
+enum MoonPhases {<br>
+  FirstQuarter,<br>
+  FullMoon,<br>
+  LastQuarter,<br>
+  NewMoon<br>
 };<br>
 </code>
 

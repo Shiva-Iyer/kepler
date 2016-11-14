@@ -1,5 +1,5 @@
 # constants.py - Constants and utility routines
-# Copyright (C) 2010 Shiva Iyer <shiva.iyer AT g m a i l DOT c o m>
+# Copyright (C) 2016 Shiva Iyer <shiva.iyer AT g m a i l DOT c o m>
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -19,13 +19,13 @@ from math import *
 class SolarSystemPlanets:
     
     MERCURY, \
-    VENUS,   \
-    EARTH,   \
-    MARS,    \
-    JUPITER, \
-    SATURN,  \
-    URANUS,  \
-    NEPTUNE = range(8)
+        VENUS,   \
+        EARTH,   \
+        MARS,    \
+        JUPITER, \
+        SATURN,  \
+        URANUS,  \
+        NEPTUNE = range(8)
 
 class ReturnValues:
 
