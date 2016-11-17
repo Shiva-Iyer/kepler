@@ -67,6 +67,12 @@ earth_figure.h
 <td>Values related to the oblateness of the Earth</td>
 </tr>
 <tr><td>
+<a href="#eclipse.c">eclipse.c</a><br>
+eclipse.h
+</td>
+<td>Calculate the circumstances of solar and lunar eclipses</td>
+</tr>
+<tr><td>
 <a href="#elp82b.c">elp82b.c</a><br>
 elp82b.h
 </td>
@@ -307,6 +313,20 @@ geog_lat: The observer's geographic latitude in radians.<br>
 height_msl: The observer's height above mean sea level in meters.<br>
 gc_lat: The observer's geocentric latitude in radians.<br>
 gc_radius: The observer's geocentric radius as a fraction of the Earth's equatorial radius.<br>
+<p>
+
+<a name="eclipse.c"><h4>eclipse.c</h4></a>
+<code><b>
+double eclipse(struct julian_date *dt, enum EclipseTypes type, double *g, double *u)<p>
+</code></b>
+Calculate the date and time of solar and lunar eclipses.<br>
+<br>
+dt: Dynamical time at which the search is to commence.<br>
+type: The type of eclipse to be searched for.<br>
+g: On exit, extra eclipse data. See Meeus for details on gamma.<br>
+u: On exit, additional eclipse data. See Meeus for details.<br>
+<br>
+Return: Dynamical time in JDE form corresponding to the time of the next &lt;type&gt; eclipse on or after &lt;dt&gt; at its maximum.<br>
 <p>
 
 <a name="elp82b.c"><h4>elp82b.c</h4></a>
@@ -584,10 +604,10 @@ void riseset(int N, double *df, double *ra, double *dec, double gast,
 </code></b>
 Calculate rise/transit/setting times for an object given its positions in equatorial coordinates.<br>
 <br>
-N: Number of entries in &lt;df&gt;, &lt;ra&gt, &lt;dec&gt.<br>
+N: Number of entries in &lt;df&gt;, &lt;ra&gt, &lt;dec&gt. Positions must be given for one full day at intervals of 6 hours or smaller for satisfactory results, especially for the Moon and Mercury.<br>
 df: Array of day fractions, each in the range [0,1].<br>
-ra: RA of the object in radians at the times given in &lt;df&gt.<br>
-dec: Declination of the object in radians at the times given in &lt;df&gt;.<br>
+ra: RA of the object in radians at the times in &lt;df&gt.<br>
+dec: Declination of the object in radians at the times in &lt;df&gt;.<br>
 gast: Greenwich apparent sidereal time in radians at &lt;df[0]&gt;.<br>
 lon: Observer's longitude in radians, positive east of Greenwich.<br>
 lat: Observer's latitude in radians, positive north of the equator.<br>
@@ -774,6 +794,16 @@ struct orbital_elements {<br>
 <p>
 
 <a name="enums"><h3>Enums</h3></a>
+
+<h4>eclipse.h</h4> 
+
+Types of eclipses.<p>
+<code>
+enum EclipseTypes {<br>
+    Solar,<br>
+    Lunar<br>
+};<br>
+</code>
 
 <h4>fund_args.h</h4> 
 

@@ -24,19 +24,21 @@ def riseset(df, ra, dec, gast, lon, lat, delt, h0):
     """Calculate rise/transit/set times for an object given its 
     positions in equatorial coordinates.
 
-    df   -- List of day fractions, each in the range [0,1]
-    ra   -- RA of the object in radians at the times given in <df>
-    dec  -- Declination of the object in radians at the times given in <df>
-    gast -- Greenwich apparent sidereal time in radians at <df[0]>
-    lon  -- Observer's longitude in radians, positive east of Greenwich
-    lat  -- Observer's latitude in radians, positive north of the equator
-    delt -- Delta-T in seconds at <df[0]>
-    h0   -- Correction to use for atmospheric refraction in radians
+    df   -- List of day fractions, each in the range [0,1]. Positions 
+            must be given for one full day at intervals of 6 hours or
+            smaller for satisfactory results, especially for the Moon
+	    and Mercury.
+    ra   -- RA of the object in radians at the times in <df>.
+    dec  -- Declination of the object in radians at the times in <df>.
+    gast -- Greenwich apparent sidereal time in radians at <df[0]>.
+    lon  -- Observer's longitude in radians, positive east of Greenwich.
+    lat  -- Observer's latitude in radians, positive north of the equator.
+    delt -- Delta-T in seconds at <df[0]>.
+    h0   -- Correction to use for atmospheric refraction in radians.
 
     Return: rts[0] = rise, rts[1] = transit, rts[2] = setting times,
     all in UTC day fractions in the range [0,1]. Values will be -1
-    for objects that don't rise/transit/set
-
+    for objects that don't rise/transit/set.
     """
 
     N = len(df)
@@ -58,12 +60,11 @@ def riseset(df, ra, dec, gast, lon, lat, delt, h0):
 def interpolate(X, Y, xint):
     """Interpolate using Lagrange's interpolation formula.
 
-    X    -- x-values for interpolation
-    Y    -- y-values for interpolation
-    xint -- Interpolant
+    X    -- x-values for interpolation.
+    Y    -- y-values for interpolation.
+    xint -- Interpolant.
 
     Return: Interpolated y-value corresponding to <xint>.
-
     """
 
     N = len(X)

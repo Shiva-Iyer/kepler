@@ -25,7 +25,7 @@ OBJS = julian_date.o delta-t.o vsop87_data.o vsop87.o fund_args.o \
 	elp82b_data.o elp82b.o iau2006_precession.o iau2000a_data.o \
 	iau2000a_nutation.o coordinates.o sidereal_time.o pluto.o \
 	orbital_elements.o mpc_file.o aberration.o earth_figure.o \
-	parallax.o magnitude.o riseset.o moonphase.o
+	parallax.o magnitude.o riseset.o moonphase.o eclipse.o
 
 all: $(LIB)
 
@@ -95,6 +95,9 @@ riseset.o: riseset.c riseset.h kepler.h
 	$(CC) $(CFLAGS) -o $@ $<
 
 moonphase.o: moonphase.c moonphase.h julian_date.h kepler.h
+	$(CC) $(CFLAGS) -o $@ $<
+
+eclipse.o: eclipse.c eclipse.h julian_date.h kepler.h
 	$(CC) $(CFLAGS) -o $@ $<
 
 $(LIB): $(OBJS)

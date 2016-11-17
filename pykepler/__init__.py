@@ -24,6 +24,7 @@ constants -- Constants and utility routines
 coordinates -- Coordinate transformations and rotations
 delta_t -- Approximate value of Delta-T (TT - UT1)
 earth_figure -- Values related to the oblateness of the Earth
+eclipse -- Calculate the circumstances of solar and lunar eclipses
 elp82b -- ELP2000-82B theory for lunar coordinates
 fund_args -- Values of fundamental lunisolar/planetary/precession arguments
 iau2000a_nutation -- Nutation calculations using the IAU 2000A model
@@ -38,7 +39,6 @@ pluto -- PLUTO95 theory for Pluto's coordinates
 riseset -- Rise/transit/set times
 sidereal_time -- Sidereal time calculations using IERS 2003 conventions 
 vsop87 -- VSOP87 theory for sun/planet coordinates
-
 """
 
 if __name__ == "__main__":
@@ -61,6 +61,7 @@ from constants import *
 from coordinates import *
 from delta_t import *
 from earth_figure import *
+from eclipse import *
 from elp82b import *
 from fund_args import *
 from iau2000a_nutation import *
