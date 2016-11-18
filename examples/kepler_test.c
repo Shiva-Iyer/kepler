@@ -92,20 +92,22 @@ int main(int argc, char *argv[])
     jd.date1 = J2000_EPOCH;
     jd.date2 = 0;
     julian_to_calendar_date(&jd, &year, &month, &day, &df);
-    printf("\nGregorian date for Julian date %10.2f = %04d-%02d-%02d %6.4f\n",
-	   jd.date1 + jd.date2, year, month, day, df);
+    printf("\nGregorian date for Julian date %10.2f = "
+	   "%04d-%02d-%02d %6.4f\n", jd.date1+jd.date2,
+	   year, month, day, df);
 
     epsilon = iau2000a_mean_obliquity(&jd);
-    printf("\nMean obliquity of the ecliptic on 2000-01-01 12:00:00 TDB = %6.4f radians\n",
-	   epsilon);
+    printf("\nMean obliquity of the ecliptic on 2000-01-01"
+	   " 12:00:00 TDB = %6.4f radians\n", epsilon);
 
     iau2000a_nutation(&jd, &d_psi, &d_eps);
-    printf("\nNutation on 2000-01-01 12:00:00 TDB (in rad): longitude = %13.10f, obliquity = %13.10f\n",
-	   d_psi, d_eps);
+    printf("\nNutation on 2000-01-01 12:00:00 TDB (in rad):"
+	   " longitude = %13.10f, obliquity = %13.10f\n", d_psi, d_eps);
 
     jd.date1 = 2455200.50; 
     jd.date2 = 0;
-    printf("\nHeliocentric equatorial coordinates for 2010-01-04 00:00:00 TDB\n");
+    printf("\nHeliocentric equatorial coordinates for "
+	   "2010-01-04 00:00:00 TDB\n");
     printf("x (AU), y (AU), z (AU)\n\n");
     for (i = MERCURY; i <= NEPTUNE + 1; i++) {
 	if (i == NEPTUNE + 1) {
@@ -121,7 +123,8 @@ int main(int argc, char *argv[])
 
     elp82b_coordinates(&jd, &moon);
     elp82b_ecliptic_to_equator(&moon);
-    printf("\nGeocentric rectangular coordinates for 2010-01-04 00:00:00 TDB\n");
+    printf("\nGeocentric rectangular coordinates for "
+	   "2010-01-04 00:00:00 TDB\n");
     printf("x (KM), y (KM), z (KM)\n\n");
     printf("%10s: %8.4f, %8.4f, %8.4f\n","Moon", moon.x, moon.y, moon.z);
 
@@ -136,19 +139,22 @@ int main(int argc, char *argv[])
 				     &eq.right_ascension,
 				     &eq.declination, &dist);
 	    printf("%10s: %8.4f, %8.4f, %8.4f AU\n","Sun",
-		   eq.right_ascension*RAD_TO_HRS, eq.declination*RAD_TO_DEG, dist);
+		   eq.right_ascension*RAD_TO_HRS,
+		   eq.declination*RAD_TO_DEG, dist);
 
 	    rectangular_to_spherical(&moon, &zero,
 				     &eq.right_ascension,
 				     &eq.declination, &dist);
 	    printf("%10s: %8.4f, %8.4f, %8.1f KM\n","Moon", 
-		   eq.right_ascension*RAD_TO_HRS, eq.declination*RAD_TO_DEG, dist);
+		   eq.right_ascension*RAD_TO_HRS,
+		   eq.declination*RAD_TO_DEG, dist);
 	}
 
 	rectangular_to_spherical(&xyz[i], &xyz[2], &eq.right_ascension,
 				 &eq.declination, &dist);
 	printf("%10s: %8.4f, %8.4f, %8.4f AU\n",
-	       planet_names[i], eq.right_ascension*RAD_TO_HRS, eq.declination*RAD_TO_DEG, dist);
+	       planet_names[i], eq.right_ascension*RAD_TO_HRS,
+	       eq.declination*RAD_TO_DEG, dist);
     }
 
     jd.date1 = 2469807.50;
@@ -169,46 +175,55 @@ int main(int argc, char *argv[])
 
     eq.right_ascension = DEGREES(2, 31, 48.704) * HRS_TO_RAD;
     eq.declination     = DEGREES(89, 15, 50.72) * DEG_TO_RAD;
-    printf("\nCoordinates of Polaris:      RA = %6.4f, Dec = %6.4f rad (epoch & equinox J2000)\n\n",
+    printf("\nCoordinates of Polaris:      RA = %6.4f, Dec = %6.4f"
+	   " rad (epoch & equinox J2000)\n\n",
 	   eq.right_ascension, eq.declination);
 
     eq.right_ascension += (50.0 * DEGREES(0, 0, 0.19877) * HRS_TO_RAD);
     eq.declination     -= (50.0 * DEGREES(0, 0, 0.0152) * DEG_TO_RAD);
-    printf("\tAfter proper motion: RA = %6.4f, Dec = %6.4f rad (epoch 2050 & equinox J2000)\n",
+    printf("\tAfter proper motion: RA = %6.4f, Dec = %6.4f"
+	   " rad (epoch 2050 & equinox J2000)\n",
 	   eq.right_ascension, eq.declination);
 
     rotate_equatorial(prec_matrix, &eq);
-    printf("\tAfter precession:    RA = %6.4f, Dec = %6.4f rad (epoch & equinox J2050)\n",
+    printf("\tAfter precession:    RA = %6.4f, Dec = %6.4f"
+	   " rad (epoch & equinox J2050)\n",
 	   eq.right_ascension, eq.declination);
 
     rotate_equatorial(nut_matrix, &eq);
-    printf("\tAfter nutation:      RA = %6.4f, Dec = %6.4f rad (epoch & equinox J2050)\n",
+    printf("\tAfter nutation:      RA = %6.4f, Dec = %6.4f"
+	   " rad (epoch & equinox J2050)\n",
 	   eq.right_ascension, eq.declination);
 
     jd.date1 = 2455246.0;
     jd.date2 = 0.34723;
     mst = mean_sidereal_time(&jd, &jd,
-			     -DEGREES(71, 3, 42) * DEG_TO_RAD) * RAD_TO_HRS;
-    printf("\nMean sidereal time at Boston, MA on 2010-02-18 15:20:00 EST     = %6.4f hours\n", mst);
+			     -DEGREES(71,3,42)*DEG_TO_RAD)*RAD_TO_HRS;
+    printf("\nMean sidereal time at Boston, MA on 2010-02-18"
+	   " 15:20:00 EST     = %6.4f hours\n", mst);
 
     ast = apparent_sidereal_time(&jd, &jd,
-				 -DEGREES(71, 3, 42) * DEG_TO_RAD) * RAD_TO_HRS;
-    printf("\nApparent sidereal time at Boston, MA on 2010-02-18 15:20:00 EST = %6.4f hours\n", ast);
+				 -DEGREES(71,3,42)*DEG_TO_RAD)*RAD_TO_HRS;
+    printf("\nApparent sidereal time at Boston, MA on 2010-02-18"
+	   " 15:20:00 EST = %6.4f hours\n", ast);
 
-    eq.right_ascension = DEGREES(2, 44, 12.9747) * HRS_TO_RAD;
-    eq.declination     = DEGREES(49, 13, 39.896) * DEG_TO_RAD;
+    eq.right_ascension = DEGREES(2, 44, 12.9747)*HRS_TO_RAD;
+    eq.declination     = DEGREES(49, 13, 39.896)*DEG_TO_RAD;
 
     jd.date1 = 2462088.69;
     jd.date2 = 0;
     annual_aberration(&jd, &eq, &d_ra, &d_dec);
-    printf("\nAnnual aberration for Theta-Persei on 2028-11-13.19 TDB: RA = %8.6f, Dec = %8.6f (rad)\n",
-	   d_ra, d_dec);
+    printf("\nAnnual aberration for Theta-Persei on 2028-11-13.19 TDB:"
+	   " RA = %8.6f, Dec = %8.6f (rad)\n", d_ra, d_dec);
 
     jd.date1 = 2455200.50;
     jd.date2 = 0;
-    printf("\nHeliocentric ecliptic coordinates for 2010-01-04 00:00:00 TT\n");
-    printf("MP|LP|SP|DC ID [name]: eccentricity, x (AU), y (AU), z (AU), absolute magnitude\n");
-    printf("MP = Minor planet, LP = Long-period comet, SP = Short-period comet, DC = Defunct comet\n\n");
+    printf("\nHeliocentric ecliptic coordinates for"
+	   " 2010-01-04 00:00:00 TT\n");
+    printf("MP|LP|SP|DC ID [name]: eccentricity, x (AU), y (AU), z (AU)"
+	   ", absolute magnitude\n");
+    printf("MP = Minor planet, LP = Long-period comet, "
+	   "SP = Short-period comet, DC = Defunct comet\n\n");
 
     for (i = 0; i < sizeof(mpc_files) / sizeof(mpc_files[0]); i++) {
 	fp = fopen(mpc_files[i], "r");
@@ -219,12 +234,14 @@ int main(int argc, char *argv[])
 		else if (i == 1)
 		    retval = comet_info(buf, &jd, &inf);
 
-		printf("\t%s %11s [%35s]: %9.7f, %13.9f, %13.9f, %13.9f, %5.2f",
+		printf("\t%s %11s [%35s]: %9.7f, %13.9f, "
+		       "%13.9f, %13.9f, %5.2f",
 		       inf.type == MINOR_PLANET ? "MP" :
 		       inf.type == LONG_PERIOD_COMET ? "LP" :
-		       inf.type == SHORT_PERIOD_COMET ? "SP" : "DC", inf.id,
-		       inf.name, inf.elements.eccentricity, inf.position.x,
-		       inf.position.y, inf.position.z, inf.magnitude);
+		       inf.type == SHORT_PERIOD_COMET ? "SP" : "DC",
+		       inf.id, inf.name, inf.elements.eccentricity,
+		       inf.position.x, inf.position.y,
+		       inf.position.z, inf.magnitude);
 
 		if (retval == SUCCESS)
 		    printf("\n");
@@ -241,8 +258,8 @@ int main(int argc, char *argv[])
     }
 
     calendar_to_julian_date(1992, 4, 12, &jd);
-    printf("\nIlluminated fraction of the Moon's disk on 1992-04-12 00:00:00 DT = %f\n",
-	   moonlit(&jd));
+    printf("\nIlluminated fraction of the Moon's disk on"
+	   " 1992-04-12 00:00:00 DT = %f\n", moonlit(&jd));
 
     calendar_to_julian_date(1977, 2, 15, &jd);
     printf("\nTime of New Moon in February 1977  = %f DT\n",
@@ -254,18 +271,23 @@ int main(int argc, char *argv[])
 
     calendar_to_julian_date(1993, 5, 21, &jd);
     df = eclipse(&jd, Solar, &gamma, &u);
-    printf("\nSolar eclipse of 1993-05-21: %f DT, gamma = %7.4f, u = %7.4f\n", df, gamma, u);
+    printf("\nSolar eclipse of 1993-05-21: %f DT,"
+	   " gamma = %7.4f, u = %7.4f\n", df, gamma, u);
     
     calendar_to_julian_date(2009, 7, 22, &jd);
     df = eclipse(&jd, Solar, &gamma, &u);
-    printf("\nSolar eclipse of 2009-07-22: %f DT, gamma = %7.4f, u = %7.4f\n", df, gamma, u);
+    printf("\nSolar eclipse of 2009-07-22: %f DT,"
+	   " gamma = %7.4f, u = %7.4f\n", df, gamma, u);
 
     calendar_to_julian_date(1973, 6, 1, &jd);
     df = eclipse(&jd, Lunar, &gamma, &u);
-    printf("\nLunar eclipse in June 1973 : %f DT, gamma = %7.4f, u = %7.4f\n", df, gamma, u);
+    printf("\nLunar eclipse in June 1973 : %f DT,"
+	   " gamma = %7.4f, u = %7.4f\n", df, gamma, u);
 
     calendar_to_julian_date(1997, 7, 1, &jd);
     df = eclipse(&jd, Lunar, &gamma, &u);
-    printf("\nLunar eclipse in July 1997 : %f DT, gamma = %7.4f, u = %7.4f\n", df, gamma, u);
+    printf("\nLunar eclipse in July 1997 : %f DT,"
+	   " gamma = %7.4f, u = %7.4f\n", df, gamma, u);
+
     return(0);
 }
