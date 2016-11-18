@@ -47,39 +47,42 @@ fund_args.o: fund_args.c fund_args.h kepler.h
 elp82b_data.o: elp82b_data.c elp82b.h kepler.h
 	$(CC) $(CFLAGS) -o $@ $<
 
-elp82b.o: elp82b.c elp82b.h fund_args.h julian_date.h coordinates.h kepler.h
+elp82b.o: elp82b.c elp82b.h fund_args.h julian_date.h coordinates.h \
+		kepler.h
 	$(CC) $(CFLAGS) -o $@ $<
 
 iau2006_precession.o: iau2006_precession.c iau2006_precession.h \
-	julian_date.h kepler.h
+			julian_date.h kepler.h
 	$(CC) $(CFLAGS) -o $@ $<
 
 iau2000a_data.o: iau2000a_data.c iau2000a_nutation.h kepler.h
 	$(CC) $(CFLAGS) -o $@ $<
 
-iau2000a_nutation.o: iau2000a_nutation.c iau2000a_nutation.h fund_args.h \
-	julian_date.h kepler.h
+iau2000a_nutation.o: iau2000a_nutation.c iau2000a_nutation.h \
+			fund_args.h julian_date.h kepler.h
 	$(CC) $(CFLAGS) -o $@ $<
 
-coordinates.o: coordinates.c coordinates.h kepler.h
+coordinates.o: coordinates.c coordinates.h julian_date.h vsop87.h \
+		pluto.h kepler.h
 	$(CC) $(CFLAGS) -o $@ $<
 
 sidereal_time.o: sidereal_time.c sidereal_time.h iau2000a_nutation.h \
-	fund_args.h julian_date.h kepler.h
+			fund_args.h julian_date.h kepler.h
 	$(CC) $(CFLAGS) -o $@ $<
 
 pluto.o: pluto.c pluto.h julian_date.h coordinates.h kepler.h
 	$(CC) $(CFLAGS) -o $@ $<
 
 orbital_elements.o: orbital_elements.c orbital_elements.h julian_date.h \
-	coordinates.h kepler.h
+			coordinates.h kepler.h
 	$(CC) $(CFLAGS) -o $@ $<
 
 mpc_file.o: mpc_file.c mpc_file.h julian_date.h coordinates.h \
-	orbital_elements.h kepler.h
+		orbital_elements.h kepler.h
 	$(CC) $(CFLAGS) -o $@ $<
 
-aberration.o: aberration.c aberration.h fund_args.h julian_date.h coordinates.h
+aberration.o: aberration.c aberration.h fund_args.h julian_date.h \
+		coordinates.h
 	$(CC) $(CFLAGS) -o $@ $<
 
 earth_figure.o: earth_figure.c earth_figure.h kepler.h

@@ -1,5 +1,5 @@
 # coordinates.py - Wrapper for coordinate transformations
-# Copyright (C) 2010 Shiva Iyer <shiva.iyer AT g m a i l DOT c o m>
+# Copyright (C) 2016 Shiva Iyer <shiva.iyer AT g m a i l DOT c o m>
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -18,6 +18,7 @@ if __name__ == "__main__":
     exit()
 
 from ctypes import *
+from julian_date import *
 from pykepler import _libkepler
 
 class RectangularCoordinates(Structure):
@@ -29,14 +30,13 @@ class RectangularCoordinates(Structure):
     x -- x-coordinate. The units are application specific.
     y -- y-coordinate. The units are application specific.
     z -- z-coordinate. The units are application specific.
-
     """
 
     _fields_ = [
         ("x", c_double),
         ("y", c_double),
         ("z", c_double)
-        ]
+    ]
 
     def __init__(self, x = 0.0, y = 0.0, z = 0.0):
 
@@ -56,13 +56,12 @@ class EquatorialCoordinates(Structure):
 
     right_ascension -- Right ascension in radians
     declination -- Declination in radians
-
     """
 
     _fields_ = [
         ("right_ascension", c_double),
         ("declination", c_double)
-        ]
+    ]
 
     def __init__(self, right_ascension = 0.0, declination = 0.0):
 
@@ -81,13 +80,12 @@ class EclipticCoordinates(Structure):
 
     longitude -- Longitude in radians.
     latitude -- Latitude in radians.
-
     """
 
     _fields_ = [
         ("longitude", c_double),
         ("latitude", c_double)
-        ]
+    ]
 
     def __init__(self, longitude = 0.0, latitude = 0.0):
 
@@ -106,13 +104,12 @@ class HorizontalCoordinates(Structure):
 
     azimuth -- Azimuth measured in radians and clockwise from the south.
     altitude -- Altitude in radians.
-
     """
 
     _fields_ = [
         ("azimuth", c_double),
         ("altitude", c_double)
-        ]
+    ]
 
     def __init__(self, azimuth = 0.0, altitude = 0.0):
 
@@ -138,8 +135,8 @@ def rectangular_to_spherical(body, earth):
     Return 1: The body's geocentric longitude in radians.
     Return 2: The body's geocentric latitude in radians.
     Return 3: The body's geocentric distance in the units of body and earth.
-
     """
+
     longitude = c_double()
     latitude = c_double()
     radius = c_double()
@@ -160,8 +157,8 @@ def spherical_to_rectangular(longitude, latitude, radius):
     radius -- The body's distance from the central body.
 
     Return 1: The body's rectangular coordinates in the same units as radius.
-
     """
+
     rectangular = RectangularCoordinates()
 
     _libkepler.spherical_to_rectangular(longitude, latitude, radius,
@@ -179,8 +176,8 @@ def phase_angle(body, earth):
              the same reference frame and units as obj.
 
     Return 1: The Sun-body-Earth phase angle in radians.
-
     """
+
     return _libkepler.phase_angle(byref(body), byref(earth))
 
 def equatorial_to_ecliptic(equatorial, obliquity):
@@ -192,8 +189,8 @@ def equatorial_to_ecliptic(equatorial, obliquity):
     obliquity -- The obliquity of the ecliptic in radians.
 
     Return 1: The body's geocentric ecliptic coordinates.
-
     """
+
     ecliptic = EclipticCoordinates()
 
     _libkepler.equatorial_to_ecliptic(byref(equatorial), obliquity,
@@ -210,8 +207,8 @@ def ecliptic_to_equatorial(ecliptic, obliquity):
     obliquity -- The obliquity of the ecliptic in radians.
 
     Return 1: The body's geocentric equatorial coordinates.
-
     """
+
     equatorial = EquatorialCoordinates()
 
     _libkepler.ecliptic_to_equatorial(byref(ecliptic), obliquity,
@@ -229,8 +226,8 @@ def equatorial_to_horizontal(hour_angle, declination, latitude):
     latitude -- The observer's geographic latitude in radians.
 
     Return 1: The body's horizontal coordinates.
-
     """
+
     horizontal = HorizontalCoordinates()
 
     _libkepler.equatorial_to_horizontal(hour_angle, declination, latitude,
@@ -248,8 +245,8 @@ def horizontal_to_equatorial(horizontal, latitude):
 
     Return 1: The body's local hour angle in radians.
     Return 2: The body's declination in radians.
-
     """
+
     hour_angle = c_double()
     declination = c_double()
 
@@ -265,8 +262,8 @@ def rotate_rectangular(rotation_matrix, rectangular):
     rotation_matrix -- The rotation matrix in the form
                        [[m11, m12, m13], [m21, m22, m23], [m31, m32, m33]]
     rectangular -- The rectangular coordinates to be rotated in-place.
-
     """
+
     mat = (c_double * 9)()
     for i in xrange(3):
         for j in xrange(3):
@@ -282,8 +279,8 @@ def rotate_equatorial(rotation_matrix, equatorial):
     rotation_matrix -- The rotation matrix in the form
                        [[m11, m12, m13], [m21, m22, m23], [m31, m32, m33]]
     equatorial -- The equatorial coordinates to be rotated in-place.
-
     """
+
     mat = (c_double * 9)()
     for i in xrange(3):
         for j in xrange(3):
@@ -297,10 +294,27 @@ def rotate_ecliptic_to_equator(obliquity, ecliptic):
 
     obliquity -- The obliquity of the ecliptic in radians.
     ecliptic -- The coordinates to be rotated in-place.
-
     """
+
     _libkepler.rotate_ecliptic_to_equator(obliquity, byref(ecliptic))
 
+def lightcor(id, dt, obj, ear = None):
+    """
+    Correct the coordinates of solar system bodies to account for the 
+    finite speed of light.
+
+    id  -- Object identifier for <obj>. MERCURY through NEPTUNE for
+           the planets or NEPTUNE+1 for Pluto.
+    dt  -- Dynamical time for coordinates. Corrected on exit.
+    obj -- Coordinates of the body in AU. Corrected on exit.
+    ear -- Coordinates of the Earth in AU. Corrected on exit if non-NULL.
+    """
+
+    if (ear is None):
+        _libkepler.lightcor(id, byref(dt), byref(obj), None)
+    else:
+        _libkepler.lightcor(id, byref(dt), byref(obj), byref(ear))
+    
 _libkepler.rectangular_to_spherical.restype = None
 _libkepler.rectangular_to_spherical.argtypes = [
     POINTER(RectangularCoordinates),
@@ -372,6 +386,14 @@ _libkepler.rotate_ecliptic_to_equator.argtypes = [
     POINTER(RectangularCoordinates)
 ]
 
+_libkepler.lightcor.restype = None
+_libkepler.lightcor.argtypes = [
+    c_int,
+    POINTER(JulianDate),
+    POINTER(RectangularCoordinates),
+    POINTER(RectangularCoordinates)
+]
+
 __all__ = [
     "RectangularCoordinates",
     "EquatorialCoordinates",
@@ -386,5 +408,6 @@ __all__ = [
     "horizontal_to_equatorial",
     "rotate_rectangular",
     "rotate_equatorial",
-    "rotate_ecliptic_to_equator"
+    "rotate_ecliptic_to_equator",
+    "lightcor"
 ]

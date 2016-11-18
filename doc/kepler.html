@@ -286,6 +286,16 @@ Rotates rectangular coordinates in the ecliptic frame to the equatorial frame.<b
 obl: The obliquity of the ecliptic in radians.<br>
 pos: The coordinates to be rotated in-place.<br>
 <p>
+<code><b>
+void lightcor(int id, struct julian_date *dt, struct rectangular_coordinates *obj, struct rectangular_coordinates *ear)<p>
+</code></b>
+Correct the coordinates of solar system bodies to account for the finite speed of light.<br>
+<br>
+id: Object identifier for &lt;obj&gt;. MERCURY through NEPTUNE for the planets or NEPTUNE+1 for Pluto.<br>
+dt: Dynamical time for coordinates. Corrected on exit.<br>
+obj: Coordinates of the body in AU. Corrected on exit.<br>
+ear: Coordinates of the Earth in AU. Corrected on exit if not NULL.<br>
+<p>
 
 <a name="delta-t.c"><h4>delta-t.c</h4></a>
 <code><b>
