@@ -32,12 +32,7 @@
 #include <aberration.h>
 #include <moonphase.h>
 #include <eclipse.h>
-
-void display_copyright()
-{
-    printf(PROG_VERSION_STRING);
-    printf(PROG_COPYRIGHT);
-}
+#include <equisols.h>
 
 void display_usage()
 {
@@ -58,7 +53,8 @@ void parse_command_line(int argc, char *argv[], int *show_all)
 	}
 
 	if (!strcmp(argv[1], "-v") || !strcmp(argv[1], "--version")) {
-	    display_copyright();
+	    printf(PROG_VERSION_STRING);
+	    printf(PROG_COPYRIGHT);
 	    exit(0);
 	}
 
@@ -225,7 +221,7 @@ int main(int argc, char *argv[])
     printf("MP = Minor planet, LP = Long-period comet, "
 	   "SP = Short-period comet, DC = Defunct comet\n\n");
 
-    for (i = 0; i < sizeof(mpc_files) / sizeof(mpc_files[0]); i++) {
+    for (i = 0; i < sizeof(mpc_files)/sizeof(mpc_files[0]); i++) {
 	fp = fopen(mpc_files[i], "r");
 	if (fp) {
 	    while (fgets(buf, 256, fp)) {
@@ -289,5 +285,10 @@ int main(int argc, char *argv[])
     printf("\nLunar eclipse in July 1997 : %f DT,"
 	   " gamma = %7.4f, u = %7.4f\n", df, gamma, u);
 
+    printf("\nEquinoxes and solstices in 1962:\n\n");
+    for (i = 3; i <= 12; i += 3)
+	printf("\t%02d: %f DT\n", i, equisols(1962, i));
+
+    printf("\n");
     return(0);
 }

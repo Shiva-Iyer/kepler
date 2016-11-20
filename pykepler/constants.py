@@ -39,8 +39,7 @@ class ReturnValues:
 class Constants:
 
     PI = 3.141592653589793238462643
-    TWO_PI = 6.283185307179586476925287
-    SQROOT_TWO = 1.414213562373095048801689
+    TWO_PI = 2.0*PI
 
     J2000_EPOCH = 2451545.0
     MJD_EPOCH = 2400000.5
@@ -50,30 +49,29 @@ class Constants:
 
 class Conversion:
 
-    DEG_TO_RAD = 0.01745329251994329576923691
-    ACS_TO_RAD = 0.000004848136811095359935899141
-    MAS_TO_RAD = 0.000000004848136811095359935899141
-    UAS_TO_RAD = 0.000000000004848136811095359935899141
+    DEG_TO_RAD = Constants.PI/180.0
+    ACS_TO_RAD = DEG_TO_RAD/3600.0
+    MAS_TO_RAD = ACS_TO_RAD/1000.0
+    UAS_TO_RAD = MAS_TO_RAD/1000.0
 
-    RAD_TO_DEG = 57.295779513082320876798147
-    RAD_TO_ACS = 206264.806247096
+    RAD_TO_DEG = 180.0/Constants.PI
+    RAD_TO_ACS = 1.0/ACS_TO_RAD
 
-    DEG_TO_HRS = 0.066666666666666666666667
     HRS_TO_DEG = 15.0
+    DEG_TO_HRS = 1.0/HRS_TO_DEG
 
-    RAD_TO_HRS = 3.81971863420548805845321
-    HRS_TO_RAD = 0.261799387799149436538554
+    RAD_TO_HRS = RAD_TO_DEG*DEG_TO_HRS
+    HRS_TO_RAD = 1.0/RAD_TO_HRS
 
 class DegMinSec:
-    """ The __init__ method converts an angle expressed as a decimal into degrees,
-    minutes and seconds.
+    """ The __init__ method converts an angle expressed as a 
+    decimal into degrees, minutes and seconds.
 
     Fields:
 
     degrees
     minutes
     seconds
-
     """
 
     def __init__(self, d = 0.0):
@@ -100,8 +98,8 @@ class DegMinSec:
 def degrees(d, m, s):
     """Return the decimal value of an angle expressed in degrees, minutes
     and seconds.
-
     """
+
     return d + (m / 60.0) + (s / 3600.0)
 
 __all__ = [

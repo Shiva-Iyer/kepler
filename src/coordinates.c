@@ -258,7 +258,7 @@ void rotate_ecliptic_to_equator(double obl, struct rectangular_coordinates *pos)
  *
  * id  -- Object identifier for <obj>. MERCURY through NEPTUNE for
  *        the planets or NEPTUNE+1 for Pluto.
- * dt  -- Dynamical time for coordinates. Corrected on exit.
+ * dt  -- Dynamical time of coordinates.
  * obj -- Coordinates of the body in AU. Corrected on exit.
  * ear -- Coordinates of the Earth in AU. Corrected on exit if non-NULL.
  */
@@ -268,8 +268,10 @@ void lightcor(int id, struct julian_date *dt,
 {
     int i;
     double x,y,z,d0,d1;
+    struct julian_date t;
 
     d0 = 0;
+    t = *dt;
     for (i = 0; i < 10; i++) {
 	if (ear) {
 	    x = obj->x - ear->x;
@@ -284,13 +286,13 @@ void lightcor(int id, struct julian_date *dt,
 	if (fabs(d1 - d0) < 1E-8)
 	    break;
 
-	dt->date2 -= (d1 - d0)/C_AUPERDAY;
+	t.date2 -= (d1 - d0)/C_AUPERDAY;
 	if (ear)
-	    vsop87_coordinates(EARTH, dt, ear);
+	    vsop87_coordinates(EARTH, &t, ear);
 	if (id <= NEPTUNE)
-	    vsop87_coordinates(id, dt, obj);
+	    vsop87_coordinates(id, &t, obj);
 	else
-	    pluto_coordinates(dt, obj);
+	    pluto_coordinates(&t, obj);
 
 	d0 = d1;
     }

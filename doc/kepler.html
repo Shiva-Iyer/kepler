@@ -79,6 +79,12 @@ elp82b.h
 <td>Implementation of the ELP2000-82B theory for lunar coordinates</td>
 </tr>
 <tr><td>
+<a href="#equisols.c">equisols.c</a><br>
+equisols.h
+</td>
+<td>Equinox and solstice calculations</td>
+</tr>
+<tr><td>
 <a href="#fund_args.c">fund_args.c</a><br>
 fund_args.h
 </td>
@@ -292,7 +298,7 @@ void lightcor(int id, struct julian_date *dt, struct rectangular_coordinates *ob
 Correct the coordinates of solar system bodies to account for the finite speed of light.<br>
 <br>
 id: Object identifier for &lt;obj&gt;. MERCURY through NEPTUNE for the planets or NEPTUNE+1 for Pluto.<br>
-dt: Dynamical time for coordinates. Corrected on exit.<br>
+dt: Dynamical time of coordinates.<br>
 obj: Coordinates of the body in AU. Corrected on exit.<br>
 ear: Coordinates of the Earth in AU. Corrected on exit if not NULL.<br>
 <p>
@@ -354,6 +360,18 @@ void elp82b_ecliptic_to_equator(struct rectangular_coordinates *pos)<p>
 Rotates the Moon's coordinates from the ecliptic frame of J2000 to the equatorial frame of J2000/FK5.<br>
 <br>
 pos: The coordinates to be rotated in-place<br>
+<p>
+
+<a name="equisols.c"><h4>equisols.c</h4></a>
+<code><b>
+double equisols(int year, int month)<p>
+</code></b>
+Calculate the time of the equinox or solstice in the specified year and month.<br>
+<br>
+year: Year number using astronomical reckoning and after 4800BC.<br>
+month: 3 for March equinox, 6 for June solstice, 9 for September equinox, or 12 for December solstice.<br>
+<br>
+Return: Dynamical time in JDE form at which the requested equinox or solstice occurs; -1 if the input parameters are invalid.<br>
 <p>
 
 <a name="fund_args.c"><h4>fund_args.c</h4></a>

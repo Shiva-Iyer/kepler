@@ -26,6 +26,7 @@ delta_t -- Approximate value of Delta-T (TT - UT1)
 earth_figure -- Values related to the oblateness of the Earth
 eclipse -- Calculate the circumstances of solar and lunar eclipses
 elp82b -- ELP2000-82B theory for lunar coordinates
+equisols -- Equinox and solstice calculations
 fund_args -- Values of fundamental lunisolar/planetary/precession arguments
 iau2000a_nutation -- Nutation calculations using the IAU 2000A model
 iau2006_precession -- Precession calculations using the IAU 2006 model
@@ -63,6 +64,7 @@ from delta_t import *
 from earth_figure import *
 from eclipse import *
 from elp82b import *
+from equisols import *
 from fund_args import *
 from iau2000a_nutation import *
 from iau2006_precession import *

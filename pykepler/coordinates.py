@@ -305,7 +305,7 @@ def lightcor(id, dt, obj, ear = None):
 
     id  -- Object identifier for <obj>. MERCURY through NEPTUNE for
            the planets or NEPTUNE+1 for Pluto.
-    dt  -- Dynamical time for coordinates. Corrected on exit.
+    dt  -- Dynamical time of coordinates.
     obj -- Coordinates of the body in AU. Corrected on exit.
     ear -- Coordinates of the Earth in AU. Corrected on exit if non-NULL.
     """

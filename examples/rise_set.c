@@ -20,13 +20,12 @@
 #include <string.h>
 #include <stdlib.h>
 #include <time.h>
-#include <memory.h>
 #include <sidereal_time.h>
 #include <delta-t.h>
 #include <vsop87.h>
 #include <elp82b.h>
 #include <pluto.h>
-#include <iau2000a_nutation.h>
+#include <iau2006_precession.h>
 #include <riseset.h>
 #include <rise_set.h>
 
@@ -38,56 +37,58 @@ int main(int argc, char *argv[])
     int i,j,year,month,day,steps;
     struct julian_date jd0,jd;
     struct equatorial_coordinates equ;
-    double longitude,latitude,ut_off,h0,gast,del_t,corr,
-	*df,*rad,*decd,rts[3],dist,wrap;
+    double longitude,latitude,h0,gast,del_t,del_cor,df[24/TIME_STEP+1],
+	rad[24/TIME_STEP+1],decd[24/TIME_STEP+1],rts[3],dist,
+	prec[3][3],w;
     char msg[256],rise[10],trans[10],set[10],ra[10],dec[10];
 
     /* Parse command line parameters */
     parse_command_line(argc, argv, &year, &month,
-		       &day, &longitude, &latitude, &ut_off);
+		       &day, &longitude, &latitude);
 
     /* Get the Julian Day Number corresponding to user input */
     calendar_to_julian_date(year, month, day, &jd0);
     jd = jd0;
 
+    /* Precession matrix to convert from J2000 to frame of date */
+    iau2006_precession_matrix(&jd0, 0, prec);
+
     /* Greenwich apparent sidereal time */
     gast = apparent_sidereal_time(&jd0, &jd0, 0);
 
     /* TT/TDB is needed for calculating coordinates, so get delta-T */
-    delta_t(year, month, &del_t, &corr);
+    delta_t(year, month, &del_t, &del_cor);
+    del_t += del_cor;
 
-    printf("Information for %4d-%02d-%02d (JD %9.1f) at lon: %-7.2f & lat: %-7.2f\n",
-	   year, month, day, jd0.date1 + jd0.date2, longitude, latitude);
-    printf("Rise, transit, set, RA (h:m:s), dec. (d:m:s), distance\n");
-    printf("RA, dec., distance are at 00:00:00 UTC on the given date\n\n");
+    printf("Information for %4d-%02d-%02d (JD %9.1f)"
+	   " at lon: %-7.2f & lat: %-7.2f\n", year, month, day,
+	   jd0.date1 + jd0.date2, longitude, latitude);
+    printf("Rise (UTC), transit (UTC), set (UTC), "
+	   "RA (hh:mm:ss), dec. (dd:mm:ss), distance\n");
+    printf("RA, dec., distance are at 00:00:00 UTC\n\n");
 
-    steps = 24/TIME_STEP + 1;
-    df = malloc(steps*sizeof(double));
-    rad = malloc(steps*sizeof(double));
-    decd = malloc(steps*sizeof(double));
-
-    /* kepler expects all angles to be in radians */
     longitude *= DEG_TO_RAD;
     latitude *= DEG_TO_RAD;
+    steps = sizeof(df)/sizeof(double);
     for (i = SUN; i <= PLUTO; i++) {
 	if (i == EARTH)
 	    continue;
 
-	/* Prepare a list of RA., dec. for the day in question */
+	/* Compute a list of RA., dec. for the day in question */
 	for (j = steps-1; j >= 0; j--) {
 	    df[j] = (double)j*TIME_STEP/24;
 	    jd.date2 = jd0.date2 + df[j];
-	    get_equatorial(i, &jd, &equ, &dist);
+	    get_equatorial(i, &jd, &equ, prec, &dist);
 	    rad[j] = equ.right_ascension;
 	    decd[j] = equ.declination;
 	}
 
 	/* Handle the case where RAs wrap around from 2PI to 0 */
-	wrap = 0;
+	w = 0;
 	for (j = 1; j < steps; j++) {
 	    if (rad[j] < rad[j-1] && rad[j-1] > PI && rad[j] < PI)
-		wrap = TWO_PI;
-	    rad[j] += wrap;
+		w = TWO_PI;
+	    rad[j] += w;
 	}
 
 	/* Corrections for atmospheric refraction */
@@ -102,7 +103,7 @@ int main(int argc, char *argv[])
 	riseset(steps, df, rad, decd, gast, longitude, latitude,
 		del_t, h0, rts);
 	for (j = 0; j < 3; j++)
-	    rts[j] = reduce_angle(rts[j]*24 + ut_off, 24);
+	    rts[j] = reduce_angle(rts[j]*24, 24);
 
 	sprintf(msg,"%10s: %5s, %5s, %5s, %8s, %9s, %9.2f %2s",
 		object_names[i+2], format_time(rts[0], rise, 0),
@@ -113,33 +114,29 @@ int main(int argc, char *argv[])
 	printf("%s\n", msg);
     }
 
-    free(df);
-    free(rad);
-    free(decd);
     return(0);
 }
 
 void get_equatorial(int body, struct julian_date *jd,
-		    struct equatorial_coordinates *equ, double *dist)
+		    struct equatorial_coordinates *equ,
+		    double prec[3][3], double *dist)    
 {
-    struct julian_date tmp;
-    struct rectangular_coordinates ear,rec = {0, 0, 0},zero = {0, 0, 0};
+    struct rectangular_coordinates ear,rec,sun = {0,0,0};
 
-    tmp = *jd;
     vsop87_coordinates(EARTH, jd, &ear);
     if (body >= MERCURY && body <= NEPTUNE) {
 	/* Use VSOP87 for all eight major planets */
 	vsop87_coordinates(body, jd, &rec);
 
 	/* Correct for finite speed of light */
-	lightcor(body, &tmp, &rec, &ear);
+	lightcor(body, jd, &rec, &ear);
 
 	/* Rotate from the J2000 ecliptic to the equator */
 	vsop87_ecliptic_to_equator(&rec);
     } else if (body == PLUTO) {
 	/* Pluto has its own analytical theory */
 	pluto_coordinates(jd, &rec);
-	lightcor(NEPTUNE + 1, &tmp, &rec, &ear);
+	lightcor(NEPTUNE + 1, jd, &rec, &ear);
     } else if (body == MOON) {
 	/* Use ELP 2000-82B for the Moon */
 	elp82b_coordinates(jd, &rec);
@@ -147,6 +144,12 @@ void get_equatorial(int body, struct julian_date *jd,
 	/* Rotate from the J2000 ecliptic to the equator */
 	elp82b_ecliptic_to_equator(&rec);
     }
+
+    vsop87_ecliptic_to_equator(&ear);
+
+    /* Precess from J2000 frame to frame of date */
+    rotate_rectangular(prec, &rec);
+    rotate_rectangular(prec, &ear);
 
     /*
      * Convert heliocentric rectangular coordinates (planets, Pluto)
@@ -158,10 +161,9 @@ void get_equatorial(int body, struct julian_date *jd,
 	 * The Moon is already in geocentric coordinates, so we just
 	 * convert to equatorial, without a Sun->Moon translation.
 	 */
-	rectangular_to_spherical(&rec, &zero, &equ->right_ascension,
+	rectangular_to_spherical(&rec, &sun, &equ->right_ascension,
 				 &equ->declination, dist);
     } else {
-	vsop87_ecliptic_to_equator(&ear);
     	rectangular_to_spherical(&rec, &ear, &equ->right_ascension,
 				 &equ->declination, dist);
     }
@@ -187,8 +189,7 @@ char *format_time(double t, char *buf, u_short sec)
 }
 
 void parse_command_line(int argc, char *argv[], int *year, int *month,
-			int *day, double *longitude, double *latitude,
-			double *ut_off)
+			int *day, double *longitude, double *latitude)
 {
     char c;
     time_t t;
@@ -201,12 +202,6 @@ void parse_command_line(int argc, char *argv[], int *year, int *month,
     *month = 1 + tt->tm_mon;
     *day = tt->tm_mday;
 
-#ifdef tm_gmtoff
-    *ut_off = tt->tm_gmtoff / 3600.0;
-#else
-    *ut_off = 0;
-#endif
-
     /* Default to the longitude & latitude of Boston, MA */
     *longitude = -DEGREES(71, 3, 42);
     *latitude = DEGREES(42, 21, 28);
@@ -218,40 +213,27 @@ void parse_command_line(int argc, char *argv[], int *year, int *month,
 	}
 
 	if (!strcmp(argv[1], "-v") || !strcmp(argv[1], "--version")) {
-	    display_copyright();
+	    printf(PROG_VERSION_STRING);
+	    printf(PROG_COPYRIGHT);
 	    exit(0);
 	}
 
 	sscanf(argv[1], "%d%c%d%c%d", year, &c, month, &c, day);
-
 	if (argc > 2)
 	    *longitude = atof(argv[2]);
-
 	if (argc > 3)
 	    *latitude = atof(argv[3]);
-
-	if (argc > 4)
-	    *ut_off = atof(argv[4]);
     }
 }
 
 void display_usage()
 {
-    printf("Usage: rise_set [OPTION] [date] [longitude] [latitude] [UTC_offset]\n");
-    printf("Display rise / set times for the Sun, Moon, planets and Pluto\n\n");
+    printf("Usage: rise_set [OPTION] [date] [longitude] [latitude]\n");
+    printf("Display rise/transit/set times for the Sun, Moon, planets and Pluto\n\n");
     printf("  -h, --help    Display this help screen and exit\n");
     printf("  -v, --version Display version number and exit\n");
-    printf("  date          Date in the Gregorian calendar, expressed as yyyy-mm-dd\n");
-    printf("  longitude     Observer's longitude in degrees, positive east of Greenwich\n");
-    printf("  latitude      Observer's latitude in degrees, positive north of the equator\n");
-    printf("  UTC_offset    Observer's offset from UTC in hours, positive east of Greenwich\n\n");
-    printf("If no parameters are provided, information for today's date is displayed for\n");
-    printf("Boston, MA, USA (71W03'42\", 42N21'28\"). No validation is done on parameters.\n\n");
-    printf("See README in the kepler source for limitations and other known issues.\n");
-}
-
-void display_copyright()
-{
-    printf(PROG_VERSION_STRING);
-    printf(PROG_COPYRIGHT);
+    printf("  date          Date in the Gregorian calendar, in the form yyyy-mm-dd\n");
+    printf("  longitude     Longitude in degrees, positive east of Greenwich\n");
+    printf("  latitude      Latitude in degrees, positive north of the equator\n\n");
+    printf("Defaults to Boston, MA, USA (71W03'42\", 42N21'28\") for today.\n\n");
 }
