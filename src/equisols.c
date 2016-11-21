@@ -46,9 +46,12 @@
 double equisols(int year, int month)
 {
     int steps,i;
-    double X,w,nutl,df[24/TIME_STEP+1],lon[24/TIME_STEP+1],prec[3][3];
+    double X,w,nutl,nuto,df[24/TIME_STEP+1],lon[24/TIME_STEP+1],
+	prec[3][3];
     struct julian_date jd0,jd;
     struct rectangular_coordinates ear,sun = {0,0,0};
+    struct ecliptic_coordinates ecl;
+    struct equatorial_coordinates equ;
 
     if (month == 3)
 	X = TWO_PI;
@@ -73,18 +76,22 @@ double equisols(int year, int month)
 	lightcor(EARTH, &jd, &ear, NULL);
 
 	vsop87_ecliptic_to_equator(&ear);
+
 	iau2006_precession_matrix(&jd, 0, prec);
 	rotate_rectangular(prec, &ear);
 
-	rectangular_to_spherical(&sun, &ear, &lon[i], &w, &w);
+	rectangular_to_spherical(&sun, &ear, &equ.right_ascension,
+				 &equ.declination, &w);
 
-	iau2000a_nutation(&jd, &nutl, &w);
-	lon[i] += nutl;
+	iau2000a_nutation(&jd, &nutl, &nuto);
+	equatorial_to_ecliptic(&equ, iau2000a_mean_obliquity(&jd)+nuto,
+			       &ecl);
+	lon[i] = ecl.longitude + nutl;
     }
 
     w = 0;
     for (i = 1; i < steps; i++) {
-	if (lon[i] < lon[i-1] && lon[i-1] > PI && lon[i] < PI)
+	if (lon[i-1] > 1.5*PI && lon[i] < 0.5*PI)
 	    w = TWO_PI;
 	lon[i] += w;
     }

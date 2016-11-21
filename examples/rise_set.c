@@ -86,7 +86,7 @@ int main(int argc, char *argv[])
 	/* Handle the case where RAs wrap around from 2PI to 0 */
 	w = 0;
 	for (j = 1; j < steps; j++) {
-	    if (rad[j] < rad[j-1] && rad[j-1] > PI && rad[j] < PI)
+	    if (rad[j-1] > 1.5*PI && rad[j] < 0.5*PI)
 		w = TWO_PI;
 	    rad[j] += w;
 	}
