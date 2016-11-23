@@ -79,14 +79,20 @@ may be used to view the documentation for the Python interface.
 Examples
 --------
 
-The following sample programs may be found in the 'examples' subdirectory:
+The following sample programs may be found in the 'examples'
+subdirectory:
 
-kepler_test.c calls most of the functions in kepler and displays the results in a
-terminal window. To test the routines in mpc_file.c, you must download the MPC
-Orbit Database files from <http://www.cfa.harvard.edu/iau/MPCORB.html>.
+kepler_test.c calls most of the functions in kepler and displays the
+results in a terminal window. To test the routines in mpc_file.c, you
+must download the MPC Orbit Database files from
+<http://www.cfa.harvard.edu/iau/MPCORB.html>.
 
-rise_set.c is a program that accepts command line arguments and displays
+rise_set.c is a program that accepts command-line arguments and displays
 the rise, transit and setting times for the Sun, Moon, planets and Pluto.
+
+planpos.py demonstrates the Python wrapper by calling routines in the
+VSOP, ELP and Pluto modules to display the positions of the Sun, Moon,
+planets and Pluto at the time specified on the command-line.
 
 References
 ----------
