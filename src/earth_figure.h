@@ -1,6 +1,6 @@
 /*
  * earth_figure.h - Declarations for calculating earth figure values
- * Copyright (C) 2010 Shiva Iyer <shiva.iyer AT g m a i l DOT c o m>
+ * Copyright (C) 2016 Shiva Iyer <shiva.iyer AT g m a i l DOT c o m>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,7 +19,10 @@
 #ifndef _EARTH_FIGURE_H_
 #define _EARTH_FIGURE_H_
 
-void earth_figure_values(double geog_lat, double height_msl, double *gc_lat,
-			double *gc_radius);
+void earth_figure_values(double geog_lat, double height_msl,
+			 double *gc_lat, double *gc_radius);
+
+double earth_gcdist(double lon1, double lat1, double lon2, double lat2,
+		    double *inb, double *fib);
 
 #endif

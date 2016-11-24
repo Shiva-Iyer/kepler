@@ -330,6 +330,20 @@ height_msl: The observer's height above mean sea level in meters.<br>
 gc_lat: The observer's geocentric latitude in radians.<br>
 gc_radius: The observer's geocentric radius as a fraction of the Earth's equatorial radius.<br>
 <p>
+<code><b>
+double earth_gcdist(double lon1, double lat1, double lon2, double lat2, double *inb, double *fib)<p>
+</code></b>
+Calculate the great circle distance and bearings between two points, taking into account the oblateness of the Earth.<br>
+<br>
+lon1: Longitude of pt. 1 in radians, positive east of Greenwich.<br>
+lat1: Latitude of pt. 1 in radians, positive north of the equator.<br>
+lon2: Longitude of pt. 2 in radians, positive east of Greenwich.<br>
+lat2: Latitude of pt. 2 in radians, positive north of the equator.<br>
+inb: The initial bearing on the great circle path in radians.<br>
+fib: The final bearing on the great circle path in radians.<br>
+<br>
+Return: The great circle distance in meters or -1 if the algorithm failed, which usually happens for antipodal points.<br>
+<p>
 
 <a name="eclipse.c"><h4>eclipse.c</h4></a>
 <code><b>

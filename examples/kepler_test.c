@@ -33,6 +33,7 @@
 #include <moonphase.h>
 #include <eclipse.h>
 #include <equisols.h>
+#include <earth_figure.h>
 
 void display_usage()
 {
@@ -72,7 +73,7 @@ int main(int argc, char *argv[])
     struct rectangular_coordinates xyz[9],zero = {0, 0, 0},moon;
     struct mpc_body inf;
     double dist,df,epsilon,d_psi,d_eps,prec_matrix[3][3],nut_matrix[3][3],
-	   mst,ast,d_ra,d_dec,gamma,u;
+	mst,ast,d_ra,d_dec,gamma,u,inb,fib;
     char buf[256];
     static char *planet_names[] = {"Mercury","Venus","Earth","Mars",
 				   "Jupiter","Saturn","Uranus","Neptune",
@@ -288,6 +289,15 @@ int main(int argc, char *argv[])
     printf("\nEquinoxes and solstices in 1962:\n\n");
     for (i = 3; i <= 12; i += 3)
 	printf("\t%02d: %f DT\n", i, equisols(1962, i));
+
+    dist = earth_gcdist(DEGREES(174, 47, 30)*DEG_TO_RAD,
+			-DEGREES(37, 0, 29)*DEG_TO_RAD,
+			DEGREES(55, 21, 52)*DEG_TO_RAD,
+			DEGREES(25, 15, 10)*DEG_TO_RAD, &inb, &fib);
+    printf("\nAKL-DXB airport GC dist. = %.3f KM, "
+	   "init. bearing = %.1f deg., fin. bearing = %.1f deg.\n",
+	   dist/1000, reduce_angle(inb*RAD_TO_DEG, 360),
+	   reduce_angle(fib*RAD_TO_DEG, 360));
 
     printf("\n");
     return(0);

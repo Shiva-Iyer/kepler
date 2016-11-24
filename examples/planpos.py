@@ -57,28 +57,27 @@ try:
     dec = [0.0]*len(pn)
     dist = [0.0]*len(pn)
 
-    # Compute the position of the Sun
-    zer = R.RectangularCoordinates(0, 0, 0)
-    ear = V.vsop87_coordinates(P.EARTH, jd)[1]
-    V.vsop87_ecliptic_to_equator(ear)
-    ra[0],dec[0],dist[0] = R.rectangular_to_spherical(zer, ear)
-
     # Compute the position of the Moon
+    zer = R.RectangularCoordinates(0, 0, 0)
     moo = E.elp82b_coordinates(jd)
     E.elp82b_ecliptic_to_equator(moo)
     ra[1],dec[1],dist[1] = R.rectangular_to_spherical(moo, zer)
 
-    # Compute the positions of the planets
+    # Compute the positions of the Sun, planets and Pluto
     j = 2
-    for i in [P.MERCURY, P.VENUS] + range(P.MARS, P.NEPTUNE + 1):
-        pla = V.vsop87_coordinates(i, jd)[1]
-        V.vsop87_ecliptic_to_equator(pla)
-        ra[j],dec[j],dist[j] = R.rectangular_to_spherical(pla, ear)
-        j += 1
+    for i in [P.EARTH, P.MERCURY, P.VENUS] + range(P.MARS, P.NEPTUNE+2):
+        if (i < P.NEPTUNE + 1):
+            pla = V.vsop87_coordinates(i, jd)[1]
+            V.vsop87_ecliptic_to_equator(pla)
+        else:
+            pla = pluto.pluto_coordinates(jd)[1]
 
-    # Compute the position of Pluto
-    pla = pluto.pluto_coordinates(jd)[1]
-    ra[j],dec[j],dist[j] = R.rectangular_to_spherical(pla, ear)
+        if (i == P.EARTH):
+            ear = pla
+            ra[0],dec[0],dist[0] = R.rectangular_to_spherical(zer, ear)
+        else:
+            ra[j],dec[j],dist[j] = R.rectangular_to_spherical(pla, ear)
+            j += 1
 
     # Display the results
     print("At " + time.strftime("%Y-%m-%d %H:%M:%S", tm) + " UTC" +  (
@@ -87,10 +86,10 @@ try:
     for i,r,d,s in zip(range(10), ra, dec, dist):
         rc = DegMinSec(r*Conversion.RAD_TO_HRS)
         dc = DegMinSec(d*Conversion.RAD_TO_DEG)
-        print("%7s: %02d:%02d:%02d, %3d:%02d:%02d, %10.3f %2s" % (pn[i],
-              rc.degrees, rc.minutes, rc.seconds,
-              dc.degrees, fabs(dc.minutes), fabs(dc.seconds), s,
-              "KM" if i == 1 else "AU"))
+        print("%7s: %02d:%02d:%05.2f, %3d:%02d:%04.1f, %12.5f %2s" % (
+            pn[i], rc.degrees, rc.minutes, rc.seconds,
+            dc.degrees, fabs(dc.minutes), fabs(dc.seconds), s,
+            "KM" if i == 1 else "AU"))
 except SystemExit:
     pass
 except:
