@@ -14,21 +14,21 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from __future__ import print_function
-import sys
-import time
-from pykepler import julian_date as J
-from pykepler import delta_t
-from pykepler.constants import SolarSystemPlanets as P
-from pykepler.constants import Conversion
-from pykepler.constants import DegMinSec
-from pykepler import vsop87 as V
-from pykepler import elp82b as E
-from pykepler import pluto
-from pykepler import coordinates as R
-from math import fabs
-
 try:
+    import sys
+    import time
+    import traceback
+    from pykepler import julian_date as J
+    from pykepler import delta_t
+    from pykepler.constants import SolarSystemPlanets as P
+    from pykepler.constants import Conversion
+    from pykepler.constants import DegMinSec
+    from pykepler import vsop87 as V
+    from pykepler import elp82b as E
+    from pykepler import pluto
+    from pykepler import coordinates as R
+    from math import fabs
+
     # Handle command-line parameters
     if (len(sys.argv) > 1 and sys.argv[1].lower() in ["--h", "--help"]):
         print(sys.argv[0] + " [datetime]")
@@ -65,7 +65,8 @@ try:
 
     # Compute the positions of the Sun, planets and Pluto
     j = 2
-    for i in [P.EARTH, P.MERCURY, P.VENUS] + range(P.MARS, P.NEPTUNE+2):
+    for i in ([P.EARTH, P.MERCURY, P.VENUS] +
+              list(range(P.MARS, P.NEPTUNE+2))):
         if (i < P.NEPTUNE + 1):
             pla = V.vsop87_coordinates(i, jd)[1]
             V.vsop87_ecliptic_to_equator(pla)
@@ -93,4 +94,4 @@ try:
 except SystemExit:
     pass
 except:
-    print(sys.exc_info()[0])
+    traceback.print_exc()

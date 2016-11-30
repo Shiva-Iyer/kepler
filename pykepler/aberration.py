@@ -1,5 +1,5 @@
 # aberration.py - Wrapper for annual aberration routines
-# Copyright (C) 2010 Shiva Iyer <shiva.iyer AT g m a i l DOT c o m>
+# Copyright (C) 2016 Shiva Iyer <shiva.iyer AT g m a i l DOT c o m>
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -18,24 +18,25 @@ if __name__ == "__main__":
     exit()
 
 from ctypes import *
-from julian_date import *
-from coordinates import *
+from .julian_date import *
+from .coordinates import *
 from pykepler import _libkepler
 
 def aberration_earth_velocity(tdb):
     """
     Calculate the components of the earth's velocity.
 
-    tdb -- TDB to be used for calculations. TT may be used for all but the most
-           exacting applications.
+    tdb -- TDB to be used for calculations. TT may be used for all
+    but the most exacting applications.
 
-    Return 1: The Earth's velocity components in 10**(-8) AU/day. The reference
-              frame is the equinox & equator of J2000.
-
+    Return 1: The Earth's velocity components in 10**(-8) AU/day.
+    The reference frame is the equinox & equator of J2000.
     """
+
     earth_velocity = RectangularCoordinates()
 
-    _libkepler.aberration_earth_velocity(byref(tdb), byref(earth_velocity))
+    _libkepler.aberration_earth_velocity(byref(tdb),
+                                         byref(earth_velocity))
 
     return earth_velocity
 
@@ -48,13 +49,13 @@ def annual_aberration(tdb, equ_coords):
 
     Return 1: Aberration in right ascension
     Return 2: Aberration in declination
-
     """
+
     d_RA = c_double()
     d_declination = c_double()
 
-    _libkepler.annual_aberration(byref(tdb), byref(equ_coords), byref(d_RA),
-                                 byref(d_declination))
+    _libkepler.annual_aberration(byref(tdb), byref(equ_coords),
+                                 byref(d_RA), byref(d_declination))
 
     return d_RA.value, d_declination.value
 

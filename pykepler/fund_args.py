@@ -1,5 +1,5 @@
 # fund_args.py - Wrapper for fundamental argument routines
-# Copyright (C) 2010 Shiva Iyer <shiva.iyer AT g m a i l DOT c o m>
+# Copyright (C) 2016 Shiva Iyer <shiva.iyer AT g m a i l DOT c o m>
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -22,9 +22,9 @@ from pykepler import _libkepler
 
 class FundArgs:
     """
-    Constants for the various fundamental arguments used throughout the library.
-    These values are parameters to the function fundamental_argument().
-
+    Constants for the various fundamental arguments used throughout the
+    library. These values are parameters to the function
+    fundamental_argument().
     """
 
     ARG_LONGITUDE_MERCURY, \
@@ -49,13 +49,13 @@ def fundamental_argument(argument, j2000_centuries):
     planetary, lunar, precession and nutation models.
 
     arguments -- One of the constants from the FundArgs class.
-    j2000_centuries -- Julian centuries of TDB since 2000-01-01 12h TDB. TT may
-                       be used for all but the most exacting applications.
+    j2000_centuries -- Julian centuries of TDB since 2000-01-01 12h TDB.
+    TT may be used for all but the most exacting applications.
 
     Return 1: -1 if the argument parameter is invalid. The value of the
               fundamental argument in radians otherwise.
-
     """
+
     return _libkepler.fundamental_argument(argument, j2000_centuries)
 
 _libkepler.fundamental_argument.restype = c_double

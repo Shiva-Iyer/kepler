@@ -1,5 +1,5 @@
 # mpc_file.py - Wrapper for MPCORB database routines
-# Copyright (C) 2010 Shiva Iyer <shiva.iyer AT g m a i l DOT c o m>
+# Copyright (C) 2016 Shiva Iyer <shiva.iyer AT g m a i l DOT c o m>
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -18,9 +18,9 @@ if __name__ == "__main__":
     exit()
 
 from ctypes import *
-from julian_date import *
-from coordinates import *
-from orbital_elements import *
+from .julian_date import *
+from .coordinates import *
+from .orbital_elements import *
 from pykepler import _libkepler
 
 class MpcBody(Structure):
@@ -35,10 +35,9 @@ class MpcBody(Structure):
     magnitude -- The body's absolute magnitude, H.
     slope -- Slope parameter, G.
     elements -- The body's orbital elements.
-    position --	The body's coordinates at the desired epoch. For minor planets
-                and comets, the origin is the Sun and the reference frame is
-                the equinox and ecliptic of J2000.
-
+    position --	The body's coordinates at the desired epoch. For minor
+    planets and comets, the origin is the Sun and the reference frame is
+    the equinox and ecliptic of J2000.
     """
 
     MINOR_PLANET,       \
@@ -72,22 +71,24 @@ class MpcBody(Structure):
 
 def minor_planet_info(mpcorb_record, jd_TT):
     """
-    Parse data in the MPC's Orbit Database for minor planets. For details on
-    the format, see <http://www.cfa.harvard.edu/iau/info/MPOrbitFormat.html>.
-    Download the database from <http://www.cfa.harvard.edu/iau/MPCORB.html>.
+    Parse data in the MPC's Orbit Database for minor planets. For
+    details on the format, see
+    <http://www.cfa.harvard.edu/iau/info/MPOrbitFormat.html>.
+    Download the database from
+    <http://www.cfa.harvard.edu/iau/MPCORB.html>.
 
-    mpcorb_record -- A line of data from the MPCORB minor planet database file.
+    mpcorb_record -- A line of data from the MPCORB minor planet
+    database file.
     jd_TT -- TT to be used for calculations.
 
-    Return 1: SUCCESS -- The data was parsed and the coordinates were calculated.
+    Return 1: SUCCESS -- Data was parsed and coordinates were calculated.
               ERR_INVALID_DATA -- The data was in an unrecognized format.
               ERR_CONVERGENCE -- The solution to Kepler's equation didn't
-              converge to the required precision within the specified number
-              of iterations.
-    Return 2: The minor planet's details and heliocentric coordinates. The
-              reference frame is the equinox & ecliptic of J2000.
-
+              converge to the required precision.
+    Return 2: The minor planet's details and heliocentric coordinates.
+    The reference frame is the equinox & ecliptic of J2000.
     """
+
     body = MpcBody()
 
     retval = _libkepler.minor_planet_info(mpcorb_record, byref(jd_TT),
@@ -97,25 +98,25 @@ def minor_planet_info(mpcorb_record, jd_TT):
 
 def comet_info(mpcorb_record, jd_TT):
     """
-    Parse data in the MPC's Orbit Database for comets. For details on the
-    format, see <http://www.cfa.harvard.edu/iau/info/CometOrbitFormat.html>.
-    Download the database from <http://www.cfa.harvard.edu/iau/MPCORB.html>.
+    Parse data in the MPC's Orbit Database for comets. For details,
+    see <http://www.cfa.harvard.edu/iau/info/CometOrbitFormat.html>.
+    Download from <http://www.cfa.harvard.edu/iau/MPCORB.html>.
 
     mpcorb_record -- A line of data from the MPCORB comet database file.
     jd_TT -- TT to be used for calculations.
 
-    Return 1: SUCCESS -- The data was parsed and the coordinates were calculated.
+    Return 1: SUCCESS -- Data was parsed and coordinates were calculated.
               ERR_INVALID_DATA -- The data was in an unrecognized format.
               ERR_CONVERGENCE -- The solution to Kepler's equation didn't
-              converge to the required precision within the specified number
-              of iterations.
-    Return 2: The comet's details and heliocentric coordinates. The reference
-              frame is the equinox & ecliptic of J2000.
-
+              converge to the required precision.
+    Return 2: The comet's details and heliocentric coordinates. The
+    reference frame is the equinox & ecliptic of J2000.
     """
+
     body = MpcBody()
 
-    retval = _libkepler.comet_info(mpcorb_record, byref(jd_TT), byref(body))
+    retval = _libkepler.comet_info(mpcorb_record, byref(jd_TT),
+                                   byref(body))
 
     return retval, body
 

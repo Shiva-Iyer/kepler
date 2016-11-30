@@ -76,13 +76,13 @@ class DegMinSec:
 
     def __init__(self, d = 0.0):
 
-	tmp = fabs(d)
-	self.degrees = floor(tmp)
-	tmp = (tmp - self.degrees) * 60
-	self.minutes = floor(tmp)
-	self.seconds = (tmp - self.minutes) * 60
+        tmp = fabs(d)
+        self.degrees = floor(tmp)
+        tmp = (tmp - self.degrees) * 60
+        self.minutes = floor(tmp)
+        self.seconds = (tmp - self.minutes) * 60
 
-	if (d < 0):
+        if (d < 0):
             self.degrees *= -1
             self.minutes *= -1
             self.seconds *= -1

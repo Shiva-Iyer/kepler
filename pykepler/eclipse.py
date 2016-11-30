@@ -18,7 +18,7 @@ if __name__ == "__main__":
     exit()
 
 from ctypes import *
-from julian_date import *
+from .julian_date import *
 from pykepler import _libkepler
 
 class EclipseTypes:

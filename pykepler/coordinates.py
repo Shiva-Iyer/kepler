@@ -18,7 +18,7 @@ if __name__ == "__main__":
     exit()
 
 from ctypes import *
-from julian_date import *
+from .julian_date import *
 from pykepler import _libkepler
 
 class RectangularCoordinates(Structure):
@@ -71,7 +71,8 @@ class EquatorialCoordinates(Structure):
 
     def __repr__(self):
 
-        return dict(RA = self.right_ascension, dec = self.declination).__repr__()
+        return dict(RA = self.right_ascension,
+                    dec = self.declination).__repr__()
 
 class EclipticCoordinates(Structure):
     """Used for ecliptic coordinates. The origin is application specific.
@@ -123,9 +124,10 @@ class HorizontalCoordinates(Structure):
 
 def rectangular_to_spherical(body, earth):
     """
-    Convert the heliocentric rectangular coordinates of a celestial body to
-    geocentric spherical coordinates. The resulting coordinates will be in the
-    same reference frame (xy plane) as the original coordinates.
+    Convert the heliocentric rectangular coordinates of a celestial
+    body to geocentric spherical coordinates. The resulting coordinates
+    will be in the same reference frame (xy plane) as the original
+    coordinates.
 
     body -- The body's heliocentric rectangular coordinates. Must be in
             the same reference frame and units as earth.
@@ -134,7 +136,7 @@ def rectangular_to_spherical(body, earth):
 
     Return 1: The body's geocentric longitude in radians.
     Return 2: The body's geocentric latitude in radians.
-    Return 3: The body's geocentric distance in the units of body and earth.
+    Return 3: The body's geocentric distance in the units of body & earth.
     """
 
     longitude = c_double()
@@ -142,7 +144,8 @@ def rectangular_to_spherical(body, earth):
     radius = c_double()
 
     _libkepler.rectangular_to_spherical(byref(body), byref(earth),
-                                        byref(longitude), byref(latitude),
+                                        byref(longitude),
+                                        byref(latitude),
                                         byref(radius))
 
     return longitude.value, latitude.value, radius.value
@@ -156,7 +159,8 @@ def spherical_to_rectangular(longitude, latitude, radius):
     latitude -- The body's latitude in radians.
     radius -- The body's distance from the central body.
 
-    Return 1: The body's rectangular coordinates in the same units as radius.
+    Return 1: The body's rectangular coordinates in the same units
+    as radius.
     """
 
     rectangular = RectangularCoordinates()
@@ -230,8 +234,8 @@ def equatorial_to_horizontal(hour_angle, declination, latitude):
 
     horizontal = HorizontalCoordinates()
 
-    _libkepler.equatorial_to_horizontal(hour_angle, declination, latitude,
-                                        byref(horizontal))
+    _libkepler.equatorial_to_horizontal(hour_angle, declination,
+                                        latitude, byref(horizontal))
 
     return horizontal
 
@@ -251,7 +255,8 @@ def horizontal_to_equatorial(horizontal, latitude):
     declination = c_double()
 
     _libkepler.horizontal_to_equatorial(byref(horizontal), latitude,
-                                        byref(hour_angle), byref(declination))
+                                        byref(hour_angle),
+                                        byref(declination))
 
     return hour_angle.value, declination.value
 
@@ -260,7 +265,7 @@ def rotate_rectangular(rotation_matrix, rectangular):
     Apply a rotation matrix to a body's rectangular coordinates.
 
     rotation_matrix -- The rotation matrix in the form
-                       [[m11, m12, m13], [m21, m22, m23], [m31, m32, m33]]
+                       [[m11, m12, m13],[m21, m22, m23],[m31, m32, m33]]
     rectangular -- The rectangular coordinates to be rotated in-place.
     """
 
@@ -273,11 +278,12 @@ def rotate_rectangular(rotation_matrix, rectangular):
 
 def rotate_equatorial(rotation_matrix, equatorial):
     """
-    Apply a rotation matrix to a body's geocentric equatorial coordinates. This
-    function can be used to apply the IAU2006/2000A precession/nutation matrices.
+    Apply a rotation matrix to a body's geocentric equatorial
+    coordinates. This function can be used to apply the IAU2006/2000A
+    precession/nutation matrices.
 
     rotation_matrix -- The rotation matrix in the form
-                       [[m11, m12, m13], [m21, m22, m23], [m31, m32, m33]]
+                       [[m11, m12, m13],[m21, m22, m23],[m31, m32, m33]]
     equatorial -- The equatorial coordinates to be rotated in-place.
     """
 
@@ -290,7 +296,8 @@ def rotate_equatorial(rotation_matrix, equatorial):
 
 def rotate_ecliptic_to_equator(obliquity, ecliptic):
     """
-    Rotate rectangular coordinates from the ecliptic to the equatorial frame.
+    Rotate rectangular coordinates from the ecliptic to the
+    equatorial frame.
 
     obliquity -- The obliquity of the ecliptic in radians.
     ecliptic -- The coordinates to be rotated in-place.

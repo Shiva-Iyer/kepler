@@ -1,5 +1,5 @@
 # elp82b.py - Wrapper for ELP2000-82B routines
-# Copyright (C) 2010-2011 Shiva Iyer <shiva.iyer AT g m a i l DOT c o m>
+# Copyright (C) 2016 Shiva Iyer <shiva.iyer AT g m a i l DOT c o m>
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -18,8 +18,8 @@ if __name__ == "__main__":
     exit()
 
 from ctypes import *
-from julian_date import *
-from coordinates import *
+from .julian_date import *
+from .coordinates import *
 from pykepler import _libkepler
 
 def elp82b_coordinates(tdb):
@@ -27,13 +27,13 @@ def elp82b_coordinates(tdb):
     Calculate the Moon's geocentric rectangular coordinates using the
     ELP 2000-82B lunar theory in its entirety.
 
-    tdb -- TDB to be used for calculations. TT may be used for all but the most
-           exacting applications.
+    tdb -- TDB to be used for calculations. TT may be used for all
+    but the most exacting applications.
 
-    Return 1: The Moon's geocentric rectangular coordinates in KM. The reference
-              frame is the equinox & ecliptic of J2000.
-
+    Return 1: The Moon's geocentric rectangular coordinates in KM.
+    The reference frame is the equinox & ecliptic of J2000.
     """
+
     rectangular = RectangularCoordinates()
 
     _libkepler.elp82b_coordinates(byref(tdb), byref(rectangular))
@@ -42,12 +42,12 @@ def elp82b_coordinates(tdb):
 
 def elp82b_ecliptic_to_equator(ecliptic):
     """
-    Rotate the Moon's coordinates from the ecliptic frame of J2000 to the
-    equatorial frame of J2000/FK5.
+    Rotate the Moon's coordinates from the ecliptic frame of J2000 to
+    the equatorial frame of J2000/FK5.
 
     ecliptic -- The coordinates to be rotated in-place
-
     """
+
     _libkepler.elp82b_ecliptic_to_equator(byref(ecliptic))
 
 _libkepler.elp82b_coordinates.restype = None

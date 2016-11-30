@@ -1,5 +1,5 @@
 # parallax.py - Wrapper for geocentric parallax routines
-# Copyright (C) 2010 Shiva Iyer <shiva.iyer AT g m a i l DOT c o m>
+# Copyright (C) 2016 Shiva Iyer <shiva.iyer AT g m a i l DOT c o m>
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -34,14 +34,14 @@ def geocentric_parallax(hour_angle, declination, distance,
 
     Return 1: The parallax in right ascension expressed in radians.
     Return 2: The parallax in declination expressed in radians.
-
     """
+
     d_RA = c_double()
     d_declination = c_double()
 
     _libkepler.geocentric_parallax(hour_angle, declination, distance,
-                                   geog_latitude, height_msl, byref(d_RA),
-                                   byref(d_declination))
+                                   geog_latitude, height_msl,
+                                   byref(d_RA), byref(d_declination))
 
     return d_RA.value, d_declination.value
 
