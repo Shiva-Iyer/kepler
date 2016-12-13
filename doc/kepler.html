@@ -339,10 +339,24 @@ lon1: Longitude of pt. 1 in radians, positive east of Greenwich.<br>
 lat1: Latitude of pt. 1 in radians, positive north of the equator.<br>
 lon2: Longitude of pt. 2 in radians, positive east of Greenwich.<br>
 lat2: Latitude of pt. 2 in radians, positive north of the equator.<br>
-inb: The initial bearing on the great circle path in radians.<br>
-fib: The final bearing on the great circle path in radians.<br>
+inb: On exit, the initial bearing on the great circle in radians, measured clockwise from true north.<br>
+fib: On exit, the final bearing on the great circle in radians, measured clockwise from true north.<br>
 <br>
 Return: The great circle distance in meters or -1 if the algorithm failed, which usually happens for antipodal points.<br>
+<p>
+<code><b>
+double earth_gcend(double lon1, double lat1, double inb, double dist, double *lon2, double *lat2)<p>
+</code></b>
+Calculate the location on the great circle that lies at the given distance and initial bearing from a starting location.<br>
+<br>
+lon1: Longitude of the starting point in radians (E positive).<br>
+lat1: Latitude of the starting point in radians (N positive).<br>
+inb: The initial bearing on the great circle in radians, measured clockwise from true north.<br>
+dist: The distance along the great circle in meters.<br>
+lon2: On exit, longitude of the destination in radians.<br>
+lat2: On exit, latitude of the destination in radians.<br>
+<br>
+Return: The final bearing in radians or -1 if the algorithm failed, which usually happens for antipodal points.<br>
 <p>
 
 <a name="eclipse.c"><h4>eclipse.c</h4></a>

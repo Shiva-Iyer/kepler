@@ -1,5 +1,5 @@
 /*
- * kepler_test.c - Test harness for kepler routines
+ * kepler_test.c - Utility to test kepler functions
  * Copyright (C) 2016 Shiva Iyer <shiva.iyer AT g m a i l DOT c o m>
  *
  * This program is free software: you can redistribute it and/or modify
@@ -73,7 +73,7 @@ int main(int argc, char *argv[])
     struct rectangular_coordinates xyz[9],zero = {0, 0, 0},moon;
     struct mpc_body inf;
     double dist,df,epsilon,d_psi,d_eps,prec_matrix[3][3],nut_matrix[3][3],
-	mst,ast,d_ra,d_dec,gamma,u,inb,fib;
+	mst,ast,d_ra,d_dec,gamma,u,inb,fib,lon,lat;
     char buf[256];
     static char *planet_names[] = {"Mercury","Venus","Earth","Mars",
 				   "Jupiter","Saturn","Uranus","Neptune",
@@ -298,6 +298,15 @@ int main(int argc, char *argv[])
 	   "init. bearing = %.1f deg., fin. bearing = %.1f deg.\n",
 	   dist/1000, reduce_angle(inb*RAD_TO_DEG, 360),
 	   reduce_angle(fib*RAD_TO_DEG, 360));
+
+    dist = 13804;
+    inb = 248.8;
+    fib = earth_gcend(-DEGREES(97, 2, 16)*DEG_TO_RAD,
+		      DEGREES(32, 53, 50)*DEG_TO_RAD,
+		      inb*DEG_TO_RAD, dist*1000, &lon, &lat);
+    printf("\n%.0f KM at %6.2f deg from DFW airport ->  "
+	   "Lon. %7.2f, Lat. %7.2f at %7.2f deg\n", dist, inb,
+	   lon*RAD_TO_DEG, lat*RAD_TO_DEG, fib*RAD_TO_DEG);
 
     printf("\n");
     return(0);

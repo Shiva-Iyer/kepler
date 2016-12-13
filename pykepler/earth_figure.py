@@ -53,8 +53,10 @@ def earth_gcdist(lon1, lat1, lon2, lat2):
 
     Return 1: The great circle distance in meters or -1 if the algorithm
               failed, which usually happens for antipodal points.
-    Return 2: The initial bearing on the great circle path in radians.
-    Return 3: The final bearing on the great circle path in radians.
+    Return 2: The initial bearing on the great circle in radians,
+              measured clockwise from true north.
+    Return 3: The final bearing on the great circle in radians,
+              measured clockwise from true north.
     """
 
     inb = c_double()
@@ -64,6 +66,31 @@ def earth_gcdist(lon1, lat1, lon2, lat2):
                                   byref(inb), byref(fib))
 
     return(dis, inb.value, fib.value)
+
+def earth_gcend(lon1, lat1, inb, dist):
+    """
+    Calculate the location on the great circle that lies at the given
+    distance and initial bearing from a starting location.
+
+    lon1 -- Longitude of the starting point in radians (E positive).
+    lat1 -- Latitude of the starting point in radians (N positive).
+    inb  -- The initial bearing on the great circle in radians,
+            measured clockwise from true north.
+    dist -- The distance along the great circle in meters.
+
+    Return 1: The longitude of the destination in radians.
+    Return 2: The latitude of the destination in radians.
+    Return 3: The final bearing in radians or -1 if the algorithm
+              failed, which usually happens for antipodal points.
+    """
+
+    lon2 = c_double()
+    lat2 = c_double()
+
+    fib = _libkepler.earth_gcend(lon1, lat1, inb, dist,
+                                 byref(lon2), byref(lat2))
+
+    return(lon2.value, lat2.value, fib)
 
 _libkepler.earth_figure_values.restype = None
 _libkepler.earth_figure_values.argtypes = [
@@ -83,7 +110,18 @@ _libkepler.earth_gcdist.argtypes = [
     POINTER(c_double)
 ]
 
+_libkepler.earth_gcend.restype = c_double
+_libkepler.earth_gcend.argtypes = [
+    c_double,
+    c_double,
+    c_double,
+    c_double,
+    POINTER(c_double),
+    POINTER(c_double)
+]
+
 __all__ = [
     "earth_figure_values",
-    "earth_gcdist"
+    "earth_gcdist",
+    "earth_gcend"
 ]

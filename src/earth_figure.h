@@ -25,4 +25,7 @@ void earth_figure_values(double geog_lat, double height_msl,
 double earth_gcdist(double lon1, double lat1, double lon2, double lat2,
 		    double *inb, double *fib);
 
+double earth_gcend(double lon1, double lat1, double inb, double dist,
+		   double *lon2, double *lat2);
+
 #endif
