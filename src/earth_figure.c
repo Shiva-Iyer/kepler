@@ -76,12 +76,14 @@ double earth_gcdist(double lon1, double lat1, double lon2, double lat2,
     b = EARTH_POL_RADIUS;
     f = EARTH_FLATTENING;
 
-    u1 = atan((1.0-f)*tan(lat1));
-    u2 = atan((1.0-f)*tan(lat2));
+    u1 = atan2((1.0 - f)*sin(lat1), cos(lat1));
+    u2 = atan2((1.0 - f)*sin(lat2), cos(lat2));
+    sincos(u1, &su1, &cu1);
+
     L = lon2 - lon1;
     lam0 = L;
+
     for (iter = 0; iter < 20; iter++) {
-	sincos(u1, &su1, &cu1);
 	sincos(u2, &su2, &cu2);
 	sincos(lam0, &sl, &cl);
 	x = cu1*su2 - su1*cu2*cl;
@@ -91,7 +93,7 @@ double earth_gcdist(double lon1, double lat1, double lon2, double lat2,
 	sig = atan2(y, x);
 
 	sl = cu1*cu2*sl/y;
-	cl = 1 - sl*sl;
+	cl = 1.0 - sl*sl;
 	if (cl)
 	    cu2 = x - 2.0*su1*su2/cl;
 	else
@@ -100,21 +102,21 @@ double earth_gcdist(double lon1, double lat1, double lon2, double lat2,
 	    cu2 = 0;
 
 	lam1 = f*cl*(4.0 + f*(4.0 - 3.0*cl))/16.0;
-	lam1 = L + (1 - lam1)*f*sl*(sig + lam1*y*(
+	lam1 = L + (1.0 - lam1)*f*sl*(sig + lam1*y*(
 	       cu2 + lam1*x*(2.0*cu2*cu2 - 1.0)));
 	if (fabs(lam1 - lam0) <= 1E-12) {
 	    u2 = cl*((a*a)/(b*b) - 1.0);
 	    cl = 1.0+u2*(u2*(u2*(320.0-175.0*u2)-768.0)+4096.0)/16384.0;
 	    sl = u2*(256.0 + u2*(u2*(74.0 - 47.0*u2) - 128.0))/1024.0;
 	    u1 = sl*y*(cu2 + 0.25*sl*(x*(2.0*cu2*cu2 - 1.0) -
-		   sl/6.0*cu2*(4.0*y*y - 3.0)*(4.0*cu2*cu2 - 3.0)));
+		   sl*cu2*(4.0*y*y - 3.0)*(4.0*cu2*cu2 - 3.0)/6.0));
 
-	    sincos(atan((1.0-f)*tan(lat1)), &su1, &cu1);
-	    sincos(atan((1.0-f)*tan(lat2)), &su2, &cu2);
-	    sincos(lon2 - lon1, &y, &x);
+	    sincos(atan((1.0 - f)*tan(lat1)), &su1, &cu1);
+	    sincos(atan((1.0 - f)*tan(lat2)), &su2, &cu2);
+	    sincos(lam1, &y, &x);
 
-	    *inb = atan2(cu2*y, cu1*su2 - su1*cu2*x);
-	    *fib = atan2(cu1*y, cu1*su2*x - su1*cu2);
+	    *inb = reduce_angle(atan2(cu2*y, cu1*su2-su1*cu2*x), TWO_PI);
+	    *fib = reduce_angle(atan2(cu1*y, cu1*su2*x-su1*cu2), TWO_PI);
 	    return(b*cl*(sig-u1));
 	}
 
@@ -155,20 +157,20 @@ double earth_gcend(double lon1, double lat1, double inb, double dist,
     sig1 = atan2(u, c);
 
     u = ((a*a)/(b*b) - 1.0)*(1.0 - s*s/(1.0 + u*u));
-    x = 1.0 + u*(4096.0 + u*(-768.0 + u*(320.0 - 175.0*u)))/16384.0;
-    y = u*(256.0 + u*(-128.0 + u*(74.0 - 47.0*u)))/1024.0;
+    x = 1.0 + u*(u*(u*(320.0 - 175.0*u) - 768.0) + 4096.0)/16384.0;
+    y = u*(256.0 + u*(u*(74.0 - 47.0*u) - 128.0))/1024.0;
     sig2 = dist/(b*x);
 
     for (iter = 0; iter < 20; iter++) {
 	u = cos(2*sig1 + sig2);
 	sincos(sig2, &s, &c);
 	dsig = y*s*(u + y*(c*(2*u*u - 1.0) -
-	       y*u*(4.0*s*s - 3.0)*(4*u*u - 3.0)/6.0)/4.0);
+	       y*u*(4.0*s*s - 3.0)*(4.0*u*u - 3.0)/6.0)/4.0);
 	t = sig2;
 	sig2 = dist/(b*x) + dsig;
 	if (fabs(sig2 - t) <= 1E-12) {
 	    x = (1.0 - f)*tan(lat1);
-	    t = 1/sqrt(1.0 + x*x);
+	    t = 1.0/sqrt(1.0 + x*x);
 	    sincos(inb, &sig1, &dsig);
 	    a = sig1*t;
 	    b = 1.0 - a*a;

@@ -16,6 +16,9 @@
 
 try:
     import sys
+    from os import path
+    sys.path.append(path.dirname(path.dirname(path.abspath(__file__))))
+
     import time
     import traceback
     from pykepler import julian_date as J
