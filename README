@@ -94,6 +94,11 @@ planpos.py demonstrates the Python wrapper by calling routines in the
 VSOP, ELP and Pluto modules to display the positions of the Sun, Moon,
 planets and Pluto at the time specified on the command-line.
 
+flightseg.py displays the great circle distance and bearing angles for
+flight segments between the airports specified on the command line.
+The airport database from <http://openflights.org/data.html> must be
+downloaded into the examples folder.
+
 References
 ----------
 
