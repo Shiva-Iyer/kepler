@@ -270,8 +270,8 @@ def rotate_rectangular(rotation_matrix, rectangular):
     """
 
     mat = (c_double * 9)()
-    for i in xrange(3):
-        for j in xrange(3):
+    for i in range(3):
+        for j in range(3):
             mat[i * 3 + j] = rotation_matrix[i][j]
 
     _libkepler.rotate_rectangular(pointer(mat), byref(rectangular))
@@ -288,8 +288,8 @@ def rotate_equatorial(rotation_matrix, equatorial):
     """
 
     mat = (c_double * 9)()
-    for i in xrange(3):
-        for j in xrange(3):
+    for i in range(3):
+        for j in range(3):
             mat[i * 3 + j] = rotation_matrix[i][j]
 
     _libkepler.rotate_equatorial(pointer(mat), byref(equatorial))
