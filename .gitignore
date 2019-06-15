@@ -1,4 +1,14 @@
+**/*.o
+**/*.so*
+**/*.pyc
+**/__pycache__
+**/*.exe
+**/*.DAT
+**/*.dat
+**/kepler_test
+**/rise_set
 data/
 reference/
-
-
+build/
+dist/
+pykepler.egg-info/

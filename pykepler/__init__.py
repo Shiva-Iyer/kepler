@@ -1,5 +1,5 @@
 # __init__.py - Package definition file for pykepler
-# Copyright (C) 2016 Shiva Iyer <shiva.iyer AT g m a i l DOT c o m>
+# Copyright (C) 2016-2019 Shiva Iyer <shiva.iyer AT g m a i l DOT c o m>
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -52,10 +52,11 @@ from ctypes import *
 
 # Load the kepler shared library and save for use in the pykepler
 # modules. The library is operating system dependent.
+basedir = os.path.dirname(os.path.abspath(__file__))
 if os.name == "posix": 
-    _libkepler = CDLL("libkepler.so.1")
+    _libkepler = CDLL(os.path.join(basedir, "libkepler.so"))
 elif os.name == "nt":
-    _libkepler = CDLL("libkepler.dll")
+    _libkepler = CDLL(os.path.join(basedir, "libkepler.dll"))
 
 from .aberration import *
 from .constants import *
@@ -92,4 +93,3 @@ for m in _modules:
             __all__ += mod.__all__
     except Exception:
         pass
-
